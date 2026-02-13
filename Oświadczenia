@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVB - Oświadczenia i Zgody (Krok 5/6)</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+    <style>
+        :root {
+            --ovb-blue: #003366;
+            --ovb-white: #FFFFFF;
+            --ovb-teal: #009999;
+            --ovb-hot-pink: #FF3399;
+            --ovb-light-grey: #E5E5E5;
+            --ovb-bg-grey: #F4F6F8;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --font-main: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            --shadow-card: 0 4px 20px rgba(0, 51, 102, 0.08);
+        }
+
+        * { box-sizing: border-box; outline: none; }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--ovb-bg-grey);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ovb-header {
+            background: var(--ovb-blue);
+            color: var(--ovb-white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo-box { background: white; color: var(--ovb-blue); padding: 2px 8px; border-radius: 2px; font-weight: 700; margin-right: 10px;}
+        .agent-info { font-size: 0.85rem; text-align: right; display: none; }
+        @media(min-width: 600px) { .agent-info { display: block; } }
+
+        .progress-section { background: white; padding: 20px 0; border-bottom: 1px solid var(--ovb-light-grey); margin-bottom: 30px; }
+        .progress-steps { display: flex; justify-content: space-between; position: relative; max-width: 600px; margin: 0 auto; }
+        .progress-steps::before { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: var(--ovb-light-grey); z-index: 1; transform: translateY(-50%); }
+        .progress-fill { position: absolute; top: 50%; left: 0; width: 80%; height: 2px; background: var(--ovb-teal); z-index: 1; transform: translateY(-50%); transition: width 1s ease-out; }
+
+        .step {
+            width: 32px; height: 32px; background: white; border: 2px solid var(--ovb-light-grey); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; font-size: 12px; font-weight: 600; color: #999;
+        }
+        .step.completed { background: var(--ovb-teal); border-color: var(--ovb-teal); color: white; }
+        .step.active { border-color: var(--ovb-blue); color: var(--ovb-blue); box-shadow: 0 0 0 4px rgba(0, 51, 102, 0.1); transform: scale(1.1); }
+        .step-label { position: absolute; top: 40px; font-size: 11px; white-space: nowrap; color: var(--ovb-blue); font-weight: 600; }
+
+        .main-form-card {
+            background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 40px;
+            margin-bottom: 50px; position: relative;
+        }
+
+        h1 { color: var(--ovb-blue); font-size: 1.75rem; margin: 0 0 10px 0; }
+        p.subtitle { color: var(--text-light); margin-bottom: 30px; font-size: 0.95rem; }
+
+        .top-controls {
+            background: #E0F7FA; border: 1px solid #B2EBF2; border-radius: 8px; padding: 15px; margin-bottom: 30px;
+            display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
+        }
+        .control-btn {
+            background: white; border: 1px solid var(--ovb-teal); color: var(--ovb-teal);
+            padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+        }
+        .control-btn:hover { background: var(--ovb-teal); color: white; }
+        .control-btn.secondary { border-color: var(--text-light); color: var(--text-light); }
+        .control-btn.secondary:hover { background: var(--text-light); color: white; }
+
+        .form-section { margin-bottom: 40px; border: 1px solid var(--ovb-light-grey); border-radius: 8px; padding: 20px; position: relative; transition: 0.3s; }
+        .form-section.highlight { border: 2px solid var(--ovb-blue); background-color: rgba(0, 51, 102, 0.02); }
+        .section-header { font-size: 1.1rem; font-weight: 700; color: var(--ovb-blue); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .section-header .icon { color: var(--ovb-teal); }
+
+        .field-group { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed #eee; }
+        .field-group:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .field-label { font-weight: 600; display: block; margin-bottom: 8px; color: var(--text-dark); }
+        .field-helper { font-size: 12px; color: #777; margin-bottom: 10px; display: block; }
+
+        .option-row { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+        .option-row input[type="checkbox"], .option-row input[type="radio"] {
+            margin-top: 4px; transform: scale(1.2); accent-color: var(--ovb-teal); cursor: pointer;
+        }
+        .option-text { font-size: 14px; line-height: 1.5; flex: 1; }
+
+        .read-more {
+            color: var(--ovb-blue); font-size: 12px; text-decoration: underline; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 2px; margin-left: 5px; font-weight: 600;
+        }
+        .read-more:hover { color: var(--ovb-teal); }
+
+        .radio-group { display: flex; gap: 20px; margin-top: 10px; }
+        .radio-btn-label {
+            display: flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--ovb-light-grey);
+            border-radius: 4px; cursor: pointer; transition: 0.2s; font-weight: 600;
+        }
+        .radio-btn-label:hover { border-color: var(--ovb-teal); background: #f0fcfc; }
+        .radio-btn-label input { margin: 0; }
+
+        .form-actions { display: flex; justify-content: space-between; margin-top: 40px; }
+        .btn { padding: 14px 28px; border-radius: 6px; font-weight: 600; font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; border: none; }
+        .btn-back { background: transparent; border: 2px solid var(--ovb-light-grey); color: var(--text-light); }
+        .btn-next { background: var(--ovb-blue); color: white; box-shadow: 0 4px 12px rgba(0, 51, 102, 0.2); }
+        .btn-next:hover { background: #002244; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+            display: none; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .modal-card {
+            background: white; width: 90%; max-width: 780px; max-height: 80vh; border-radius: 12px;
+            display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: fadeIn 0.3s;
+        }
+        .modal-header { padding: 20px; border-bottom: 1px solid #eee; font-weight: 700; color: var(--ovb-blue); display: flex; justify-content: space-between; }
+        .modal-body { padding: 20px; overflow-y: auto; font-size: 14px; line-height: 1.6; color: #444; white-space: pre-line; }
+        .modal-footer { padding: 15px 20px; border-top: 1px solid #eee; text-align: right; }
+        .close-modal { background: none; border: none; font-size: 24px; cursor: pointer; color: #999; }
+
+        @keyframes fadeIn { from {opacity: 0; transform: scale(0.95);} to {opacity: 1; transform: scale(1);} }
+
+        .field-group.error { background: #fff0f5; padding: 10px; border-radius: 4px; border: 1px solid var(--ovb-hot-pink); }
+        .error-text { color: var(--ovb-hot-pink); font-size: 12px; font-weight: 600; margin-top: 5px; display: none; }
+        .field-group.error .error-text { display: block; }
+
+        .fulltext-block {
+            font-size: 14px;
+            background: white;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            white-space: pre-line;
+            line-height: 1.6;
+            color: #444;
+        }
+    </style>
+</head>
+
+<body>
+<header class="ovb-header">
+    <div class="container header-content">
+        <div style="display:flex; align-items:center;">
+            <div class="logo-box">OVB</div> <span>Allfinanz</span>
+        </div>
+        <div class="agent-info">
+            <strong>Twój Doradca:</strong> Dariusz Halczok<br>
+            +48 600 000 000
+        </div>
+    </div>
+</header>
+
+<div class="progress-section">
+    <div class="container">
+        <div class="progress-steps">
+            <div class="progress-fill"></div>
+            <div class="step completed"><span class="material-icons-outlined">check</span></div>
+            <div class="step completed"><span class="material-icons-outlined">check</span></div>
+            <div class="step completed"><span class="material-icons-outlined">check</span></div>
+            <div class="step completed"><span class="material-icons-outlined">check</span></div>
+            <div class="step active">5 <div class="step-label">Oświadczenia</div></div>
+            <div class="step">6</div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="top-controls">
+        <div style="font-weight: 600; font-size: 14px; color: var(--ovb-blue);">
+            <span class="material-icons-outlined" style="vertical-align:middle; font-size:18px;">build</span>
+            Narzędzia doradcy:
+        </div>
+        <button type="button" class="control-btn" onclick="FormController.setStandardAnswers()">
+            <span class="material-icons-outlined" style="font-size:16px">flash_on</span>
+            Szybkie wypełnienie (Standard)
+        </button>
+        <button type="button" class="control-btn" onclick="FormController.selectMarketing()">
+            <span class="material-icons-outlined" style="font-size:16px">campaign</span>
+            Zaznacz marketing (Opcja)
+        </button>
+        <button type="button" class="control-btn secondary" onclick="FormController.clearAll()">
+            <span class="material-icons-outlined" style="font-size:16px">cleaning_services</span>
+            Wyczyść
+        </button>
+    </div>
+
+    <form class="main-form-card" id="consentsForm">
+        <h1>Przystąpienie do ubezpieczenia grupowego</h1>
+        <p class="subtitle">Potwierdź wymagane zgody i oświadczenia, aby przejść dalej.</p>
+
+        <!-- 1. AML / PEP -->
+        <div class="form-section" id="step_1_pep_aml">
+            <div class="section-header">
+                <span class="material-icons-outlined icon">gavel</span>
+                1. AML / PEP
+            </div>
+
+            <div class="field-group" data-id="pep_is_pep">
+                <span class="field-label">Czy jesteś osobą zajmującą eksponowane stanowisko polityczne (PEP)?</span>
+                <span class="field-helper">PEP to osoba pełniąca ważną funkcję publiczną. Jeśli masz wątpliwość — wybierz TAK.</span>
+
+                <div class="radio-group">
+                    <label class="radio-btn-label">
+                        <input type="radio" name="pep_is_pep" value="TAK"> TAK
+                    </label>
+                    <label class="radio-btn-label">
+                        <input type="radio" name="pep_is_pep" value="NIE"> NIE
+                    </label>
+                </div>
+                <div class="read-more" onclick="Modal.open('pep_modal')">Pokaż treść oświadczenia PEP</div>
+                <div class="error-text">To pole jest wymagane</div>
+            </div>
+
+            <div class="field-group" data-id="pep_is_family">
+                <span class="field-label">Czy jesteś członkiem rodziny PEP lub osobą znaną jako bliski współpracownik PEP?</span>
+                <span class="field-helper">Dotyczy członków rodziny PEP i bliskich współpracowników. Jeśli nie masz pewności — wybierz TAK.</span>
+
+                <div class="radio-group">
+                    <label class="radio-btn-label">
+                        <input type="radio" name="pep_is_family" value="TAK"> TAK
+                    </label>
+                    <label class="radio-btn-label">
+                        <input type="radio" name="pep_is_family" value="NIE"> NIE
+                    </label>
+                </div>
+                <div class="read-more" onclick="Modal.open('pep_family_modal')">Pokaż treść oświadczenia</div>
+                <div class="error-text">To pole jest wymagane</div>
+            </div>
+        </div>
+
+        <!-- 2. Zgody wymagane -->
+        <div class="form-section" id="step_2_required">
+            <div class="section-header">
+                <span class="material-icons-outlined icon">verified_user</span>
+                2. Zgody wymagane (Medyczne/Danych)
+            </div>
+
+            <div class="field-group" data-id="consent_medical">
+                <label class="option-row">
+                    <input type="checkbox" name="consent_medical_info" required>
+                    <span class="option-text">
+                        <strong>Zgoda na pozyskiwanie informacji o stanie zdrowia.</strong><br>
+                        Potrzebna do oceny ryzyka i wypłaty świadczeń. Nie dotyczy badań genetycznych.
+                    </span>
+                </label>
+                <div class="read-more" onclick="Modal.open('medical_modal')">Pełna treść zgody</div>
+                <div class="error-text">Ta zgoda jest wymagana do zawarcia polisy</div>
+            </div>
+
+            <div class="field-group" data-id="consent_share">
+                <label class="option-row">
+                    <input type="checkbox" name="consent_share_to_other_insurers" required>
+                    <span class="option-text">
+                        <strong>Zgoda na udostępnienie danych innym zakładom ubezpieczeń.</strong><br>
+                        Wymagana do weryfikacji danych i oceny ryzyka.
+                    </span>
+                </label>
+                <div class="read-more" onclick="Modal.open('share_modal')">Pełna treść zgody</div>
+                <div class="error-text">Ta zgoda jest wymagana do zawarcia polisy</div>
+            </div>
+        </div>
+
+        <!-- 3. Warunki -->
+        <div class="form-section" id="step_3_terms">
+            <div class="section-header">
+                <span class="material-icons-outlined icon">description</span>
+                3. Warunki przystąpienia
+            </div>
+
+            <div class="field-group">
+                <label class="option-row">
+                    <input type="checkbox" name="accept_policy_terms_certum" required>
+                    <span class="option-text">
+                        Potwierdzam warunki przystąpienia oraz zasady ochrony i przedłużania (CERTUM/CERTUM MAX).
+                    </span>
+                </label>
+                <div class="read-more" onclick="Modal.open('terms_modal')">Zobacz szczegóły</div>
+                <div class="read-more" onclick="Modal.open('owu_updates_modal')">Aktualne warunki OWU (zmiany)</div>
+                <div class="error-text">To potwierdzenie jest wymagane</div>
+            </div>
+
+            <div class="field-group">
+                <label class="option-row">
+                    <input type="checkbox" name="decl_not_on_L4" required>
+                    <span class="option-text">
+                        Oświadczam, że <strong>nie przebywam na L4</strong> (z wyjątkiem ciąży i opieki nad innym członkiem rodziny).
+                    </span>
+                </label>
+                <div class="error-text">To oświadczenie jest wymagane</div>
+            </div>
+
+            <div class="field-group">
+                <label class="option-row">
+                    <input type="checkbox" name="decl_not_excluded" required>
+                    <span class="option-text">
+                        Oświadczam, że <strong>nie wykonuję zawodów ani prac wykluczonych</strong> przez ubezpieczyciela.
+                    </span>
+                </label>
+                <div class="read-more" onclick="Modal.open('excluded_modal')">Pełna lista zawodów wykluczonych</div>
+                <div class="error-text">To oświadczenie jest wymagane</div>
+            </div>
+        </div>
+
+        <!-- 4. Informacja RODO -->
+        <div class="form-section" id="step_rodo_info" style="border-left: 3px solid #90CAF9;">
+            <div class="section-header">
+                <span class="material-icons-outlined icon" style="color:#1E88E5;">policy</span>
+                4. Informacja RODO (administracja umową)
+                <span style="font-size:12px; font-weight:400; color:#666; margin-left:auto;">(Wymagane)</span>
+            </div>
+
+            <div class="field-group" data-id="rodo_ack_group">
+                <div class="fulltext-block">
+                    <strong>Najważniejsze:</strong><br>
+                    - Dane wprowadzasz w Doradca.pro i są przekazywane API do Generali.<br>
+                    - Kopie deklaracji i odpowiedzi medycznych są na serwerach w Polsce i są przechowywane 12 lat.<br>
+                    - Stowarzyszenie przechowuje oryginały deklaracji 12 lat i udostępnia je na wniosek Towarzystwa.<br>
+                    - OVB i doradcy nie mają dostępu do odpowiedzi medycznych.
+                </div>
+
+                <label class="option-row">
+                    <input type="checkbox" name="rodo_ack" required>
+                    <span class="option-text">
+                        Potwierdzam, że zapoznałem(-łam) się z informacją o przetwarzaniu danych osobowych (RODO).
+                    </span>
+                </label>
+                <div class="read-more" onclick="Modal.open('rodo_modal')">Pokaż pełną informację RODO</div>
+                <div class="error-text">To potwierdzenie jest wymagane</div>
+            </div>
+        </div>
+
+        <!-- 5. Marketing (opcjonalne) -->
+        <div class="form-section" id="step_4_marketing" style="border-left: 3px solid #FFD54F;">
+            <div class="section-header">
+                <span class="material-icons-outlined icon" style="color:#FBC02D">thumb_up</span>
+                5. Zgody opcjonalne (Marketing)
+                <span style="font-size:12px; font-weight:400; color:#666; margin-left:auto;">(Niewymagane)</span>
+            </div>
+
+            <div class="field-group">
+                <label class="option-row">
+                    <input type="checkbox" name="consent_generali_group_marketing">
+                    <span class="option-text">Zgoda na udostępnienie danych w Grupie Generali (cele marketingowe).</span>
+                </label>
+            </div>
+
+            <div class="field-group">
+                <label class="option-row">
+                    <input type="checkbox" name="consent_marketing_email_sms_generali">
+                    <span class="option-text">Marketing Generali e-mail/SMS.</span>
+                </label>
+            </div>
+
+            <div class="field-group">
+                <label class="option-row">
+                    <input type="checkbox" name="consent_marketing_phone_generali">
+                    <span class="option-text">Marketing Generali – kontakt telefoniczny.</span>
+                </label>
+            </div>
+
+            <div class="field-group">
+                <label class="option-row">
+                    <input type="checkbox" name="consent_e_delivery">
+                    <span class="option-text">Doręczenie dokumentacji na e-mail / Konto Klienta (e-doręczenia).</span>
+                </label>
+            </div>
+
+            <div class="field-group">
+                <label class="option-row">
+                    <input type="checkbox" name="consent_financeclub_ovb_sms">
+                    <span class="option-text">Marketing SMS – Stowarzyszenie Klientów Finance Club oraz OVB Allfinanz sp. z o.o.</span>
+                </label>
+            </div>
+
+            <div class="field-group">
+                <label class="option-row">
+                    <input type="checkbox" name="consent_financeclub_ovb_email">
+                    <span class="option-text">Marketing e-mail – Stowarzyszenie Klientów Finance Club oraz OVB Allfinanz sp. z o.o.</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 6. Zdrowie (bramka) -->
+        <div class="form-section highlight" id="step_5_health">
+            <div class="section-header">
+                <span class="material-icons-outlined icon">monitor_heart</span>
+                6. Oświadczenie o stanie zdrowia (bramka)
+            </div>
+
+            <div class="field-group" data-id="health_status" style="border:none;">
+                <div class="fulltext-block" id="health_full_text">Ładowanie treści oświadczenia...</div>
+
+                <span class="field-label" style="font-size:16px;">Czy powyższe oświadczenie jest PRAWDZIWE?</span>
+                <span class="field-helper">TAK → przejście dalej. NIE → formularz medyczny.</span>
+
+                <div class="radio-group" style="justify-content: flex-start;">
+                    <label class="radio-btn-label" style="border-color:var(--ovb-teal); background:#E0F2F1;">
+                        <input type="radio" name="health_meets_criteria" value="TAK"> TAK
+                    </label>
+                    <label class="radio-btn-label">
+                        <input type="radio" name="health_meets_criteria" value="NIE"> NIE
+                    </label>
+                </div>
+                <div class="error-text">To pole jest wymagane</div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn btn-back">Wstecz</button>
+            <button type="button" class="btn btn-next" onclick="FormController.validateAndSubmit()">
+                Zatwierdź i Finalizuj
+                <span class="material-icons-outlined">arrow_forward</span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- MODAL -->
+<div id="modal_overlay" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header">
+            <span id="modal_title">Tytuł</span>
+            <button type="button" class="close-modal" onclick="Modal.close()">&times;</button>
+        </div>
+        <div class="modal-body" id="modal_body">Treść...</div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-next" style="padding: 8px 16px; font-size:14px;" onclick="Modal.close()">Zamknij</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const Texts = {
+        pep: `Niniejszym oświadczam pod rygorem odpowiedzialności karnej za złożenie fałszywego oświadczenia, że nie jestem osobą zajmującą eksponowane stanowisko polityczne zgodnie z Ustawą z dnia 1 marca 2018r. o przeciwdziałaniu praniu pieniędzy oraz finansowaniu terroryzmu.`,
+
+        pep_family: `Niniejszym oświadczam pod rygorem odpowiedzialności karnej za złożenie fałszywego oświadczenia, że nie jestem członkiem rodziny PEP / osobą znaną jako bliski współpracownik PEP.`,
+
+        medical: `Wyrażam zgodę, aby Generali Życie T.U. S.A. otrzymywała od podmiotów wykonujących działalność leczniczą, np. szpitali, przychodni lekarskich („Zakłady Lecznicze"), wskazane niżej informacje, w tym informacje o moim stanie zdrowia (z wyłączeniem wyników badań genetycznych), w celu oceny ryzyka ubezpieczeniowego, weryfikacji podanych przeze mnie danych o stanie zdrowia i ustalenia mojego prawa do świadczenia z zawartej umowy ubezpieczenia i wysokości tego świadczenia oraz, w przypadku zgłoszenia przeze mnie roszczeń, na otrzymywanie od Narodowego Funduszu Zdrowia informacji o adresach i nazwach Zakładów Leczniczych, które udzielały mi świadczeń zdrowotnych w związku ze zdarzeniem będącym podstawą ustalenia odpowiedzialności Generali Życie T.U. S.A. Zakres informacji o moim stanie zdrowia obejmuje: przyczyny hospitalizacji oraz leczenia ambulatoryjnego, wykonane w ich trakcie badania diagnostyczne i wyniki tych badań, inne udzielone świadczenia zdrowotne oraz wyniki leczenia, wyniki przeprowadzonych konsultacji, przyczynę śmierci i wyniki sekcji zwłok, jeżeli została przeprowadzona.`,
+
+        share: `Wyrażam zgodę na udostępnienie przez Generali Życie T.U. S.A. innym zakładom ubezpieczeń, na ich żądanie, moich danych osobowych w zakresie potrzebnym do oceny ryzyka ubezpieczeniowego i weryfikacji danych podanych przez ubezpieczającego lub ubezpieczonego lub osobę, na rachunek której ma zostać zawarta umowa ubezpieczenia, ustalenia prawa ubezpieczonego do świadczenia z zawartej umowy ubezpieczenia i wysokości tego świadczenia, a także informacji o przyczynie mojej śmierci lub informacji niezbędnych do ustalenia prawa uprawnionego z umowy ubezpieczenia do świadczenia i jego wysokości.`,
+
+        terms: `Oświadczenia o chęci zawarcia umowy ubezpieczenia
+Przystępując do Umowy grupowego ubezpieczenia na życie CERTUM/CERTUM MAX (dalej: umowa ubezpieczenia) zostałem poinformowany, że
+1. Towarzystwo za pośrednictwem sms wysłanego na nr telefonu wskazany w deklaracji przystąpienia przekaże informację o rozpoczęciu ochrony ubezpieczeniowej.
+2. Odpowiedzialność Towarzystwa trwa 1 miesiąc, z możliwością jej automatycznego przedłużenia na kolejny, analogiczny co do długości okres, pod warunkiem opłacenia składki w terminie do 26 dnia miesiąca poprzedzającego okres, na który odpowiedzialność Towarzystwa ma zostać przedłużona.
+3. Brak wpłaty składki w terminie, o którym mowa w pkt 2 powyżej, skutkuje nieprzedłużeniem odpowiedzialności Towarzystwa na kolejny okres.
+4. Wznowienie odpowiedzialności może nastąpić, jeżeli łącznie spełnione są warunki przewidziane w OWU (m.in. nie więcej niż 26 dni przerwy, bez zmiany warunków Umowy oraz z uwzględnieniem limitów wieku / podgrup zgodnie z OWU).`,
+
+        excluded: `Oświadczam, że nie wykonuję żadnego z wymienionych zawodów:
+
+górnik, konwojent przedmiotów wartościowych i pieniędzy, ochroniarz z pozwoleniem na broń, elektryk pracujący przy sieci o napięciu wyższym niż 1kV, kaskader, pirotechnik, korespondent wojenny, marynarz, ratownik, żołnierz zawodowy, funkcjonariusz Straży Miejskiej/Gminnej, funkcjonariusz służb mundurowych (m. in. strażak, policjant, funkcjonariusz Służby Więziennej, Straży Granicznej, Biura Ochrony Rządu, Agencji Bezpieczeństwa Wewnętrznego, Centralnego Biura Śledczego, Centralnego Biura Antykorupcyjnego), treser zwierząt niebezpiecznych, opiekun zwierząt w zoo lub cyrku, akrobata, artysta cyrkowy, sportowiec zawodowy.
+
+Oraz nie wykonuję prac:
+na platformie wiertniczej, w rafinerii, w tartaku, pod ziemią, pod wodą, przy zrywce albo wyrębie drzew i zwózce drewna, na wysokościach powyżej 10 metrów, w charakterze pracownika używającego materiałów wybuchowych i łatwopalnych, pracownika rybołówstwa dalekomorskiego, personelu samolotów.`,
+
+        rodo_info: `INFORMACJA O PRZETWARZANIU DANYCH OSOBOWYCH (RODO) – część dla Ubezpieczającego
+
+1) Administratorzy danych:
+- Stowarzyszenie Klientów Finance Club (Ubezpieczający) – w zakresie członkostwa honorowego i administrowania Umową Grupową (obsługa przystąpień, zmian, składek, komunikacji, statusu ochrony).
+- Generali Życie T.U. S.A. – jako ubezpieczyciel (odrębny administrator) w zakresie zawarcia i wykonywania umowy ubezpieczenia, w tym oceny ryzyka i roszczeń.
+
+2) Zakres danych:
+Stowarzyszenie przetwarza dane identyfikacyjne i kontaktowe, numer deklaracji, wariant ochrony, status ochrony oraz dane rozliczeniowe (składki) – w zakresie niezbędnym do administrowania Umową Grupową.
+OVB Allfinanz sp. z o.o. oraz doradcy/pośrednicy nie mają dostępu do odpowiedzi na pytania medyczne ani dokumentacji medycznej.
+
+3) Sposób przetwarzania / system:
+Dane są wprowadzane w aplikacji Doradca.pro i przekazywane przez interfejs API do Generali w celu zawarcia i obsługi ubezpieczenia.
+Kopie deklaracji oraz odpowiedzi na pytania medyczne są przechowywane na serwerach w Polsce.
+
+4) Okres przechowywania:
+Kopie deklaracji oraz dane związane z zawarciem i wykonywaniem Umowy Grupowej są przechowywane przez 12 lat od dnia zawarcia umowy, a następnie mogą zostać zniszczone, chyba że dłuższe przechowywanie będzie konieczne do ustalenia, dochodzenia lub obrony roszczeń.
+Stowarzyszenie przechowuje oryginały deklaracji przystąpienia przez okres 12 lat oraz udostępnia te oryginały na wniosek Towarzystwa.
+
+5) Odbiorcy danych:
+Odbiorcami danych mogą być: Generali Życie T.U. S.A., dostawcy IT/hostingu (w tym Doradca.pro), oraz podmioty uprawnione na podstawie przepisów prawa. OVB może otrzymywać dane niezbędne do rozliczeń pośrednictwa/prowizji – bez danych medycznych.
+
+6) Prawa:
+Przysługuje prawo dostępu do danych, ich sprostowania, ograniczenia przetwarzania, wniesienia sprzeciwu (gdy podstawa to uzasadniony interes), oraz złożenia skargi do Prezesa UODO.`,
+
+        health_full: `Oświadczam, że w okresie ostatnich 5 lat stan mojego zdrowia nie uległ istotnemu pogorszeniu
+czyli:
+nie byłem(am) leczony(a) szpitalnie, ani nie jest planowane takie leczenie (z wyjątkiem usunięcia wyrostka robaczkowego, pęcherzyka żółciowego, migdałków, hemoroidów, łagodnych torbieli, przeprowadzenia artroskopii, operacji przepukliny, przegrody nosa, zaćmy, leczenia złamania kości, usunięcia zęba, porodu);
+nie stwierdzano odchyleń od normy w wykonanych badaniach diagnostycznych, powodujących konieczność podjęcia leczenia trwającego dłużej niż 1 miesiąc. Jednocześnie oświadczam, że
+nie pozostawałem(am) niezdolny(a) do pracy dłużej niż 30 dni w ciągu ostatnich 12 miesięcy (nie dotyczy niezdolności do pracy związanej z ciążą) ;
+nie posiadam orzeczenia o częściowej niezdolności do pracy lub służby (tzw. renta z tytułu niezdolności do pracy) wydanego przez właściwy organ według przepisów o ubezpieczeniu społecznym lub zaopatrzeniu społecznym
+nie oczekuję na wykonanie zaleconych przez lekarza badań diagnostycznych (za wyjątkiem badań okresowych, związanych z wykonywaną pracą)
+nie rozpoznano u mnie którejkolwiek z wymienionych chorób lub stanów chorobowych przewlekłych: choroba nowotworowa, choroba wieńcowa, zawał serca, wada serca, udar mózgu, przemijające niedokrwienie mózgu (TIA), cukrzyca, astma oskrzelowa lub inna przewlekła choroba układu oddechowego, przewlekła choroba wątroby, trzustki lub nerek, zaburzenia psychiczne, choroba alkoholowa, zakażenie wirusem HIV. - jeśli w to pytanie nie zostanie odhaczone to musi być ocena medyczna i idzie kolejny krok`,
+
+        owu_updates: `AKTUALNE WARUNKI (ZMIANY OWU) – pkt 30–44
+
+30. Art. XIV ust. 1 OWU przyjmuje następujące brzmienie:
+„W przypadku zakończenia odpowiedzialności Towarzystwa z tytułu Umowy w stosunku do Ubezpieczonego z powodu ukończenia określonego wieku wskazanego w Art. X ust. 2 pkt 4) Ubezpieczony ma prawo do indywidualnej kontynuacji ubezpieczenia, jeżeli łącznie spełnione zostały następujące warunki:
+1) Ubezpieczony złoży w Towarzystwie wniosek przed upływem 3 miesięcy od daty zajścia któregokolwiek z wyżej wymienionych zdarzeń;
+2) Ubezpieczony był objęty ochroną ubezpieczeniową z tytułu Umowy przez co najmniej 1 miesiąc, a w przypadku obejmowania Ubezpieczonego ochroną ubezpieczeniową z tytułu wcześniejszej umowy ubezpieczenia, upływ okresu ochrony ubezpieczeniowej liczony jest od daty rozpoczęcia ochrony ubezpieczeniowej z tytułu wcześniejszej umowy ubezpieczenia, pod warunkiem, że okres od daty zakończenia ochrony ubezpieczeniowej z tytułu wcześniejszej umowy ubezpieczenia do daty przystąpienia Ubezpieczonego do Umowy jest nie dłuższy niż 31 dni.”
+
+31. Art. II pkt 77 OWU otrzymuje następujące brzmienie:
+„77. wcześniejsza umowa ubezpieczenia – umowa ubezpieczenia spełniająca jeden z poniższych warunków:
+a) umowa grupowego ubezpieczenia na życie;
+b) umowa Indywidualnej Kontynuacji zawarta przez Ubezpieczonego z innym ubezpieczycielem;
+c) umowa Indywidualnej Kontynuacji zawarta przez Ubezpieczonego z Towarzystwem;
+… (ciągłość ochrony, dokumenty potwierdzające warunki i okres wcześniejszej umowy).”
+
+32. Art. IV ust. 10 OWU:
+Podgrupy/pakiety i limity wieku:
+- START, STANDARD, FAMILY, PREMIUM, VIP – do 56 lat;
+- SILVER 55+, GOLD 55+, PLATINUM 55+ – do 70 lat;
+- SENIOR SILVER, SENIOR GOLD – do 75 lat;
+- pakiet ACTIVE, KIDS, ONKO, KARDIO – do 56 lat;
+- pakiet ACTIVE, KIDS, ONKO 55+, KARDIO 55+ – do 70 lat.
+
+33. Art. IV ust. 11 OWU:
+Zmiana podgrupy/pakietu tylko w rocznicę polisy; brak zmiany z SENIOR SILVER na SENIOR GOLD; możliwe automatyczne przeniesienie do SENIOR SILVER po wygaśnięciu ochrony wg wieku.
+
+34. Art. IV ust. 11’ OWU:
+Zmiana START/STANDARD → FAMILY/PREMIUM/VIP/PLATINUM 55+ lub SILVER 55+/GOLD 55+ → PLATINUM 55+/VIP wymaga pozytywnej oceny ryzyka (oceny medycznej).
+
+35. Art. V ust. 1 OWU:
+Warunki przystąpienia: min. 15 lat, max 75 (z zastrzeżeniem podgrup), członek Grupy Otwartej, brak L4 (z wyjątkiem ciąży/opieki), brak zawodów/prac wykluczonych (w tym elektryk >1kV), pozytywna ocena ryzyka, suma zgonu łącznie max 250 000 zł.
+
+36. Art. V: brak zastosowania ust. 4, ust. 5 i ust. 7.
+
+37. Art. V ust. 12’ OWU:
+Dla osób z polis wskazanych w OWU: w datach 01.04.2026 / 01.05.2026 / 01.06.2026 lub przy zmianie zakresu bez podwyższenia sumy – odstępuje się od oświadczeń: zawód, L4, zdrowie, ankieta medyczna (zgodnie z OWU).
+
+38. Art. VIII ust. 1 pkt 2 OWU:
+Deklaracje przekazywane API; oryginały deklaracji przechowywane 12 lat i udostępniane na wniosek Towarzystwa.
+
+39–40. Art. X OWU:
+Zakończenie wg wieku w rocznicę polisy (69 lat dla większości podgrup); wznowienie możliwe (do 26 dni, bez zmiany warunków, limity wieku/podgrup wg OWU).
+
+41–43. Art. XI OWU:
+Karencje i zasady zaliczania stażu z wcześniejszej umowy (ciągłość do 31 dni + dokumenty).
+
+44. Przystąpienie do pakietu ONKO/KARDIO/ONKO 55+/KARDIO 55+ wyłącznie po pozytywnej ocenie medycznej (dodatkowe oświadczenie o stanie zdrowia).`
+    };
+
+    const ModalsMap = {
+        pep_modal: { title: 'Oświadczenie PEP', body: Texts.pep },
+        pep_family_modal: { title: 'Relacja z PEP', body: Texts.pep_family },
+        medical_modal: { title: 'Zgoda Medyczna', body: Texts.medical },
+        share_modal: { title: 'Udostępnianie Danych', body: Texts.share },
+        terms_modal: { title: 'Warunki Przystąpienia', body: Texts.terms },
+        excluded_modal: { title: 'Lista zawodów wykluczonych', body: Texts.excluded },
+        rodo_modal: { title: 'Informacja RODO', body: Texts.rodo_info },
+        owu_updates_modal: { title: 'Aktualne warunki OWU (zmiany)', body: Texts.owu_updates }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const el = document.getElementById('health_full_text');
+        if (el) el.textContent = Texts.health_full;
+    });
+
+    const FormController = {
+        setStandardAnswers() {
+            document.querySelector('input[name="pep_is_pep"][value="NIE"]').checked = true;
+            document.querySelector('input[name="pep_is_family"][value="NIE"]').checked = true;
+
+            const requiredNames = [
+                'consent_medical_info',
+                'consent_share_to_other_insurers',
+                'accept_policy_terms_certum',
+                'decl_not_on_L4',
+                'decl_not_excluded',
+                'rodo_ack'
+            ];
+            requiredNames.forEach(name => {
+                const el = document.querySelector(`input[name="${name}"]`);
+                if (el) el.checked = true;
+            });
+
+            document.querySelector('input[name="health_meets_criteria"][value="TAK"]').checked = true;
+            this.clearErrors();
+        },
+
+        clearAll() {
+            document.getElementById('consentsForm').reset();
+            this.clearErrors();
+        },
+
+        selectMarketing() {
+            const marketingNames = [
+                'consent_generali_group_marketing',
+                'consent_marketing_email_sms_generali',
+                'consent_marketing_phone_generali',
+                'consent_financeclub_ovb_sms',
+                'consent_financeclub_ovb_email'
+            ];
+            marketingNames.forEach(name => {
+                const el = document.querySelector(`input[name="${name}"]`);
+                if (el) el.checked = true;
+            });
+        },
+
+        validateAndSubmit() {
+            let isValid = true;
+            let firstError = null;
+
+            // PEP radios
+            if(!document.querySelector('input[name="pep_is_pep"]:checked')) {
+                this.showError('pep_is_pep'); isValid = false;
+                if(!firstError) firstError = 'step_1_pep_aml';
+            }
+            if(!document.querySelector('input[name="pep_is_family"]:checked')) {
+                this.showError('pep_is_family'); isValid = false;
+                if(!firstError) firstError = 'step_1_pep_aml';
+            }
+
+            // Required checkboxes
+            const requiredCheckboxes = document.querySelectorAll('input[required][type="checkbox"]');
+            requiredCheckboxes.forEach(cb => {
+                const group = cb.closest('.field-group');
+                if(!cb.checked) {
+                    if(group) group.classList.add('error');
+                    isValid = false;
+                    if(!firstError && group) firstError = group;
+                } else {
+                    if(group) group.classList.remove('error');
+                }
+            });
+
+            // Health radio
+            const health = document.querySelector('input[name="health_meets_criteria"]:checked');
+            const healthGroup = document.querySelector('div[data-id="health_status"]');
+            if(!health) {
+                if (healthGroup) healthGroup.style.border = "1px solid var(--ovb-hot-pink)";
+                isValid = false;
+                if(!firstError) firstError = 'step_5_health';
+            } else {
+                if (healthGroup) healthGroup.style.border = "none";
+            }
+
+            if(!isValid) {
+                alert("Proszę uzupełnić wszystkie wymagane pola (oznaczone na czerwono).");
+                if(firstError) {
+                    if(typeof firstError === 'string') document.getElementById(firstError).scrollIntoView({behavior:'smooth'});
+                    else firstError.scrollIntoView({behavior:'smooth'});
+                }
+                return;
+            }
+
+            this.handleRouting();
+        },
+
+        handleRouting() {
+            const isPep = document.querySelector('input[name="pep_is_pep"]:checked').value === 'TAK';
+            const isPepFamily = document.querySelector('input[name="pep_is_family"]:checked').value === 'TAK';
+            const isHealthOk = document.querySelector('input[name="health_meets_criteria"]:checked').value === 'TAK';
+
+            if (isPep || isPepFamily) {
+                alert("ROUTING: Użytkownik jest PEP. Przekierowanie do formularza dodatkowego AML...");
+                return;
+            }
+
+            if (!isHealthOk) {
+                alert("ROUTING: Oświadczenie zdrowotne = NIE. Przekierowanie do formularza medycznego...");
+                return;
+            }
+
+            alert("SUKCES: Wszystkie zgody i oświadczenia poprawne. Przechodzenie do podsumowania i podpisu (Krok 6).");
+        },
+
+        showError(dataId) {
+            const el = document.querySelector(`div[data-id="${dataId}"]`);
+            if(el) el.classList.add('error');
+        },
+
+        clearErrors() {
+            document.querySelectorAll('.field-group').forEach(el => el.classList.remove('error'));
+            const healthGroup = document.querySelector('div[data-id="health_status"]');
+            if (healthGroup) healthGroup.style.border = "none";
+        }
+    };
+
+    const Modal = {
+        overlay: document.getElementById('modal_overlay'),
+        title: document.getElementById('modal_title'),
+        body: document.getElementById('modal_body'),
+
+        open(modalKey) {
+            const content = ModalsMap[modalKey];
+            if(content) {
+                this.title.textContent = content.title;
+                this.body.textContent = content.body;
+                this.overlay.style.display = 'flex';
+            }
+        },
+
+        close() {
+            this.overlay.style.display = 'none';
+        }
+    };
+
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('modal_overlay')) {
+            Modal.close();
+        }
+    }
+</script>
+</body>
+</html>
