@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVB CERTUM - Oświadczenia i Zgody (Krok 5)</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+    <style>
+        /* --- OVB DESIGN SYSTEM --- */
+        :root {
+            --ovb-blue: #003366; 
+            --ovb-white: #FFFFFF; 
+            --ovb-teal: #009999; 
+            --ovb-hot-pink: #FF3399;
+            --ovb-blue-light: #6699CC; 
+            --ovb-blue-medium: #336699; 
+            --ovb-light-grey: #E5E5E5;
+            --ovb-bg-grey: #F4F6F8;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --font-main: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            --shadow-card: 0 4px 20px rgba(0, 51, 102, 0.08);
+        }
+
+        * { box-sizing: border-box; outline: none; }
+        body { font-family: var(--font-main); background-color: var(--ovb-bg-grey); color: var(--text-dark); margin: 0; padding-bottom: 50px; line-height: 1.5; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+        /* HEADER */
+        .ovb-header { background: linear-gradient(135deg, var(--ovb-blue), var(--ovb-blue-medium)); color: var(--ovb-white); padding: 1rem 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo-box { background: white; color: var(--ovb-blue); padding: 2px 8px; border-radius: 2px; font-weight: 700; font-size: 20px;}
+        
+        .lang-switcher { display: flex; gap: 8px; }
+        .lang-btn { cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; opacity: 0.7; transition: 0.3s; padding: 5px 12px; border-radius: 20px; color: white; border: 1px solid rgba(255,255,255,0.3); text-transform: uppercase; }
+        .lang-btn:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+        .lang-btn.active { opacity: 1; background: white; color: var(--ovb-blue); border-color: white; }
+        .flag { width: 18px; height: 12px; object-fit: cover; border-radius: 2px; }
+
+        /* PROGRESS BAR */
+        .progress-section { background: white; padding: 20px 0; border-bottom: 1px solid var(--ovb-light-grey); margin-bottom: 30px; }
+        .progress-steps { display: flex; justify-content: space-between; position: relative; max-width: 600px; margin: 0 auto; }
+        .progress-steps::before { content: ''; position: absolute; top: 16px; left: 0; width: 100%; height: 2px; background: var(--ovb-light-grey); z-index: 1; }
+        .progress-fill { position: absolute; top: 16px; left: 0; width: 80%; height: 2px; background: var(--ovb-teal); z-index: 1; transition: width 0.6s ease; }
+        .step { width: 32px; height: 32px; background: white; border: 2px solid var(--ovb-light-grey); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; font-size: 12px; font-weight: 600; color: #999; }
+        .step.completed { background: var(--ovb-teal); border-color: var(--ovb-teal); color: white; }
+        .step.active { border-color: var(--ovb-blue); color: var(--ovb-blue); box-shadow: 0 0 0 4px rgba(0, 51, 102, 0.1); transform: scale(1.1); }
+        .step-label { position: absolute; top: 40px; font-size: 11px; white-space: nowrap; color: var(--ovb-blue); font-weight: 600; }
+
+        /* MAIN CARD */
+        .main-form-card { background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 40px; margin-bottom: 50px; }
+        h1 { color: var(--ovb-blue); font-size: 1.75rem; margin: 0 0 10px 0; }
+        .subtitle { color: var(--text-light); margin-bottom: 30px; font-size: 0.95rem; }
+
+        /* SECTIONS */
+        .form-section { margin-bottom: 30px; border: 1px solid var(--ovb-light-grey); border-radius: 12px; padding: 25px; transition: 0.3s; position: relative; }
+        .form-section.highlight { border: 2px solid var(--ovb-blue); background-color: rgba(0, 51, 102, 0.02); }
+        .section-header { font-size: 1.1rem; font-weight: 700; color: var(--ovb-blue); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .section-header .icon { color: var(--ovb-teal); }
+
+        .field-group { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed #eee; }
+        .field-group:last-child { border-bottom: none; padding-bottom: 0; }
+        .field-label { font-weight: 600; display: block; margin-bottom: 8px; color: var(--text-dark); }
+        .field-helper { font-size: 12px; color: #777; margin-bottom: 10px; display: block; }
+
+        /* INPUTS */
+        .radio-group { display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap; }
+        .radio-btn-label {
+            display: flex; align-items: center; gap: 8px; padding: 10px 24px; border: 2px solid #eee;
+            border-radius: 25px; cursor: pointer; transition: 0.2s; font-weight: 700; font-size: 14px; color: #666;
+        }
+        .radio-btn-label:hover { border-color: var(--ovb-blue-light); }
+        .radio-btn-label input { accent-color: var(--ovb-teal); transform: scale(1.2); }
+        .radio-btn-label.selected { border-color: var(--ovb-teal); background: #f0fcfc; color: var(--ovb-teal); }
+
+        .option-row { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; margin-bottom: 10px; }
+        .option-row input[type="checkbox"] { margin-top: 4px; transform: scale(1.3); accent-color: var(--ovb-teal); flex-shrink: 0; }
+        .option-text { font-size: 14px; line-height: 1.5; color: #444; flex: 1; }
+
+        .read-more { color: var(--ovb-blue); font-size: 12px; text-decoration: underline; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; font-weight: 600; }
+        .read-more:hover { color: var(--ovb-teal); }
+
+        .fulltext-block { 
+            font-size: 13px; 
+            background: #ffffff; 
+            padding: 20px; 
+            border: 1px solid #e0e0e0; 
+            border-left: 4px solid var(--ovb-teal);
+            border-radius: 6px; 
+            margin-bottom: 20px; 
+            line-height: 1.6; 
+            color: #444; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        
+        .alert-box { background: #FFF9C4; border: 1px solid #FBC02D; padding: 15px; border-radius: 8px; font-size: 13px; margin-bottom: 20px; display: flex; gap: 12px; }
+        .note { font-size: 12px; color: #666; background: #f7fafc; border: 1px solid #e6eef6; border-radius: 8px; padding: 10px; line-height: 1.5; margin-bottom: 10px; }
+
+        /* MODALS */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,20,40,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
+        .modal-card { background: white; width: 95%; max-width: 850px; max-height: 90vh; border-radius: 16px; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.3); animation: fadeIn 0.3s; }
+        .modal-header { padding: 20px 25px; border-bottom: 1px solid #eee; font-weight: 800; color: var(--ovb-blue); display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { padding: 25px; overflow-y: auto; font-size: 14px; line-height: 1.8; color: #444; white-space: pre-line; }
+        .modal-footer { padding: 15px 25px; border-top: 1px solid #eee; text-align: right; }
+        .close-modal { background: none; border: none; font-size: 26px; cursor: pointer; color: #999; }
+
+        /* ACTIONS */
+        .form-actions { display: flex; justify-content: space-between; margin-top: 40px; }
+        .btn { padding: 14px 28px; border-radius: 30px; font-weight: 600; font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; border: none; transition: 0.3s; }
+        .btn-back { background: transparent; border: 2px solid var(--ovb-light-grey); color: var(--text-light); }
+        .btn-next { background: var(--ovb-blue); color: white; box-shadow: 0 4px 12px rgba(0, 51, 102, 0.2); }
+        .btn-next:hover { background: #002244; transform: translateY(-2px); }
+
+        .field-group.error { background: #fff0f5; border: 1px solid var(--ovb-hot-pink); padding: 10px; border-radius: 8px; }
+        .error-text { color: var(--ovb-hot-pink); font-size: 12px; font-weight: 900; margin-top: 6px; display: none; }
+        .field-group.error .error-text { display: block; }
+
+        /* SELECT ALL BOX & TRANSFER BOX */
+        .select-all-box {
+            background: #f0fcfc; border: 1px solid var(--ovb-teal); padding: 10px 15px;
+            border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .select-all-label { font-weight: 700; color: var(--ovb-teal); font-size: 14px; display:flex; align-items:center; gap:8px; cursor:pointer;}
+        
+        .transfer-box {
+            background: #E3F2FD; border: 2px solid #2196F3; padding: 20px; border-radius: 12px; margin-bottom: 25px;
+        }
+        .transfer-header { font-weight: 700; color: #0D47A1; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; font-size: 15px; }
+        .transfer-inputs { margin-top: 15px; padding-top: 15px; border-top: 1px solid #BBDEFB; display: none; }
+        .transfer-inputs.visible { display: block; animation: fadeIn 0.4s; }
+        .input-std { width: 100%; padding: 10px; border: 1px solid #90CAF9; border-radius: 6px; font-family: inherit; font-size: 14px; }
+
+        @keyframes fadeIn { from {opacity: 0; transform: scale(0.95);} to {opacity: 1; transform: scale(1);} }
+    </style>
+</head>
+
+<body>
+<header class="ovb-header">
+    <div class="container header-content">
+        <div style="display:flex; align-items:center;">
+            <div class="logo-box">OVB</div> <span style="margin-left:10px; font-weight:300; letter-spacing:1px;">Allfinanz</span>
+        </div>
+        <div class="lang-switcher">
+            <div class="lang-btn active" id="btn-pl" onclick="setLang('pl')"><img src="https://flagcdn.com/w40/pl.png" class="flag"> PL</div>
+            <div class="lang-btn" id="btn-en" onclick="setLang('en')"><img src="https://flagcdn.com/w40/gb.png" class="flag"> EN</div>
+            <div class="lang-btn" id="btn-ua" onclick="setLang('ua')"><img src="https://flagcdn.com/w40/ua.png" class="flag"> UA</div>
+        </div>
+    </div>
+</header>
+
+<div class="progress-section">
+    <div class="container">
+        <div class="progress-steps">
+            <div class="progress-fill"></div>
+            <div class="step completed">✓</div>
+            <div class="step completed">✓</div>
+            <div class="step completed">✓</div>
+            <div class="step completed">✓</div>
+            <div class="step active">5 <div class="step-label" id="lbl-step-5">Oświadczenia</div></div>
+            <div class="step">6</div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="top-controls" style="background:#E0F7FA; padding:15px; border-radius:8px; display:flex; justify-content:space-between; margin-bottom:30px; align-items: center;">
+        <span style="font-weight:700; color:var(--ovb-blue);" id="lbl-tools">Narzędzia wsparcia:</span>
+        <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn" style="padding:5px 15px; font-size:12px; background:white; color:var(--ovb-teal); border:1px solid var(--ovb-teal);" onclick="FormController.setStandardAnswers()">Standard</button>
+            <button type="button" class="btn" style="padding:5px 15px; font-size:12px; background:white; color:#999; border:1px solid #999;" onclick="FormController.clearAll()" id="lbl-clear">Wyczyść</button>
+        </div>
+    </div>
+
+    <form class="main-form-card" id="consentsForm">
+        <h1 id="lbl-main-title">Przystąpienie do ubezpieczenia</h1>
+        <p class="subtitle" id="lbl-main-subtitle">Potwierdź wymagane sekcje, aby móc sfinalizować deklarację przystąpienia.</p>
+
+        <!-- 1. AML / PEP -->
+        <div class="form-section">
+            <div class="section-header"><span class="material-icons-outlined icon">gavel</span> <span id="lbl-sec-1">1. Procedury AML / PEP</span></div>
+            
+            <div class="field-group" data-id="pep_is_pep">
+                <span class="field-label" id="lbl-pep-q1">Czy zajmujesz eksponowane stanowisko polityczne (PEP)?</span>
+                <div class="radio-group">
+                    <label class="radio-btn-label" onclick="UI.radioSelect(this)"><input type="radio" name="pep_is_pep" value="TAK"> <span id="lbl-yes-1">TAK</span></label>
+                    <label class="radio-btn-label" onclick="UI.radioSelect(this)"><input type="radio" name="pep_is_pep" value="NIE"> <span id="lbl-no-1">NIE</span></label>
+                </div>
+                <div class="read-more" onclick="Modal.open('pep')"><span id="lbl-read-pep">Pokaż treść oświadczenia PEP</span></div>
+                <div class="error-text" id="err-pep1">Wybór jest wymagany</div>
+            </div>
+
+            <div class="field-group" data-id="pep_is_family">
+                <span class="field-label" id="lbl-pep-q2">Czy jesteś członkiem rodziny lub bliskim współpracownikiem PEP?</span>
+                <div class="radio-group">
+                    <label class="radio-btn-label" onclick="UI.radioSelect(this)"><input type="radio" name="pep_is_family" value="TAK"> <span id="lbl-yes-2">TAK</span></label>
+                    <label class="radio-btn-label" onclick="UI.radioSelect(this)"><input type="radio" name="pep_is_family" value="NIE"> <span id="lbl-no-2">NIE</span></label>
+                </div>
+                <div class="read-more" onclick="Modal.open('pep_family')"><span id="lbl-read-pep-fam">Pokaż treść oświadczenia dla bliskich</span></div>
+                <div class="error-text" id="err-pep2">Wybór jest wymagany</div>
+            </div>
+        </div>
+
+        <!-- 2. Zgody Medyczne -->
+        <div class="form-section">
+            <div class="section-header"><span class="material-icons-outlined icon">verified_user</span> <span id="lbl-sec-2">2. Zgody wymagane (Generali)</span></div>
+            
+            <div class="field-group">
+                <label class="option-row">
+                    <input type="checkbox" name="consent_medical_info" required>
+                    <span class="option-text"><strong id="lbl-med-title">Zgoda na pozyskiwanie informacji o stanie zdrowia.</strong><br><span id="lbl-med-desc">Niezbędna do oceny ryzyka przez Generali.</span></span>
+                </label>
+                <div class="read-more" onclick="Modal.open('medical')"><span id="lbl-read-med">Pełna treść zgody medycznej</span></div>
+                <div class="error-text" id="err-med">Zgoda jest wymagana</div>
+            </div>
+
+            <div class="field-group">
+                <label class="option-row">
+                    <input type="checkbox" name="consent_share" required>
+                    <span class="option-text"><strong id="lbl-share-title">Zgoda na udostępnienie danych innym zakładom ubezpieczeń.</strong></span>
+                </label>
+                <div class="read-more" onclick="Modal.open('share')"><span id="lbl-read-share">Pełna treść zgody na wymianę danych</span></div>
+                <div class="error-text" id="err-share">Zgoda jest wymagana</div>
+            </div>
+        </div>
+
+        <!-- 3. Warunki -->
+        <div class="form-section">
+            <div class="section-header"><span class="material-icons-outlined icon">description</span> <span id="lbl-sec-3">3. Warunki przystąpienia</span></div>
+            <div class="field-group">
+                <label class="option-row"><input type="checkbox" name="accept_terms" required> <span class="option-text" id="lbl-terms-text">Potwierdzam warunki CERTUM/CERTUM MAX oraz zasady ochrony.</span></label>
+                <div class="read-more" onclick="Modal.open('terms')"><span id="lbl-read-terms">Zobacz szczegóły oświadczeń</span></div>
+                <div class="read-more" onclick="Modal.open('owu')"><span id="lbl-read-owu">Zmiany w OWU (pkt 30-44)</span></div>
+                <div class="error-text">Potwierdzenie jest wymagane</div>
+            </div>
+        </div>
+
+        <!-- 4. RODO -->
+        <div class="form-section" style="border-left: 5px solid #90CAF9;">
+            <div class="section-header"><span class="material-icons-outlined icon" style="color:#1E88E5">policy</span> <span id="lbl-sec-4">4. Informacja RODO</span></div>
+            
+            <div class="field-group">
+                <label class="option-row"><input type="checkbox" name="rodo_ack" required> <span class="option-text" id="lbl-rodo-text">Potwierdzam zapoznanie się z informacją RODO.</span></label>
+                <div class="read-more" onclick="Modal.open('rodo')"><span id="lbl-read-rodo">Pokaż pełną informację RODO</span></div>
+                <div class="error-text">Potwierdzenie jest wymagane</div>
+            </div>
+        </div>
+
+        <!-- 5. Marketing -->
+        <div class="form-section" style="border-left: 5px solid #FFD54F;">
+            <div class="section-header"><span class="material-icons-outlined icon" style="color:#FBC02D">campaign</span> <span id="lbl-sec-5">5. Marketing i e-doręczenia (Opcjonalne)</span></div>
+            
+            <!-- Generali Master Switch -->
+            <div class="select-all-box">
+                <span style="font-weight:700; font-size:14px; color:#333;" id="lbl-title-gen">Generali Polska</span>
+                <label class="select-all-label">
+                    <input type="checkbox" onchange="FormController.toggleGroup(this, 'mkt_gen')"> 
+                    <span id="lbl-all-generali">Zaznacz wszystkie zgody Generali</span>
+                </label>
+            </div>
+
+            <div class="field-group"><label class="option-row"><input type="checkbox" name="mkt_gen_group" class="mkt_gen"> <span class="option-text" id="lbl-mkt-1">Zgoda na udostępnienie danych w Grupie Generali (marketing).</span></label></div>
+            <div class="field-group"><label class="option-row"><input type="checkbox" name="mkt_gen_email" class="mkt_gen"> <span class="option-text" id="lbl-mkt-2">Marketing Generali drogą elektroniczną (E-mail).</span></label></div>
+            <div class="field-group"><label class="option-row"><input type="checkbox" name="mkt_gen_sms" class="mkt_gen"> <span class="option-text" id="lbl-mkt-3">Marketing Generali przez wiadomości SMS/MMS.</span></label></div>
+            <div class="field-group"><label class="option-row"><input type="checkbox" name="mkt_gen_phone" class="mkt_gen"> <span class="option-text" id="lbl-mkt-4">Marketing Generali – kontakt telefoniczny.</span></label></div>
+            
+            <!-- OVB Master Switch -->
+            <div class="select-all-box" style="margin-top:25px;">
+                <span style="font-weight:700; font-size:14px; color:#333;" id="lbl-title-ovb">OVB / Finance Club</span>
+                <label class="select-all-label">
+                    <input type="checkbox" onchange="FormController.toggleGroup(this, 'mkt_ovb')"> 
+                    <span id="lbl-all-ovb">Zaznacz wszystkie zgody OVB/SKFC</span>
+                </label>
+            </div>
+
+            <div class="field-group"><label class="option-row"><input type="checkbox" name="mkt_ovb_email" class="mkt_ovb"> <span class="option-text" id="lbl-mkt-ovb-email">Marketing OVB/SKFC drogą elektroniczną (E-mail).</span></label></div>
+            <div class="field-group"><label class="option-row"><input type="checkbox" name="mkt_ovb_sms" class="mkt_ovb"> <span class="option-text" id="lbl-mkt-ovb-sms">Marketing OVB/SKFC przez wiadomości SMS/MMS.</span></label></div>
+            <div class="field-group"><label class="option-row"><input type="checkbox" name="mkt_ovb_phone" class="mkt_ovb"> <span class="option-text" id="lbl-mkt-ovb-phone">Marketing OVB/SKFC – kontakt telefoniczny.</span></label></div>
+
+            <div class="field-group" style="background:#F9FBE7; padding:15px; border-radius:8px; border:1px solid #D4E157; margin-top:20px;">
+                <label class="option-row"><input type="checkbox" name="e_delivery" required> <span class="option-text"><strong id="lbl-ed-title">Zgoda na e-doręczenia.</strong><br><span id="lbl-ed-desc">Dostarczanie polisy i dokumentacji na e-mail.</span></span></label>
+            </div>
+        </div>
+
+        <!-- 6. Zdrowie, Praca, Transfer (BRAMKA) -->
+        <div class="form-section highlight" id="sec_health_gate">
+            <div class="section-header"><span class="material-icons-outlined icon">monitor_heart</span> <span id="lbl-sec-6">6. Stan zdrowia, Zawód i Transfer</span></div>
+            
+            <!-- LOGIKA TRANSFERU -->
+            <div class="transfer-box">
+                <div class="transfer-header">
+                    <label class="option-row" style="margin:0;">
+                        <input type="checkbox" id="chk_transfer" onchange="FormController.toggleTransfer()">
+                        <span class="option-text" style="font-weight:700; color:#0D47A1;" id="lbl-transfer-main">Zmieniam pakiet / Kontynuacja (Promocja dla klientów)</span>
+                    </label>
+                </div>
+                <div class="note" id="lbl-transfer-note">Zaznacz, jeśli rezygnujesz z innej polisy w Stowarzyszeniu. Nie będziesz musiał wypełniać ankiety medycznej ani oświadczenia o pracy. Wyrażam zgodę na przelanie nadpłaty składki na konto nowego certyfikatu.</div>
+                
+                <div class="transfer-inputs" id="box_transfer_details">
+                    <div style="margin-bottom:15px;">
+                        <label class="field-label" id="lbl-old-policy">Numer poprzedniego certyfikatu / polisy</label>
+                        <input type="text" id="inp_old_policy" class="input-std" placeholder="900000XXXXX_XXXX" maxlength="16" oninput="FormController.formatPolicy(this)">
+                        <div class="field-helper">Format: [NumerBazowy]_[max4cyfry]</div>
+                    </div>
+                    <div style="margin-bottom:15px;">
+                        <label class="field-label" id="lbl-resignation-date">Data rezygnacji ze starej polisy (automatyczna)</label>
+                        <input type="text" id="inp_res_date" class="input-std" readonly style="background:#eee; cursor:not-allowed;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- STANDARDOWA ŚCIEŻKA (Ukrywana przy transferze) -->
+            <div id="box_standard_health">
+                <div class="alert-box">
+                    <span class="material-icons-outlined" style="color:#F57F17">info</span>
+                    <span id="lbl-health-alert">To oświadczenie jest wymagane. Jeśli wybierzesz NIE, poprosimy o wypełnienie kwestionariusza medycznego.</span>
+                </div>
+
+                <div class="field-group">
+                    <label class="option-row"><input type="checkbox" name="no_l4" id="std_l4"> <span class="option-text" id="lbl-l4-text">Oświadczam, że nie przebywam na L4 (poza ciążą/opieką).</span></label>
+                    <div class="error-text">Oświadczenie jest wymagane</div>
+                </div>
+                <div class="field-group">
+                    <label class="option-row"><input type="checkbox" name="no_excluded" id="std_excluded"> <span class="option-text" id="lbl-excluded-text">Oświadczam, że nie wykonuję zawodów wykluczonych.</span></label>
+                    <div class="read-more" onclick="Modal.open('excluded')"><span id="lbl-read-excluded">Lista zawodów i prac wykluczonych</span></div>
+                    <div class="error-text">Oświadczenie jest wymagane</div>
+                </div>
+
+                <div class="field-group" data-id="health_status" style="border:none;">
+                    <div class="fulltext-block" id="box-health-text">...</div>
+                    <span class="field-label" style="font-size:16px; margin-top:20px;" id="lbl-health-q">Czy powyższe oświadczenie jest PRAWDZIWE?</span>
+                    <div class="radio-group">
+                        <label class="radio-btn-label" onclick="UI.radioSelect(this)"><input type="radio" name="health_gate" value="TAK"> <span id="lbl-yes-3">TAK</span></label>
+                        <label class="radio-btn-label" onclick="UI.radioSelect(this)"><input type="radio" name="health_gate" value="NIE"> <span id="lbl-no-3">NIE</span></label>
+                    </div>
+                    <div class="error-text" id="err-gate">Wybór w bramce jest wymagany</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn btn-back" id="lbl-btn-back">Wstecz</button>
+            <button type="button" class="btn btn-next" onclick="FormController.validateAndSubmit()">
+                <span id="lbl-btn-next">Zatwierdź i dalej</span>
+                <span class="material-icons-outlined">arrow_forward</span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- MODAL SURVEY -->
+<div id="modal_survey" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header"><span id="lbl-survey-title">Kwestionariusz Medyczny</span><button type="button" class="close-modal" onclick="Modal.closeSurvey()">&times;</button></div>
+        <div class="modal-body">
+            <p id="lbl-survey-desc" style="color:#666; margin-bottom:20px;">Z uwagi na odpowiedź NIE w bramce zdrowotnej, prosimy o dodatkowe odpowiedzi. Ubezpieczyciel może poprosić o dokumentację medyczną.</p>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:20px;">
+                <div><label class="field-label" id="lbl-weight">Waga (kg)</label><input type="number" class="btn" style="width:100%; background:#f0f0f0; border:1px solid #ccc; border-radius:8px;" id="q_waga"></div>
+                <div><label class="field-label" id="lbl-height">Wzrost (cm)</label><input type="number" class="btn" style="width:100%; background:#f0f0f0; border:1px solid #ccc; border-radius:8px;" id="q_wzrost"></div>
+            </div>
+            <div id="survey_questions"></div>
+        </div>
+        <div class="modal-footer"><button type="button" class="btn btn-next" onclick="FormController.saveSurvey()">Zapisz i kontynuuj</button></div>
+    </div>
+</div>
+
+<!-- GENERIC MODAL -->
+<div id="modal_generic" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header"><span id="modal_title"></span><button type="button" class="close-modal" onclick="Modal.close()">&times;</button></div>
+        <div class="modal-body" id="modal_body"></div>
+        <div class="modal-footer"><button type="button" class="btn btn-next" onclick="Modal.close()">Zamknij</button></div>
+    </div>
+</div>
+
+<script>
+    const I18N = {
+        pl: {
+            step_5: "Oświadczenia", tools: "Narzędzia wsparcia:", main_title: "Zgody i oświadczenia", main_subtitle: "Potwierdź wymagane sekcje.", clear: "Wyczyść",
+            sec_1: "1. Procedury AML / PEP", pep_q1: "Czy zajmujesz eksponowane stanowisko polityczne (PEP)?", pep_q2: "Czy jesteś członkiem rodziny lub bliskim współpracownikiem PEP?", yes: "TAK", no: "NIE", read_pep: "Pokaż treść oświadczenia PEP", read_pep_fam: "Pokaż treść oświadczenia dla bliskich",
+            sec_2: "2. Zgody wymagane (Generali)", med_title: "Zgoda na pozyskiwanie informacji o stanie zdrowia.", med_desc: "Niezbędna do oceny ryzyka przez Generali.", share_title: "Zgoda na udostępnienie danych innym zakładom.", read_med: "Pełna treść zgody medycznej", read_share: "Pełna treść zgody na wymianę danych",
+            sec_3: "3. Warunki przystąpienia", terms_text: "Potwierdzam warunki CERTUM/CERTUM MAX oraz zasady ochrony.", read_terms: "Zobacz szczegóły oświadczeń", read_owu: "Zmiany w OWU (pkt 30-44)",
+            sec_4: "4. Informacja RODO", rodo_text: "Potwierdzam zapoznanie się z informacją RODO.", read_rodo: "Pokaż pełną informację RODO",
+            sec_5: "5. Marketing i e-doręczenia", all_gen: "Zaznacz wszystkie (Generali)", all_ovb: "Zaznacz wszystkie (OVB/SKFC)",
+            mkt_1: "Zgoda na udostępnienie danych w Grupie Generali (marketing).", mkt_2: "Marketing Generali drogą elektroniczną (E-mail).", mkt_3: "Marketing Generali przez wiadomości SMS/MMS.", mkt_4: "Marketing Generali – kontakt telefoniczny.", 
+            mkt_ovb_1: "Marketing OVB/SKFC drogą elektroniczną (E-mail).", mkt_ovb_2: "Marketing OVB/SKFC przez wiadomości SMS/MMS.", mkt_ovb_3: "Marketing OVB/SKFC – kontakt telefoniczny.",
+            ed_title: "Zgoda na e-doręczenia.", ed_desc: "Dostarczanie polisy i dokumentacji na e-mail.",
+            sec_6: "6. Stan zdrowia, Zawód i Transfer", health_alert: "To oświadczenie jest wymagane. Jeśli wybierzesz NIE, poprosimy o kwestionariusz medyczny.", health_q: "Czy powyższe oświadczenie jest PRAWDZIWE?",
+            transfer_main: "Zmieniam pakiet / Kontynuacja (Promocja dla klientów)", transfer_note: "Zaznacz, jeśli rezygnujesz z innej polisy w Stowarzyszeniu. Nie będziesz musiał wypełniać ankiety medycznej ani oświadczenia o pracy. Wyrażam zgodę na przelanie nadpłaty składki na konto nowego certyfikatu.",
+            lbl_old_pol: "Numer poprzedniego certyfikatu / polisy", lbl_res_date: "Data rezygnacji ze starej polisy (automatyczna)",
+            l4_text: "Oświadczam, że nie przebywam na L4 (poza ciążą/opieką).", excluded_text: "Oświadczam, że nie wykonuję zawodów wykluczonych.", read_excluded: "Lista zawodów i prac wykluczonych",
+            btn_back: "Wstecz", btn_next: "Zatwierdź i dalej", survey_title: "Kwestionariusz Medyczny", survey_desc: "Z uwagi na odpowiedź NIE w bramce zdrowotnej, prosimy o dodatkowe odpowiedzi. Ubezpieczyciel może poprosić o dokumentację medyczną.", weight: "Waga (kg)", height: "Wzrost (cm)",
+            err_req: "Wybór jest wymagany", err_cb: "Zgoda jest wymagana",
+            lbl_gen_pol: "Generali Polska", lbl_ovb_pol: "OVB / Finance Club",
+            // PEŁNE TREŚCI (PL)
+            pep_content: `Niniejszym oświadczam pod rygorem odpowiedzialności karnej za złożenie fałszywego oświadczenia, że nie jestem osobą zajmującą eksponowane stanowisko polityczne zgodnie z Ustawą z dnia 1 marca 2018r. o przeciwdziałaniu praniu pieniędzy oraz finansowaniu terroryzmu.`,
+            pep_family_content: `Niniejszym oświadczam pod rygorem odpowiedzialności karnej za złożenie fałszywego oświadczenia, że nie jestem członkiem rodziny PEP / osobą znaną jako bliski współpracownik PEP.`,
+            medical_content: `Wyrażam zgodę, aby Generali Życie T.U. S.A. otrzymywała od podmiotów wykonujących działalność leczniczą, np. szpitali, przychodni lekarskich („Zakłady Lecznicze"), wskazane niżej informacje, w tym informacje o moim stanie zdrowia (z wyłączeniem wyników badań genetycznych), w celu oceny ryzyka ubezpieczeniowego, weryfikacji podanych przeze mnie danych o stanie zdrowia i ustalenia mojego prawa do świadczenia z zawartej umowy ubezpieczenia i wysokości tego świadczenia oraz, w przypadku zgłoszenia przeze mnie roszczeń, na otrzymywanie od Narodowego Funduszu Zdrowia informacji o adresach i nazwach Zakładów Leczniczych, które udzielały mi świadczeń zdrowotnych w związku ze zdarzeniem będącym podstawą ustalenia odpowiedzialności Generali Życie T.U. S.A. Zakres informacji o moim stanie zdrowia obejmuje: przyczyny hospitalizacji oraz leczenia ambulatoryjnego, wykonane w ich trakcie badania diagnostyczne i wyniki tych badań, inne udzielone świadczenia zdrowotne oraz wyniki leczenia, wyniki przeprowadzonych konsultacji, przyczynę śmierci i wyniki sekcji zwłok, jeżeli została przeprowadzona.`,
+            share_content: `Wyrażam zgodę na udostępnienie przez Generali Życie T.U. S.A. innym zakładom ubezpieczeń, na ich żądanie, moich danych osobowych w zakresie potrzebnym do oceny ryzyka ubezpieczeniowego i weryfikacji danych podanych przez ubezpieczającego lub ubezpieczonego lub osobę, na rachunek której ma zostać zawarta umowa ubezpieczenia, ustalenia prawa ubezpieczonego do świadczenia z zawartej umowy ubezpieczenia i wysokości tego świadczenia, a także informacji o przyczynie mojej śmierci lub informacji niezbędnych do ustalenia prawa uprawnionego z umowy ubezpieczenia do świadczenia i jego wysokości.`,
+            terms_content: `Oświadczenia o chęci zawarcia umowy ubezpieczenia\nPrzystępując do Umowy grupowego ubezpieczenia na życie CERTUM/CERTUM MAX (dalej: umowa ubezpieczenia) zostałem poinformowany, że\n1. Towarzystwo za pośrednictwem sms wysłanego na nr telefonu wskazany w deklaracji przystąpienia przekaże informację o rozpoczęciu ochrony ubezpieczeniowej.\n2. Odpowiedzialność Towarzystwa trwa 1 miesiąc, z możliwością jej automatycznego przedłużenia na kolejny, analogiczny co do długości okres, pod warunkiem opłacenia składki w terminie do 26 dnia miesiąca poprzedzającego okres, na który odpowiedzialność Towarzystwa ma zostać przedłużona.\n3. Brak wpłaty składki w terminie, o którym mowa w pkt 2 powyżej, skutkuje nieprzedłużeniem odpowiedzialności Towarzystwa na kolejny okres.\n4. Wznowienie odpowiedzialności może nastąpić, jeżeli łącznie spełnione są warunki przewidziane w OWU (m.in. nie więcej niż 26 dni przerwy, bez zmiany warunków Umowy oraz z uwzględnieniem limitów wieku / podgrup zgodnie z OWU).`,
+            owu_content: `AKTUALNE WARUNKI (ZMIANY OWU) – pkt 30–44\n\n30. Art. XIV ust. 1 OWU przyjmuje następujące brzmienie: „W przypadku zakończenia odpowiedzialności Towarzystwa z tytułu Umowy w stosunku do Ubezpieczonego z powodu ukończenia określonego wieku wskazanego w Art. X ust. 2 pkt 4) Ubezpieczony ma prawo do indywidualnej kontynuacji ubezpieczenia, jeżeli łącznie spełnione zostały następujące warunki:\n1) Ubezpieczony złoży w Towarzystwie wniosek przed upływem 3 miesięcy od daty zajścia któregokolwiek z wyżej wymienionych zdarzeń;\n2) Ubezpieczony był objęty ochroną ubezpieczeniową z tytułu Umowy przez co najmniej 1 miesiąc...”\n\n31. Art. II pkt 77 OWU: definicja wcześniejszej umowy ubezpieczenia.\n\n32. Limity wieku i pakiety (START-VIP do 56 lat, Silver+ do 70 lat).\n\n44. Przystąpienie do pakietu ONKO/KARDIO wyłącznie po pozytywnej ocenie medycznej.`,
+            excluded_content: `Oświadczam, że nie wykonuję żadnego z wymienionych zawodów: górnik, konwojent, ochroniarz z bronią, elektryk >1kV, kaskader, pirotechnik, marynarz, ratownik, żołnierz zawodowy, funkcjonariusz służb mundurowych, treser zwierząt, akrobata.\nOraz nie wykonuję prac: na platformie wiertniczej, w rafinerii, w tartaku, pod ziemią, pod wodą, przy zrywce drzew, na wysokościach >10m, materiały wybuchowe.`,
+            rodo_content: `INFORMACJA O PRZETWARZANIU DANYCH OSOBOWYCH (RODO) – część dla Ubezpieczającego\n1) Administratorzy danych: SKFC oraz Generali Życie T.U. S.A.\n2) Zakres danych: identyfikacyjne, kontaktowe, status ochrony. OVB nie ma dostępu do odpowiedzi medycznych.\n3) Okres przechowywania: 12 lat od dnia zawarcia umowy.`,
+            health_text: `Oświadczam, że w okresie ostatnich 5 lat stan mojego zdrowia nie uległ istotnemu pogorszeniu czyli:
+
+<ul><li>nie byłem(am) leczony(a) szpitalnie, ani nie jest planowane takie leczenie (z wyjątkiem usunięcia wyrostka robaczkowego, pęcherzyka żółciowego, migdałków, hemoroidów, łagodnych torbieli, przeprowadzenia artroskopii, operacji przepukliny, przegrody nosa, zaćmy, leczenia złamania kości, usunięcia zęba, porodu);</li>
+<li>nie stwierdzano odchyleń od normy w wykonanych badaniach diagnostycznych, powodujących konieczność podjęcia leczenia trwającego dłużej niż 1 miesiąc.</li></ul>
+
+<strong>Jednocześnie oświadczam, że:</strong>
+<ul><li>nie pozostawałem(am) niezdolny(a) do pracy dłużej niż 30 dni w ciągu ostatnich 12 miesięcy (nie dotyczy niezdolności do pracy związanej z ciążą);</li>
+<li>nie posiadam orzeczenia o częściowej niezdolności do pracy lub służby;</li>
+<li>nie rozpoznano u mnie którejkolwiek z wymienionych chorób lub stanów chorobowych przewlekłych: nowotwór, choroba wieńcowa, zawał serca, wada serca, udar mózgu, TIA, cukrzyca, astma, przewlekła choroba wątroby, trzustki lub nerek, zaburzenia psychiczne, choroba alkoholowa, zakażenie wirusem HIV.</li></ul>`,
+            q1: "1) Czy w ciągu ostatnich 5 lat chorował Pan/chorowała Pani na następujące choroby? choroba nowotworowa, choroba wieńcowa, zawał serca, wada serca, udar mózgu, przemijające niedokrwienie mózgu (TIA), nadciśnienie tętnicze, cukrzyca, astma oskrzelowa lub inna przewlekła choroba układu oddechowego, przewlekła choroba wątroby, trzustki lub nerek, zaburzenia psychiczne, choroba alkoholowa, zakażenie wirusem HIV.",
+            q2: "2) Czy w ciągu ostatnich 5 lat był Pan leczony/ była Pani leczona w szpitalu (z wyjątkiem usunięcia wyrostka robaczkowego, pęcherzyka żółciowego, migdałków, hemoroidów, łagodnych torbieli, przeprowadzenia artroskopii, operacji przepukliny, przegrody nosa, zaćmy, leczenia złamania kości, usunięcia zęba, porodu) lub czy jest planowane takie leczenie?",
+            q3: "3) Czy w ciągu ostatniego roku odczuwał Pan/ odczuwała Pani którekolwiek z poniższych dolegliwości: bóle w klatce piersiowej, omdlenia, krwioplucie, obecność krwi w stolcu, duszność, wyczuwalny guzek lub powiększenie jednego sutka, gorączkę, której przyczyny nie wyjaśniono, postępującą utratę masy ciała?",
+            q4: "4) Czy w ciągu ostatnich 5 lat wykonywano u Pana/ wykonywano u Pani jakiekolwiek inwazyjne badania diagnostyczne (np. biopsja, nakłucie lędźwiowe, punkcja, endoskopia, koronarografia, cewnikowanie serca)?"
+        },
+        en: {
+            step_5: "Declarations", tools: "Agent Tools:", main_title: "Policy Accession", main_subtitle: "Please confirm the required sections.", clear: "Clear",
+            sec_1: "1. AML / PEP Procedures", pep_q1: "Are you a Politically Exposed Person (PEP)?", pep_q2: "Are you a PEP family member or associate?", yes: "YES", no: "NO", read_pep: "Show PEP statement", read_pep_fam: "Show PEP Family statement",
+            sec_2: "2. Required Consents", med_title: "Medical Data Acquisition Consent.", med_desc: "Required for risk assessment by Generali.", share_title: "Data sharing with other insurers.", read_med: "Full medical consent text", read_share: "Full data sharing consent",
+            sec_3: "3. Conditions", terms_text: "I confirm CERTUM terms & protection rules.", read_terms: "Full statement details", read_owu: "OWU Updates",
+            sec_4: "4. GDPR (RODO)", rodo_text: "I acknowledge the GDPR information.", read_rodo: "Show full GDPR info",
+            sec_5: "5. Marketing & E-delivery", all_gen: "Select all (Generali)", all_ovb: "Select all (OVB/SKFC)",
+            mkt_1: "Consent to share data within the Generali Group for marketing purposes.", mkt_2: "Generali marketing via electronic means (E-mail).", mkt_3: "Generali marketing via SMS/MMS messages.", mkt_4: "Generali marketing via telephone contact.", 
+            mkt_ovb_1: "Marketing for OVB Polska/SKFC via electronic means (E-mail).", mkt_ovb_2: "Marketing for OVB Polska/SKFC via SMS/MMS messages.", mkt_ovb_3: "Marketing for OVB Polska/SKFC via telephone contact.",
+            ed_title: "E-delivery consent.", ed_desc: "Policy delivery via e-mail.",
+            sec_6: "6. Health, Job & Transfer", health_alert: "This statement is required. If you select NO, a medical questionnaire will be required.", health_q: "Is the statement TRUE?",
+            transfer_main: "Change Package / Continuation (Client Promo)", transfer_note: "Check if resigning from another Association policy. No medical survey or job declaration needed. I agree to transfer overpayment to the new certificate account.",
+            lbl_old_pol: "Previous Certificate / Policy Number", lbl_res_date: "Resignation Date (Auto)",
+            l4_text: "I declare I am not on sick leave.", excluded_text: "I do not work in excluded professions.", read_excluded: "Excluded professions list",
+            btn_back: "Back", btn_next: "Confirm and proceed", survey_title: "Medical Questionnaire", survey_desc: "Due to NO answer, please provide details. Medical documentation may be required.", weight: "Weight (kg)", height: "Height (cm)",
+            lbl_gen_pol: "Generali Poland", lbl_ovb_pol: "OVB / Finance Club",
+            pep_content: "I hereby declare under penalty of perjury for making a false statement that I am not a Politically Exposed Person (PEP) in accordance with the Act of March 1, 2018 on counteracting money laundering and terrorism financing.",
+            pep_family_content: "I hereby declare under penalty of perjury for making a false statement that I am not a family member of a PEP or a person known as a close associate of a PEP.",
+            medical_content: "I consent to Generali Życie T.U. S.A. receiving from entities performing medical activities, e.g., hospitals, medical clinics ('Medical Facilities'), the information indicated below, including information about my health (excluding genetic test results), for the purpose of insurance risk assessment, verification of health data provided by me, and determining my right to benefits from the concluded insurance contract and the amount of such benefits, and, in the case of reporting claims by me, receiving from the National Health Fund information about the addresses and names of Medical Facilities that provided me with health services in connection with the event constituting the basis for determining the liability of Generali Życie T.U. S.A. The scope of information about my health includes: causes of hospitalization and outpatient treatment, diagnostic tests performed during them and their results, other health services provided and treatment results, results of consultations, cause of death, and autopsy results, if performed.",
+            share_content: "I consent to the disclosure by Generali Życie T.U. S.A. to other insurance companies, at their request, of my personal data to the extent necessary to assess insurance risk and verify data provided by the policyholder or the insured or the person on whose account the insurance contract is to be concluded, determining the insured's right to benefits from the concluded insurance contract and the amount of such benefits, as well as information about the cause of my death or information necessary to determine the right of the beneficiary under the insurance contract to benefits and their amount.",
+            terms_content: "Declarations of willingness to conclude an insurance contract\nAccessing the Group Life Insurance Agreement CERTUM/CERTUM MAX (hereinafter: insurance agreement), I have been informed that:\n1. The Company will send information about the commencement of insurance coverage via SMS to the phone number indicated in the accession declaration.\n2. The Company's liability lasts for 1 month, with the possibility of its automatic extension for another analogous period, provided that the premium is paid by the 26th day of the month preceding the period for which the Company's liability is to be extended.\n3. Failure to pay the premium by the deadline referred to in point 2 above results in the non-extension of the Company's liability for the next period.\n4. Resumption of liability may occur if the conditions provided for in the GTC are jointly met (including no more than 26 days gap, without changing the Agreement conditions and taking into account age limits/subgroups according to the GTC).",
+            owu_content: "CURRENT CONDITIONS (GTC CHANGES) – pts 30–44\n\n30. Art. XIV sec. 1 GTC takes the following wording:\n'In the event of termination of the Company's liability under the Agreement in relation to the Insured due to reaching a specific age indicated in Art. X sec. 2 pt 4), the Insured has the right to individual continuation of insurance if the following conditions are jointly met:\n1) The Insured submits an application to the Company before the expiry of 3 months from the date of occurrence of any of the above-mentioned events;\n2) The Insured was covered by insurance protection under the Agreement for at least 1 month...'\n\n31. Art. II pt 77 GTC receives the following wording:\n'77. previous insurance agreement – an insurance agreement meeting one of the following conditions: a) group life insurance agreement; b) Individual Continuation agreement...'\n\n32. Art. IV sec. 10 GTC: Subgroups/packages and age limits: START-VIP up to 56 years; SILVER-PLATINUM up to 70 years; SENIOR up to 75 years.\n\n33. Art. IV sec. 11 GTC: Change of subgroup/package only on policy anniversary.\n\n34. Art. IV sec. 11’ GTC: Change to higher packages requires positive risk assessment.\n\n35. Art. V sec. 1 GTC: Conditions for accession: min 15 years, max 75, member of Open Group, no L4, no excluded professions.\n\n44. Accession to ONKO/KARDIO package solely after positive medical assessment.",
+            excluded_content: "I declare that I do not practice any of the following professions:\n\nminer, conveyer of valuables and money, security guard with a weapon permit, electrician working on networks with voltage higher than 1kV, stuntman, pyrotechnician, war correspondent, sailor, rescuer, professional soldier, Municipal/Commune Guard officer, uniformed services officer (including firefighter, policeman, Prison Service officer, Border Guard, Government Protection Bureau, Internal Security Agency, Central Investigation Bureau, Central Anti-Corruption Bureau), dangerous animal trainer, zoo or circus animal caretaker, acrobat, circus artist, professional athlete.\n\nAnd I do not perform work:\non an oil rig, in a refinery, in a sawmill, underground, underwater, in logging or timber transport, at heights above 10 meters, as an employee using explosives and flammable materials, deep-sea fishing employee, aircraft personnel.",
+            rodo_content: "INFORMATION ON PERSONAL DATA PROCESSING (GDPR) – part for the Policyholder\n\n1) Data Controllers:\n- Finance Club Clients Association (Policyholder) – regarding honorary membership and administration of the Group Agreement.\n- Generali Życie T.U. S.A. – as insurer regarding the conclusion and execution of the insurance contract.\n\n2) Scope of data: The Association processes identification and contact data, declaration number, protection variant, protection status, and settlement data. OVB Allfinanz sp. z o.o. and advisors/intermediaries do not have access to answers to medical questions or medical documentation.\n\n3) Processing method: Data is entered in the Doradca.pro application and transferred via API to Generali. Copies of declarations and medical answers are stored on servers in Poland.\n\n4) Storage period: Copies of declarations and data related to the conclusion and execution of the Group Agreement are stored for 12 years from the date of concluding the agreement.\n\n5) Data recipients: Generali Życie T.U. S.A., IT/hosting providers (including Doradca.pro). OVB may receive data necessary for brokerage/commission settlements – without medical data.\n\n6) Rights: Right to access data, rectification, restriction of processing, objection, and lodging a complaint with the President of the Personal Data Protection Office.",
+            health_text: `I declare that in the last 5 years my health has not significantly deteriorated, meaning:
+
+<ul><li>I have not been hospitalized, nor is such treatment planned (except for removal of appendix, gallbladder, tonsils, hemorrhoids, benign cysts, arthroscopy, hernia repair, nasal septum, cataracts, bone fracture treatment, tooth extraction, childbirth);</li>
+<li>no abnormalities were found in diagnostic tests performed, requiring treatment lasting longer than 1 month.</li></ul>
+
+<strong>At the same time, I declare that:</strong>
+<ul><li>I have not remained unfit for work for longer than 30 days in the last 12 months (does not apply to incapacity for work related to pregnancy);</li>
+<li>I do not have a certificate of partial incapacity for work or service;</li>
+<li>I am not waiting for diagnostic tests recommended by a doctor;</li>
+<li>I have not been diagnosed with any of the listed chronic diseases or conditions: cancer, coronary heart disease, heart attack, heart defect, stroke, transient ischemic attack (TIA), diabetes, bronchial asthma or other chronic respiratory disease, chronic liver, pancreas or kidney disease, mental disorders, alcohol disease, HIV infection.</li></ul>`,
+            q1: "1) Have you suffered from the following diseases in the last 5 years? cancer, coronary heart disease, heart attack, heart defect, stroke, transient ischemic attack (TIA), hypertension, diabetes, bronchial asthma or other chronic respiratory disease, chronic liver, pancreas or kidney disease, mental disorders, alcohol disease, HIV infection.",
+            q2: "2) Have you been treated in a hospital in the last 5 years (except for removal of appendix, gallbladder, tonsils, hemorrhoids, benign cysts, arthroscopy, hernia repair, nasal septum, cataracts, bone fracture treatment, tooth extraction, childbirth) or is such treatment planned?",
+            q3: "3) Have you felt any of the following ailments in the last year: chest pain, fainting, hemoptysis, blood in stool, shortness of breath, palpable lump or enlargement of one breast, fever of unexplained cause, progressive weight loss?",
+            q4: "4) Have any invasive diagnostic tests been performed on you in the last 5 years (e.g., biopsy, lumbar puncture, puncture, endoscopy, coronary angiography, heart catheterization)?"
+        },
+        ua: {
+            step_5: "Декларації", tools: "Інструменти:", main_title: "Згоди та декларації", main_subtitle: "Будь ласка, ознайомтеся та підтвердьте необхідні розділи.", clear: "Очистити",
+            sec_1: "1. Процедури AML / PEP", pep_q1: "Чи займаєте ви політично значущу посаду (PEP)?", pep_q2: "Чи є ви членом сім'ї або близьким співробітником PEP?", yes: "ТАК", no: "НІ", read_pep: "Показати зміст декларації PEP", read_pep_fam: "Показати зміст декларації для близьких",
+            sec_2: "2. Обов'язкові згоди (Generali)", med_title: "Згода на отримання інформації про стан здоров'я.", med_desc: "Необхідна для оцінки ризику Generali.", share_title: "Згода на надання даних іншим страховим компаніям.", read_med: "Повний текст медичної згоди", read_share: "Повний текст згоди на обмін даними",
+            sec_3: "3. Умови приєднання", terms_text: "Підтверджую умови CERTUM/CERTUM MAX та правила захисту.", read_terms: "Деталі декларації", read_owu: "Зміни в OWU (п. 30-44)",
+            sec_4: "4. Інформація RODO", rodo_text: "Підтверджую ознайомлення з інформацією RODO.", read_rodo: "Показати повну інформацію RODO",
+            sec_5: "5. Маркетинг та е-доставка", all_gen: "Вибрати все (Generali)", all_ovb: "Вибрати все (OVB/SKFC)",
+            mkt_1: "Згода на надання даних у Групі Generali для маркетингових цілей.", mkt_2: "Маркетинг Generali електронним шляхом (E-mail).", mkt_3: "Маркетинг Generali через повідомлення SMS/MMS.", mkt_4: "Маркетинг Generali – телефонний контакт.",
+            mkt_ovb_1: "Маркетинг OVB/SKFC електронним шляхом (E-mail).", mkt_ovb_2: "Маркетинг OVB/SKFC через повідомлення SMS/MMS.", mkt_ovb_3: "Маркетинг OVB/SKFC – телефонний контакт.",
+            ed_title: "Згода на е-доставку.", ed_desc: "Доставка полісу та документації на e-mail.",
+            sec_6: "6. Стан здоров'я, Професія та Трансфер", health_alert: "Ця декларація є обов'язковою. Якщо ви виберете НІ, ми попросимо заповнити медичну анкету.", health_q: "Чи є вищезазначена заява ПРАВДИВОЮ?",
+            transfer_main: "Зміна пакету / Продовження (Акція для клієнтів)", transfer_note: "Позначте, якщо відмовляєтесь від іншого полісу в Асоціації. Вам не потрібно заповнювати медичну анкету або декларацію про роботу. Я даю згоду на переказ переплати внеску на рахунок нового сертифікату.",
+            lbl_old_pol: "Номер попереднього сертифікату / полісу", lbl_res_date: "Дата відмови від старого полісу (автоматично)",
+            l4_text: "Не перебуваю на лікарняному (крім вагітності/догляду).", excluded_text: "Не виконую виключених професій.", read_excluded: "Список виключених професій та робіт",
+            btn_back: "Назад", btn_next: "Підтвердити та далі", survey_title: "Медична анкета", survey_desc: "У зв'язку з відповіддю НІ в декларації про здоров'я, просимо надати додаткові відповіді. Страховик може попросити медичну документацію.", weight: "Вага (кг)", height: "Зріст (см)",
+            err_req: "Вибір обов'язковий", err_cb: "Згода обов'язкова",
+            lbl_gen_pol: "Generali Poland", lbl_ovb_pol: "OVB / Finance Club",
+            pep_content: "Цим я заявляю під загрозою кримінальної відповідальності за подання неправдивої заяви, що я не є особою, яка займає політично значущу посаду (PEP) відповідно до Закону від 1 березня 2018 року про протидію відмиванню грошей та фінансуванню тероризму.",
+            pep_family_content: "Цим я заявляю під загрозою кримінальної відповідальності за подання неправдивої заяви, що я не є членом сім'ї PEP або особою, відомою як близький співробітник PEP.",
+            medical_content: "Я даю згоду Generali Życie T.U. S.A. на отримання від суб'єктів, що здійснюють медичну діяльність, наприклад, лікарень, поліклінік («Лікувальні заклади»), зазначеної нижче інформації, включаючи інформацію про стан мого здоров'я (за винятком результатів генетичних досліджень), з метою оцінки страхового ризику, перевірки наданих мною даних про стан здоров'я та встановлення мого права на виплату за укладеним договором страхування та розміру цієї виплати, а також, у разі подання мною претензій, на отримання від Національного фонду здоров'я інформації про адреси та назви Лікувальних закладів, які надавали мені медичні послуги у зв'язку з подією, що є підставою для визначення відповідальності Generali Życie T.U. S.A. Обсяг інформації про стан мого здоров'я включає: причини госпіталізації та амбулаторного лікування, проведені під час них діагностичні дослідження та їх результати, інші надані медичні послуги та результати лікування, результати проведених консультацій, причину смерті та результати розтину, якщо він був проведений.",
+            share_content: "Я даю згоду на надання Generali Życie T.U. S.A. іншим страховим компаніям, на їх запит, моїх персональних даних в обсязі, необхідному для оцінки страхового ризику та перевірки даних, наданих страхувальником або застрахованим, або особою, на чий рахунок має бути укладений договір страхування, встановлення права застрахованого на виплату за укладеним договором страхування та розміру цієї виплати, а також інформації про причину моєї смерті або інформації, необхідної для встановлення права вигодонабувача за договором страхування на виплату та її розміру.",
+            terms_content: "Декларації про бажання укласти договір страхування\nПриєднуючись до Договору групового страхування життя CERTUM/CERTUM MAX (далі: договір страхування), я був поінформований, що:\n1. Товариство за допомогою SMS, надісланого на номер телефону, вказаний у декларації про приєднання, передасть інформацію про початок страхового захисту.\n2. Відповідальність Товариства триває 1 місяць з можливістю її автоматичного продовження на наступний аналогічний період за умови сплати внеску до 26-го дня місяця, що передує періоду, на який відповідальність Товариства має бути продовжена.\n3. Несплата внеску у строк, зазначений у п. 2 вище, призводить до непродовження відповідальності Товариства на наступний період.\n4. Відновлення відповідальності може відбутися, якщо сукупно виконані умови, передбачені в OWU (зокрема, не більше 26 днів перерви, без зміни умов Договору та з урахуванням вікових лімітів/підгруп відповідно до OWU).",
+            owu_content: "АКТУАЛЬНІ УМОВИ (ЗМІНИ OWU) – пп. 30–44\n\n30. Ст. XIV п. 1 OWU набуває такого змісту:\n«У разі припинення відповідальності Товариства за Договором щодо Застрахованого через досягнення певного віку, зазначеного в Ст. X п. 2 пп. 4), Застрахований має право на індивідуальне продовження страхування, якщо сукупно виконані такі умови:\n1) Застрахований подасть до Товариства заяву до закінчення 3 місяців з дати настання будь-якої з вищезазначених подій;\n2) Застрахований був охоплений страховим захистом за Договором щонайменше 1 місяць...»\n\n31. Ст. II п. 77 OWU отримує такий зміст:\n«77. попередній договір страхування – договір страхування, що відповідає одній з таких умов: a) договір групового страхування життя; b) договір Індивідуального Продовження...»\n\n32. Ст. IV п. 10 OWU: Підгрупи/пакети та вікові ліміти: START-VIP до 56 років; SILVER-PLATINUM до 70 років; SENIOR до 75 років.\n\n33. Ст. IV п. 11 OWU: Зміна підгрупи/пакету лише в річницю полісу.\n\n34. Ст. IV п. 11’ OWU: Зміна на вищі пакети вимагає позитивної оцінки ризику.\n\n35. Ст. V п. 1 OWU: Умови приєднання: мін. 15 років, макс. 75, член Відкритої Групи, відсутність L4, відсутність виключених професій.\n\n44. Приєднання до пакету ONKO/KARDIO виключно після позитивної медичної оцінки.",
+            excluded_content: "Я заявляю, що не виконую жодної з перерахованих професій:\n\nшахтар, конвоїр цінностей та грошей, охоронець з дозволом на зброю, електрик, що працює в мережі з напругою вище 1 кВ, каскадер, піротехнік, військовий кореспондент, моряк, рятувальник, професійний солдат, співробітник муніципальної варти, співробітник силових структур (зокрема пожежник, поліцейський, співробітник тюремної служби, прикордонної служби, Бюро охорони уряду, Агентства внутрішньої безпеки, Центрального слідчого бюро, Центрального антикорупційного бюро), дресирувальник небезпечних тварин, доглядач тварин у зоопарку або цирку, акробат, цирковий артист, професійний спортсмен.\n\nА також не виконую робіт:\nна буровій платформі, на нафтопереробному заводі, на лісопильні, під землею, під водою, при трелюванні або вирубці дерев та вивезенні деревини, на висоті понад 10 метрів, як працівник, що використовує вибухові та легкозаймисті матеріали, працівник глибоководного рибальства, персонал літаків.",
+            rodo_content: "ІНФОРМАЦІЯ ПРО ОБРОБКУ ПЕРСОНАЛЬНИХ ДАНИХ (RODO) – частина для Страхувальника\n\n1) Адміністратори даних:\n- Асоціація Клієнтів Finance Club (Страхувальник) – у сфері почесного членства та адміністрування Групового Договору.\n- Generali Życie T.U. S.A. – як страховик (окремий адміністратор) у сфері укладення та виконання договору страхування.\n\n2) Обсяг даних: Асоціація обробляє ідентифікаційні та контактні дані, номер декларації, варіант захисту, статус захисту та розрахункові дані. OVB Allfinanz sp. z o.o. та консультанти не мають доступу до відповідей на медичні питання або медичної документації.\n\n3) Спосіб обробки: Дані вводяться в додатку Doradca.pro та передаються через інтерфейс API до Generali. Копії декларацій та медичні відповіді зберігаються на серверах у Польщі.\n\n4) Період зберігання: Копії декларацій та дані, пов'язані з укладенням та виконанням Групового Договору, зберігаються протягом 12 років.\n\n5) Отримувачі даних: Generali Życie T.U. S.A., постачальники IT/хостингу (включаючи Doradca.pro). OVB може отримувати дані, необхідні для розрахунків посередництва – без медичних даних.\n\n6) Права: Право доступу до даних, їх виправлення, обмеження обробки, заперечення та подання скарги Голові Управління захисту персональних даних (UODO).",
+            health_text: `Я заявляю, що за останні 5 років стан мого здоров'я суттєво не погіршився, а саме:
+
+<ul><li>я не перебував(ла) на стаціонарному лікуванні, і таке лікування не планується (за винятком видалення апендикса, жовчного міхура, мигдаликів, геморою, доброякісних кіст, проведення артроскопії, операції грижі, носової перегородки, катаракти, лікування перелому кістки, видалення зуба, пологів);</li>
+<li>не виявлено відхилень від норми у виконаних діагностичних дослідженнях, що потребують лікування тривалістю понад 1 місяць.</li></ul>
+
+<strong>Водночас я заявляю, що:</strong>
+<ul><li>я не був(ла) непрацездатним(ою) понад 30 днів протягом останніх 12 місяців (не стосується непрацездатності, пов'язаної з вагітністю);</li>
+<li>я не маю довідки про часткову непрацездатність до роботи або служби;</li>
+<li>я не очікую на виконання рекомендованих лікарем діагностичних досліджень;</li>
+<li>у мене не було діагностовано жодної з перерахованих хронічних хвороб або станів: онкологічне захворювання, ішемічна хвороба серця, інфаркт міокарда, вада серця, інсульт, транзиторна ішемічна атака (TIA), діабет, бронхіальна астма або інше хронічне захворювання дихальної системи, хронічне захворювання печінки, підшлункової залози або нирок, психічні розлади, алкогольна хвороба, вірусна інфекція ВІЛ.</li></ul>`,
+            q1: "1) Чи хворіли Ви протягом останніх 5 років на наступні хвороби? онкологічне захворювання, ішемічна хвороба серця, інфаркт міокарда, вада серця, інсульт, транзиторна ішемічна атака (TIA), артеріальна гіпертензія, діабет, бронхіальна астма або інше хронічне захворювання дихальної системи, хронічне захворювання печінки, підшлункової залози або нирок, психічні розлади, алкогольна хвороба, вірусна інфекція ВІЛ.",
+            q2: "2) Чи лікувалися Ви в лікарні протягом останніх 5 років (за винятком видалення апендикса, жовчного міхура, мигдаликів, геморою, доброякісних кіст, проведення артроскопії, операції грижі, носової перегородки, катаракти, лікування перелому кістки, видалення зуба, пологів) або чи планується таке лікування?",
+            q3: "3) Чи відчували Ви протягом останнього року будь-які з наступних нездужань: біль у грудній клітці, непритомність, кровохаркання, наявність крові в калі, задишка, відчутний вузлик або збільшення однієї молочної залози, лихоманка, причину якої не з'ясовано, прогресуюча втрата ваги?",
+            q4: "4) Чи проводилися Вам протягом останніх 5 років будь-які інвазивні діагностичні дослідження (наприклад, біопсія, люмбальна пункція, пункція, ендоскопія, коронарографія, катетеризація серця)?"
+        }
+    };
+
+    let currentLang = 'pl';
+
+    function setLang(lang) {
+        currentLang = lang;
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`btn-${lang}`).classList.add('active');
+        const d = I18N[lang];
+        
+        document.getElementById('lbl-step-5').textContent = d.step_5;
+        document.getElementById('lbl-tools').textContent = d.tools;
+        document.getElementById('lbl-clear').textContent = d.clear;
+        document.getElementById('lbl-main-title').textContent = d.main_title;
+        document.getElementById('lbl-main-subtitle').textContent = d.main_subtitle;
+        document.getElementById('lbl-sec-1').textContent = d.sec_1;
+        document.getElementById('lbl-pep-q1').textContent = d.pep_q1;
+        document.getElementById('lbl-pep-q2').textContent = d.pep_q2;
+        document.getElementById('lbl-read-pep').textContent = d.read_pep;
+        document.getElementById('lbl-read-pep-fam').textContent = d.read_pep_fam;
+        document.querySelectorAll('[id^="lbl-yes"]').forEach(el => el.textContent = d.yes);
+        document.querySelectorAll('[id^="lbl-no"]').forEach(el => el.textContent = d.no);
+        document.getElementById('lbl-sec-2').textContent = d.sec_2;
+        document.getElementById('lbl-med-title').textContent = d.med_title;
+        document.getElementById('lbl-med-desc').textContent = d.med_desc;
+        document.getElementById('lbl-share-title').textContent = d.share_title;
+        document.getElementById('lbl-read-med').textContent = d.read_med;
+        document.getElementById('lbl-read-share').textContent = d.read_share;
+        document.getElementById('lbl-sec-3').textContent = d.sec_3;
+        document.getElementById('lbl-terms-text').textContent = d.terms_text;
+        document.getElementById('lbl-read-terms').textContent = d.read_terms;
+        document.getElementById('lbl-read-owu').textContent = d.read_owu;
+        document.getElementById('lbl-sec-4').textContent = d.sec_4;
+        document.getElementById('lbl-rodo-text').textContent = d.rodo_text;
+        document.getElementById('lbl-read-rodo').textContent = d.read_rodo;
+        document.getElementById('lbl-sec-5').textContent = d.sec_5;
+        document.getElementById('lbl-all-generali').textContent = d.all_gen;
+        document.getElementById('lbl-title-gen').textContent = d.lbl_gen_pol;
+        document.getElementById('lbl-mkt-1').textContent = d.mkt_1;
+        document.getElementById('lbl-mkt-2').textContent = d.mkt_2;
+        document.getElementById('lbl-mkt-3').textContent = d.mkt_3;
+        document.getElementById('lbl-mkt-4').textContent = d.mkt_4;
+        document.getElementById('lbl-all-ovb').textContent = d.all_ovb;
+        document.getElementById('lbl-title-ovb').textContent = d.lbl_ovb_pol;
+        document.getElementById('lbl-mkt-ovb-email').textContent = d.mkt_ovb_1;
+        document.getElementById('lbl-mkt-ovb-sms').textContent = d.mkt_ovb_2;
+        document.getElementById('lbl-mkt-ovb-phone').textContent = d.mkt_ovb_3;
+        document.getElementById('lbl-ed-title').textContent = d.ed_title;
+        document.getElementById('lbl-ed-desc').textContent = d.ed_desc;
+        document.getElementById('lbl-sec-6').textContent = d.sec_6;
+        document.getElementById('lbl-health-alert').textContent = d.health_alert;
+        document.getElementById('box-health-text').innerHTML = d.health_text; // innerHTML for HTML content
+        document.getElementById('lbl-health-q').textContent = d.health_q;
+        document.getElementById('lbl-transfer-text').textContent = d.transfer;
+        document.getElementById('lbl-btn-back').textContent = d.btn_back;
+        document.getElementById('lbl-btn-next').textContent = d.btn_next;
+        document.getElementById('lbl-survey-title').textContent = d.survey_title;
+        document.getElementById('lbl-survey-desc').textContent = d.survey_desc;
+        document.getElementById('lbl-weight').textContent = d.weight;
+        document.getElementById('lbl-height').textContent = d.height;
+        document.getElementById('lbl-transfer-main').textContent = d.transfer_main;
+        document.getElementById('lbl-transfer-note').textContent = d.transfer_note;
+        document.getElementById('lbl-old-policy').textContent = d.lbl_old_pol;
+        document.getElementById('lbl-resignation-date').textContent = d.lbl_res_date;
+        document.getElementById('lbl-l4-text').textContent = d.l4_text;
+        document.getElementById('lbl-excluded-text').textContent = d.excluded_text;
+        document.getElementById('lbl-read-excluded').textContent = d.read_excluded;
+
+        renderSurvey();
+    }
+
+    function renderSurvey() {
+        const d = I18N[currentLang];
+        const container = document.getElementById('survey_questions');
+        container.innerHTML = '';
+        [1,2,3,4].forEach(i => {
+            const div = document.createElement('div');
+            div.className = 'field-group';
+            div.innerHTML = `
+                <span class="field-label">${d['q'+i]}</span>
+                <div class="radio-group">
+                    <label class="radio-btn-label" onclick="UI.radioSelect(this)"><input type="radio" name="sq${i}" value="TAK"> ${d.yes}</label>
+                    <label class="radio-btn-label" onclick="UI.radioSelect(this)"><input type="radio" name="sq${i}" value="NIE"> ${d.no}</label>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    const FormController = {
+        setStandardAnswers() {
+            this.setRadio('pep_is_pep', 'NIE');
+            this.setRadio('pep_is_family', 'NIE');
+            this.setRadio('health_gate', 'TAK');
+            ['consent_medical_info', 'consent_share', 'accept_terms', 'no_l4', 'no_excluded', 'rodo_ack', 'e_delivery'].forEach(n => {
+                const el = document.querySelector(`input[name="${n}"]`);
+                if(el) el.checked = true;
+            });
+            this.clearErrors();
+        },
+        setRadio(name, val) {
+            const input = document.querySelector(`input[name="${name}"][value="${val}"]`);
+            if(input) { input.checked = true; UI.radioSelect(input.parentElement); }
+        },
+        toggleGroup(source, className) {
+            document.querySelectorAll('.' + className).forEach(checkbox => {
+                checkbox.checked = source.checked;
+            });
+        },
+        toggleTransfer() {
+            const isTransfer = document.getElementById('chk_transfer').checked;
+            const transferBox = document.getElementById('box_transfer_details');
+            const stdBox = document.getElementById('box_standard_health');
+            
+            if (isTransfer) {
+                transferBox.classList.add('visible');
+                stdBox.style.display = 'none';
+                this.calculateResignationDate();
+            } else {
+                transferBox.classList.remove('visible');
+                stdBox.style.display = 'block';
+            }
+        },
+        formatPolicy(input) {
+            let val = input.value.replace(/\D/g, '');
+            if (val.length > 3) {
+                val = val.substring(0, 3) + '_' + val.substring(3, 6);
+            }
+            input.value = val;
+        },
+        calculateResignationDate() {
+            const today = new Date();
+            const day = today.getDate();
+            let targetDate;
+
+            // Logic: <= 25 -> last day of current month, > 25 -> last day of NEXT month
+            if (day <= 25) {
+                targetDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            } else {
+                targetDate = new Date(today.getFullYear(), today.getMonth() + 2, 0);
+            }
+            
+            // Format YYYY-MM-DD
+            const yyyy = targetDate.getFullYear();
+            const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
+            const dd = String(targetDate.getDate()).padStart(2, '0');
+            document.getElementById('inp_res_date').value = `${yyyy}-${mm}-${dd}`;
+        },
+        clearAll() {
+            document.getElementById('consentsForm').reset();
+            document.querySelectorAll('.radio-btn-label').forEach(l => l.classList.remove('selected'));
+            document.getElementById('box_transfer_details').classList.remove('visible');
+            document.getElementById('box_standard_health').style.display = 'block';
+            this.clearErrors();
+        },
+        validateAndSubmit() {
+            let valid = true;
+            
+            // 1. Common required checkboxes (except standard health ones if transfer is checked)
+            const commonReq = ['consent_medical_info', 'consent_share', 'accept_terms', 'rodo_ack', 'e_delivery'];
+            commonReq.forEach(id => {
+                const el = document.querySelector(`input[name="${id}"]`);
+                const group = el.closest('.field-group');
+                if(!el.checked) { 
+                    if(group) group.classList.add('error'); 
+                    valid = false; 
+                } else { 
+                    if(group) group.classList.remove('error'); 
+                }
+            });
+
+            // 2. PEP Radios
+            ['pep_is_pep', 'pep_is_family'].forEach(n => {
+                const checked = document.querySelector(`input[name="${n}"]:checked`);
+                const group = document.querySelector(`div[data-id="${n}"]`);
+                if(!checked) { group.classList.add('error'); valid = false; }
+                else { group.classList.remove('error'); }
+            });
+
+            // 3. Logic Branch: Transfer vs Standard
+            const isTransfer = document.getElementById('chk_transfer').checked;
+
+            if (isTransfer) {
+                // Validate Transfer Fields
+                const policyInput = document.getElementById('inp_old_policy');
+                if (!/^(90000021380|90000030017|90000021381|90000030016|90000022498|90000030019|90000022479|90000030018|90000030354)_\d{1,4}$/.test(policyInput.value)) {
+                    alert("Numer polisy musi mieć format zgodny z listą (np. 90000021380_1234)");
+                    policyInput.style.borderColor = "red";
+                    valid = false;
+                } else {
+                    policyInput.style.borderColor = "#90CAF9";
+                }
+            } else {
+                // Validate Standard Fields (L4, Excluded, Health Gate)
+                ['no_l4', 'no_excluded'].forEach(id => {
+                    const el = document.getElementById(id === 'no_l4' ? 'std_l4' : 'std_excluded');
+                    const group = el.closest('.field-group');
+                    if(!el.checked) { group.classList.add('error'); valid = false; }
+                    else { group.classList.remove('error'); }
+                });
+
+                const gate = document.querySelector('input[name="health_gate"]:checked');
+                if(!gate) { 
+                    document.querySelector('div[data-id="health_status"]').classList.add('error'); 
+                    valid = false; 
+                } else {
+                    document.querySelector('div[data-id="health_status"]').classList.remove('error');
+                    if(gate.value === 'NIE') {
+                        Modal.openSurvey();
+                        return; // Stop here to show survey
+                    }
+                }
+            }
+
+            if(valid) {
+                console.log("Validation passed. Proceeding to Step 6.");
+            }
+        },
+        saveSurvey() { 
+            Modal.closeSurvey(); 
+            console.log("Survey saved. Proceeding to Step 6.");
+        },
+        clearErrors() { document.querySelectorAll('.field-group').forEach(el => el.classList.remove('error')); }
+    };
+
+    const UI = {
+        radioSelect(labelEl) {
+            const name = labelEl.querySelector('input').name;
+            document.querySelectorAll(`input[name="${name}"]`).forEach(i => i.parentElement.classList.remove('selected'));
+            labelEl.classList.add('selected');
+        }
+    };
+
+    const Modal = {
+        open(key) {
+            const d = I18N[currentLang];
+            document.getElementById('modal_title').textContent = key.toUpperCase().replace('_',' ');
+            document.getElementById('modal_body').innerText = d[`${key}_content`];
+            document.getElementById('modal_generic').style.display = 'flex';
+        },
+        close() { document.getElementById('modal_generic').style.display = 'none'; },
+        openSurvey() { document.getElementById('modal_survey').style.display = 'flex'; },
+        closeSurvey() { document.getElementById('modal_survey').style.display = 'none'; }
+    };
+
+    window.onclick = e => { if(e.target.classList.contains('modal-overlay')) { Modal.close(); Modal.closeSurvey(); } };
+    document.addEventListener('DOMContentLoaded', () => setLang('pl'));
+</script>
+</body>
+</html>
