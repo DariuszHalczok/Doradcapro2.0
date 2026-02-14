@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVB CERTUM - Krok 1 i 2 (Precyzyjne Dane)</title>
+    <!-- Google Fonts: Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        /* --- OVB DESIGN SYSTEM VARIABLES --- */
+        :root {
+            --ovb-blue: #003366; 
+            --ovb-white: #FFFFFF; 
+            --ovb-teal: #009999; 
+            --ovb-hot-pink: #FF3399;
+            --ovb-blue-light: #6699CC; 
+            --ovb-blue-medium: #336699; 
+            --ovb-light-grey: #E5E5E5;
+            --ovb-bg-grey: #F4F6F8;
+            --ovb-text: #333333; 
+            --border-radius: 12px; 
+            --transition: all 0.3s ease;
+            --shadow-card: 0 4px 20px rgba(0, 51, 102, 0.08);
+        }
+
+        * { box-sizing: border-box; outline: none; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--ovb-bg-grey); color: var(--ovb-text); margin: 0; padding-bottom: 50px; }
+
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+
+        /* HEADER & LANG PICKER */
+        .ovb-header { background: linear-gradient(135deg, var(--ovb-blue), #336699); color: white; padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .header-content { max-width: 900px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .ovb-logo-placeholder { background: white; color: var(--ovb-blue); font-weight: 900; font-size: 24px; padding: 5px 12px; border-radius: 4px; }
+        
+        .lang-switcher { display: flex; gap: 8px; }
+        .lang-btn { cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; opacity: 0.7; transition: 0.3s; padding: 5px 10px; border-radius: 20px; color: white; border: 1px solid rgba(255,255,255,0.3); text-transform: uppercase; }
+        .lang-btn.active { opacity: 1; background: white; color: var(--ovb-blue); border-color: white; }
+        .flag { width: 18px; height: 12px; object-fit: cover; border-radius: 2px; }
+
+        /* PROGRESS BAR */
+        .progress-steps { display: flex; justify-content: space-between; position: relative; margin-bottom: 30px; }
+        .progress-bg-line { position: absolute; top: 15px; left: 20px; right: 20px; height: 2px; background: #ddd; z-index: 0; }
+        .progress-fill-line { position: absolute; top: 15px; left: 20px; height: 2px; background: var(--ovb-teal); z-index: 1; width: 16%; transition: width 0.4s; }
+        .step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 60px; }
+        .step-circle { width: 32px; height: 32px; border-radius: 50%; background: white; border: 2px solid #ddd; color: #999; display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 13px; }
+        .step.active .step-circle { border-color: var(--ovb-teal); color: var(--ovb-teal); box-shadow: 0 0 0 3px rgba(0, 153, 153, 0.1); }
+        .step.completed .step-circle { background: var(--ovb-teal); border-color: var(--ovb-teal); color: white; }
+
+        /* CONTENT */
+        .step-content { display: none; animation: fadeIn 0.4s; }
+        .step-content.active { display: block; }
+        .main-form-card { background: white; border-radius: var(--border-radius); box-shadow: var(--shadow-card); padding: 30px; margin-bottom: 30px; }
+
+        .cards-container { display: flex; flex-direction: column; gap: 20px; }
+        .plan-card { border: 2px solid #eee; border-radius: 12px; padding: 25px; cursor: pointer; background: white; transition: var(--transition); position: relative; display: flex; flex-direction: column; }
+        .plan-card:hover { border-color: var(--ovb-blue-light); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        .plan-card.selected { border-color: var(--ovb-teal); background: #F0FCFC; box-shadow: 0 5px 15px rgba(0,153,153,0.15); }
+
+        .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--ovb-hot-pink); color: white; padding: 4px 14px; font-size: 11px; border-radius: 20px; font-weight: 700; text-transform: uppercase; z-index: 5; }
+        .plan-recommendation { background: #EAF2F8; color: var(--ovb-blue-medium); font-size: 11px; font-weight: 600; padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-left: 4px solid var(--ovb-blue); }
+        
+        .card-header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .plan-title { font-size: 1.3em; font-weight: 800; color: var(--ovb-blue); }
+        .plan-price { text-align: right; font-size: 1.8em; font-weight: 800; color: #333; }
+        .plan-price span { font-size: 0.4em; color: #777; font-weight: 400; display: block; }
+        
+        .main-points { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+        .main-point { display: flex; align-items: center; gap: 8px; font-size: 0.82em; font-weight: 600; color: #444; background: #f1f3f5; padding: 4px 12px; border-radius: 20px; }
+        .main-point .material-icons-outlined { color: var(--ovb-teal); font-size: 14px; }
+
+        /* TABLES */
+        .details-expand-btn { background: none; border: 1px solid #ddd; padding: 8px 20px; border-radius: 20px; font-size: 11px; font-weight: 700; color: var(--ovb-blue-medium); cursor: pointer; display: flex; align-items: center; gap: 5px; margin: 5px auto 0; transition: 0.2s; }
+        .full-details { display: none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px; }
+        .full-details.visible { display: block; animation: fadeIn 0.4s ease-out; }
+        .details-table { width: 100%; border-collapse: collapse; font-size: 12px; background: white; border-radius: 8px; overflow: hidden; }
+        .details-table th { text-align: left; padding: 10px; background: var(--ovb-blue); color: white; font-size: 10px; text-transform: uppercase; }
+        .details-table td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; line-height: 1.4; }
+        .details-table td:last-child { text-align: right; font-weight: 700; color: var(--ovb-blue); }
+        .row-cat { background: #f1f4f8; font-weight: 800; color: var(--ovb-blue); font-size: 10px; padding: 6px 10px !important; text-transform: uppercase; }
+
+        /* ACTIONS */
+        .form-actions { display: flex; justify-content: space-between; margin-top: 30px; }
+        .btn { padding: 12px 30px; border-radius: 25px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 15px; }
+        .btn-primary { background: var(--ovb-teal); color: white; box-shadow: 0 4px 10px rgba(0,153,153,0.3); }
+        .btn-secondary { background: transparent; border: 1px solid #ccc; color: #666; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header class="ovb-header">
+        <div class="header-content">
+            <div class="ovb-logo-placeholder">OVB</div>
+            <div class="lang-switcher">
+                <div class="lang-btn active" id="lang-pl" onclick="setLang('pl')"><img src="https://flagcdn.com/w40/pl.png" class="flag"> PL</div>
+                <div class="lang-btn" id="lang-en" onclick="setLang('en')"><img src="https://flagcdn.com/w40/gb.png" class="flag"> EN</div>
+                <div class="lang-btn" id="lang-ua" onclick="setLang('ua')"><img src="https://flagcdn.com/w40/ua.png" class="flag"> UA</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="progress-steps">
+            <div class="progress-bg-line"></div><div class="progress-fill-line" id="progressFill"></div>
+            <div id="s1" class="step active"><div class="step-circle">1</div></div>
+            <div id="s2" class="step"><div class="step-circle">2</div></div>
+            <div id="s3" class="step"><div class="step-circle">3</div></div>
+            <div id="s4" class="step"><div class="step-circle">4</div></div>
+            <div id="s5" class="step"><div class="step-circle">5</div></div>
+            <div id="s6" class="step"><div class="step-circle">6</div></div>
+        </div>
+
+        <!-- STEP 1 -->
+        <div id="step-1" class="step-content active">
+            <h1 style="color:var(--ovb-blue); text-align:center;" data-i18n="step1_h1">Solidny fundament Twojej przyszłości</h1>
+            <div class="main-form-card" style="text-align:center;">
+                <p style="color:#666; margin-bottom:25px;" data-i18n="step1_p">Wprowadź datę urodzenia ubezpieczonego, abyśmy mogli dopasować najlepsze rozwiązanie CERTUM do Twojego etapu życia.</p>
+                <input type="date" id="dataUrodzenia" onchange="calculateAgeGroup()" style="padding:15px; border:2px solid #ddd; border-radius:10px; font-size:18px; font-weight:600; color:var(--ovb-blue);">
+                <div id="ageResult" style="margin-top:20px; font-weight:700; color:var(--ovb-teal); min-height:30px;"></div>
+                <button id="btnStep1" class="btn btn-primary" onclick="nextStep()" disabled style="margin:25px auto; width:220px; justify-content:center;" data-i18n="btn_start">Dopasuj ofertę</button>
+            </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div id="step-2" class="step-content">
+            <h1 style="color:var(--ovb-blue); margin-bottom:5px;" data-i18n="step2_h1">Zapewnij sobie spokój już dziś</h1>
+            <p style="color:#666; margin-bottom:25px; font-size:15px; line-height:1.5;" data-i18n="step2_p">
+                Poniżej znajdują się pakiety bazowe zoptymalizowane pod kątem Twojej grupy wiekowej. 
+                <br><strong>Aby wybrać pakiet, kliknij bezpośrednio w jego kafelek.</strong> Zostanie on podświetlony na zielono.
+            </p>
+            <div id="packagesContainer" class="cards-container"></div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="prevStep()" data-i18n="btn_back">Wstecz</button>
+                <button class="btn btn-primary" onclick="nextStep()" data-i18n="btn_to_addons">Przejdź do dodatków</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. GLOBAL STATE & TRANSLATIONS ---
+        let currentStep = 1;
+        let clientGroup = 0; 
+        let currentLang = 'pl';
+        let selectedPlan = null;
+
+        const translations = {
+            pl: {
+                step1_h1: "Solidny fundament Twojej przyszłości", step1_p: "Wprowadź datę urodzenia ubezpieczonego, abyśmy mogli dopasować najlepsze rozwiązanie CERTUM do Twojego etapu życia.",
+                step2_h1: "Zapewnij sobie spokój już dziś", step2_p: "Poniżej znajdują się pakiety bazowe zoptymalizowane pod kątem Twojej grupy wiekowej. <br><strong>Aby wybrać pakiet, kliknij bezpośrednio w jego kafelek.</strong> Zostanie on podświetlony na zielono.",
+                btn_start: "Dopasuj ofertę", btn_back: "Wstecz", btn_to_addons: "Przejdź do dodatków",
+                age_qualified: "Zakwalifikowano do oferty CERTUM (Grupa ", age_error: "Niestety, wiek ubezpieczonego jest poza zakresem oferty (16-75 lat).",
+                show_details: "POKAŻ PEŁNY ZAKRES", hide_details: "ZWIŃ ZAKRES", popular: "POLECANY", senior_msg: "Gwarantowana ochrona bezterminowa",
+                cat_death: "💀 Świadczenia z tytułu śmierci", cat_health: "💪 Uszczerbek na zdrowiu", cat_hosp: "🏥 Pobyt w szpitalu", cat_other: "🩺 Choroby i operacje", cat_assist: "🩹 Assistance i Mediplan",
+                row_comm: "Śmierć w wypadku komunikacyjnym", row_nw: "Nieszczęśliwy wypadek", row_any: "Śmierć Ubezpieczonego", row_pnw: "Rodzice / Teściowie NW", row_pany: "Rodzice / Teściowie (naturalna)",
+                row_unw: "Uszczerbek na zdrowiu", row_unw_unit: "Trwały uszczerbek NW (za 1%)", row_uheart: "Uszczerbek Zawał / Udar (za 1%)", row_work: "Niezdolność do pracy NW",
+                row_hsum: "Pobyt w szpitalu", row_hsum_full: "Suma ubezpieczenia (Szpital)", row_hday: "NW / Choroba / OIOM (za dzień)", row_hrehab: "Szpital rehabilitacyjny (dzień)",
+                row_sick: "Poważne zachorowanie", row_surg: "Operacje chirurgiczne", row_spec: "Zabiegi specjalistyczne", row_injury: "Uraz niepowodujący uszczerbku",
+                row_baby: "Urodzenie dziecka", row_meds: "Ryczałt za leki po hospitalizacji", row_ass_med: "Pomoc medyczna (Assistance)", row_ass_baby: "Assistance po urodzeniu dziecka", row_plan: "Mediplan (badania, konsultacje)"
+            },
+            en: {
+                step1_h1: "A solid foundation for your future", step1_p: "Please enter the insured person's date of birth so we can match the best CERTUM solution for your life stage.",
+                step2_h1: "Secure your peace of mind today", step2_p: "Below are the base packages optimized for your age group. <br><strong>To choose a package, click directly on its tile.</strong> It will be highlighted in green once selected.",
+                btn_start: "Match the offer", btn_back: "Back", btn_to_addons: "Proceed to add-ons",
+                age_qualified: "Qualified for CERTUM offer (Group ", age_error: "Insured's age out of range (16-75 years).",
+                show_details: "SHOW FULL SCOPE", hide_details: "HIDE SCOPE", popular: "RECOMMENDED", senior_msg: "Guaranteed lifetime protection",
+                cat_death: "💀 Death Benefits", cat_health: "💪 Health Impairment", cat_hosp: "🏥 Hospital Stay", cat_other: "🩺 Illness & Surgery", cat_assist: "🩹 Assistance & Mediplan",
+                row_comm: "Traffic accident death", row_nw: "Accidental death", row_any: "Insured's death", row_pnw: "Parents/In-laws (Accident)", row_pany: "Parents/In-laws (Natural)",
+                row_unw: "Health impairment", row_unw_unit: "Permanent impairment (for 1%)", row_uheart: "Stroke / Heart attack (for 1%)", row_work: "Disability NW",
+                row_hsum: "Hospital stay", row_hsum_full: "Sum (Hospital)", row_hday: "NW / Sickness / ICU (per day)", row_hrehab: "Rehab hospital (day)",
+                row_sick: "Critical illness", row_surg: "Surgical operations", row_spec: "Specialist procedures", row_injury: "Injury without impairment",
+                row_baby: "Birth of child", row_meds: "Meds lump sum", row_ass_med: "Medical assistance", row_ass_baby: "Birth assistance", row_plan: "Mediplan"
+            },
+            ua: {
+                step1_h1: "Надійний фундамент вашого майбутнього", step1_p: "Введіть дату народження застрахованої особи, щоб ми могли підібрати найкраще рішення CERTUM для вашого етапу життя.",
+                step2_h1: "Забезпечте свій спокій вже сьогодні", step2_p: "Нижче наведені базові пакети, оптимізовані для вашої вікової групи. <br><strong>Щоб обрати пакет, натисніть безпосередньо на його плитку.</strong> Після вибору вона буде підсвічена.",
+                btn_start: "Підібрати пропозицію", btn_back: "Назад", btn_to_addons: "Перейти до додатків",
+                age_qualified: "Кваліфіковано для CERTUM (Група ", age_error: "Вік застрахованої особи поза межами (16-75 років).",
+                show_details: "ПОКАЗАТИ ПОВНИЙ ОБСЯГ", hide_details: "ЗГОРНУТИ", popular: "РЕКОМЕНДОВАНО", senior_msg: "Гарантований довічний захист",
+                cat_death: "💀 Виплати у разі смерті", cat_health: "💪 Шкода здоров'ю", cat_hosp: "🏥 Перебування в лікарні", cat_other: "🩺 Хвороби та операції", cat_assist: "🩹 Assistance та Mediplan",
+                row_comm: "Смерть у дорожній пригоді", row_nw: "Нещасний випадок", row_any: "Смерть застрахованого", row_pnw: "Батьки (НВ)", row_pany: "Батьки (природна)",
+                row_unw: "Шкода здоров'ю", row_unw_unit: "Постійна шкода (за 1%)", row_uheart: "Інсульт / Інфаркт (за 1%)", row_work: "Непрацездатність НВ",
+                row_hsum: "Перебування в лікарні", row_hsum_full: "Сума страхування (Лікарня)", row_hday: "НВ / Хвороба / Реанімація", row_hrehab: "Реабілітація (день)",
+                row_sick: "Критична хвороба", row_surg: "Операції", row_spec: "Спец. процедури", row_injury: "Травма без шкоди",
+                row_baby: "Народження дитини", row_meds: "Кошти на ліки", row_ass_med: "Медична допомога", row_ass_baby: "Допомога після пологів", row_plan: "Mediplan"
+            }
+        };
+
+        // --- 2. CORE FUNCTIONS ---
+        function setLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('lang-'+lang).classList.add('active');
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.innerHTML = translations[lang][key];
+            });
+            if(clientGroup > 0) calculateAgeGroup();
+        }
+
+        function showStep(s) {
+            document.querySelectorAll('.step-content').forEach(e=>e.classList.remove('active'));
+            document.getElementById('step-'+s).classList.add('active'); 
+            currentStep=s; 
+            updateProgress();
+            window.scrollTo(0,0);
+        }
+        function nextStep() { if(currentStep < 6) showStep(currentStep + 1); }
+        function prevStep() { if(currentStep > 1) showStep(currentStep - 1); }
+
+        function updateProgress() {
+            const p = ((currentStep-1)/5)*100;
+            const fill = document.getElementById('progressFill');
+            if(fill) fill.style.width = (p > 0 ? p : 16) +'%';
+            for(let i=1; i<=6; i++) {
+                const el = document.getElementById('s'+i);
+                if(!el) continue;
+                el.className = i < currentStep ? 'step completed' : (i === currentStep ? 'step active' : 'step');
+                const circle = el.querySelector('.step-circle');
+                if(circle) circle.innerHTML = i < currentStep ? '✓' : i;
+            }
+        }
+
+        function calculateAgeGroup() {
+            const val = document.getElementById('dataUrodzenia').value;
+            if(!val) return;
+            const dob = new Date(val); const now = new Date();
+            let age = now.getFullYear() - dob.getFullYear();
+            if (now.getMonth() < dob.getMonth() || (now.getMonth() === dob.getMonth() && now.getDate() < dob.getDate())) age--;
+
+            if (age >= 16 && age <= 55) clientGroup = 1;
+            else if (age >= 56 && age <= 69) clientGroup = 2;
+            else if (age >= 70 && age <= 75) clientGroup = 3;
+            else clientGroup = 0;
+
+            const res = document.getElementById('ageResult');
+            const btn = document.getElementById('btnStep1');
+            const t = translations[currentLang];
+            if(clientGroup > 0) {
+                res.innerText = t.age_qualified + clientGroup + ")";
+                btn.disabled = false;
+                renderPackages(clientGroup);
+            } else {
+                res.innerText = t.age_error;
+                btn.disabled = true;
+            }
+        }
+
+        function renderPackages(group) {
+            const container = document.getElementById('packagesContainer');
+            container.innerHTML = '';
+            let pkgs = [];
+            const t = translations[currentLang];
+
+            if(group === 1) {
+                const baseP = [
+                    { n:'START', p:59, vals:['100 000','50 000','25 000','5 000','1 000','600','600','50 000','20 000','200 / 120 / 200','50','5 000','2 000','4 000','200','—','200','10 000','—','10 000']},
+                    { n:'STANDARD', p:79, vals:['150 000','100 000','60 000','4 000','1 500','600','600','50 000','20 000','200 / 120 / 200','50','5 000','2 000','5 000','200','2 000','200','10 000','10 000','10 000']},
+                    { n:'FAMILY + 2 000 zł urodzenie dziecka', p:119, vals:['450 000','250 000','150 000','5 000','2 200','1 000','1 000','100 000','20 000','200 / 120 / 200','50','10 000','3 000','5 000','200','2 000','200','10 000','10 000','10 000']},
+                    { n:'PREMIUM', p:149, vals:['700 000','500 000','200 000','7 000','3 000','1 500','1 500','150 000','30 000','300 / 180 / 300','100','10 000','8 000','6 000','200','—','400','10 000','—','10 000']},
+                    { n:'VIP', p:199, vals:['1 000 000','600 000','250 000','10 000','4 000','2 000','2 000','200 000','50 000','500 / 300 / 500','100','10 000','10 000','7 000','200','—','400','10 000','—','10 000']}
+                ];
+                pkgs = baseP.map(p => ({
+                    n: p.n, p: p.p, 
+                    r: p.n.includes('FAMILY') ? t.popular : (currentLang==='pl'?'Solidny fundament':'Solid foundation'),
+                    pts: [
+                        t.row_any + ': ' + p.vals[2] + ' zł', 
+                        t.row_comm + ': ' + p.vals[0] + ' zł', 
+                        t.row_hsum + ': ' + p.vals[8] + ' zł',
+                        t.row_unw + ': ' + p.vals[5] + ' zł'
+                    ],
+                    det: [
+                        {c:t.cat_death, rows:[[t.row_comm, p.vals[0]+' zł'],[t.row_nw, p.vals[1]+' zł'],[t.row_any, p.vals[2]+' zł'],[t.row_pnw, p.vals[3]+' zł'],[t.row_pany, p.vals[4]+' zł']]},
+                        {c:t.cat_health, rows:[[t.row_unw_unit, p.vals[5]+' zł'],[t.row_uheart, p.vals[6]+' zł'],[t.row_work, p.vals[7]+' zł']]},
+                        {c:t.cat_hosp, rows:[[t.row_hsum_full, p.vals[8]+' zł'],[t.row_hday, p.vals[9]+' zł'],[t.row_hrehab, p.vals[10]+' zł']]},
+                        {c:t.cat_other, rows:[[t.row_sick, p.vals[11]+' zł'],[t.row_surg, p.vals[12]+' zł'],[t.row_spec, p.vals[13]+' zł'],[t.row_injury, '200 zł'],[t.row_baby, p.vals[15]+' zł'],[t.row_meds, p.vals[16]+' zł']]},
+                        {c:t.cat_assist, rows:[[t.row_ass_med, p.vals[17]+' zł'],[t.row_ass_baby, p.vals[18]+' zł'],[t.row_plan, p.vals[19]+' zł']]}
+                    ]
+                }));
+            } else if(group === 2) {
+                const baseP = [
+                    { n:'SILVER 55+', p:89, vals:['100 000','70 000','40 000','3 000','1 500','500','20 000','200 / 120 / 200','5 000','3 000','4 000','200','200','10 000','10 000']},
+                    { n:'GOLD 55+', p:149, vals:['250 000','130 000','70 000','4 000','2 000','700','20 000','200 / 120 / 200','5 000','5 000','5 000','200','200','10 000','10 000']},
+                    { n:'PLATINUM 55+', p:249, vals:['500 000','300 000','150 000','6 000','2 500','1 500','30 000','300 / 180 / 300','8 000','5 000','10 000','200','400','10 000','10 000']}
+                ];
+                pkgs = baseP.map(p => ({
+                    n: p.n, p: p.p, r: t.popular,
+                    pts: [
+                        t.row_any + ': ' + p.vals[2] + ' zł', 
+                        t.row_comm + ': ' + p.vals[0] + ' zł', 
+                        t.row_hsum + ': ' + p.vals[6] + ' zł',
+                        t.row_unw + ': ' + p.vals[5] + ' zł'
+                    ],
+                    det: [
+                        {c:t.cat_death, rows:[[t.row_comm, p.vals[0]+' zł'],[t.row_nw, p.vals[1]+' zł'],[t.row_any, p.vals[2]+' zł'],[t.row_pnw, p.vals[3]+' zł'],[t.row_pany, p.vals[4]+' zł']]},
+                        {c:t.cat_health + ' | ' + t.cat_hosp, rows:[[t.row_unw_unit, p.vals[5]+' zł'],[t.row_hsum_full, p.vals[6]+' zł'],[t.row_hday, p.vals[7]+' zł']]},
+                        {c:t.cat_other, rows:[[t.row_sick, p.vals[8]+' zł'],[t.row_surg, p.vals[9]+' zł'],[t.row_injury, '200 zł'],[t.row_meds, p.vals[12]+' zł']]},
+                        {c:t.cat_assist, rows:[[t.row_ass_med, p.vals[13]+' zł'],[t.row_plan, p.vals[14]+' zł']]}
+                    ]
+                }));
+            } else {
+                pkgs = [
+                    { n:'SENIOR SILVER', p:69, r: t.senior_msg, pts:[t.row_any + ': 17 000 zł', t.row_nw + ': 30 000 zł'], det:[]},
+                    { n:'SENIOR GOLD', p:99, r: t.senior_msg, pts:[t.row_any + ': 24 000 zł', t.row_nw + ': 50 000 zł'], det:[]}
+                ];
+            }
+
+            pkgs.forEach((pkg, idx) => {
+                const card = document.createElement('div');
+                const isPop = (group === 1 && pkg.n.includes('FAMILY')) || (group === 2 && pkg.n.includes('GOLD')) || (group === 3 && pkg.n.includes('SILVER'));
+                card.className = `plan-card ${isPop ? 'popular' : ''}`;
+                if(selectedPlan && selectedPlan.n === pkg.n) card.classList.add('selected');
+                const ptsHtml = pkg.pts.map(p => `<div class="main-point"><span class="material-icons-outlined">check_circle</span> ${p}</div>`).join('');
+                let cardBody = `<div class="plan-recommendation"><span class="material-icons-outlined">tips_and_updates</span> ${pkg.r}</div>
+                    <div class="card-header-row"><div class="plan-title">${pkg.n}</div><div class="plan-price">${pkg.p}<span> zł/mc</span></div></div>
+                    <div class="main-points">${ptsHtml}</div>`;
+                if (group !== 3) {
+                    let dHtml = '';
+                    pkg.det.forEach(s => {
+                        dHtml += `<tr><td colspan="2" class="row-cat">${s.c}</td></tr>`;
+                        s.rows.forEach(r => { dHtml += `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`; });
+                    });
+                    cardBody += `<button class="details-expand-btn" onclick="toggleDetails(event, 'det-${idx}')">${t.show_details}</button>
+                    <div id="det-${idx}" class="full-details"><table class="details-table"><thead><tr><th>Zakres</th><th>Suma</th></tr></thead><tbody>${dHtml}</tbody></table></div>`;
+                } else {
+                    cardBody += `<div style="font-size:11px; color:#777; margin-top:10px; text-align:center; font-weight:700;">${t.senior_msg}</div>`;
+                }
+                card.innerHTML = cardBody;
+                card.onclick = (e) => { 
+                    if(!e.target.closest('button')) { 
+                        document.querySelectorAll('.plan-card').forEach(el=>el.classList.remove('selected')); 
+                        card.classList.add('selected'); selectedPlan=pkg; 
+                    } 
+                };
+                container.appendChild(card);
+            });
+        }
+
+        function toggleDetails(e, id) {
+            e.stopPropagation();
+            const el = document.getElementById(id);
+            const btn = e.currentTarget;
+            const vis = el.classList.toggle('visible');
+            btn.innerText = vis ? translations[currentLang].hide_details : translations[currentLang].show_details;
+        }
+
+        window.onload = () => { setLang('pl'); updateProgress(); };
+    </script>
+</body>
+</html>
