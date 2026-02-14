@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVB CERTUM - Krok 3 (Cegiełki)</title>
+    <!-- Google Fonts: Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        /* --- OVB DESIGN SYSTEM VARIABLES --- */
+        :root {
+            --ovb-blue: #003366; 
+            --ovb-white: #FFFFFF; 
+            --ovb-teal: #009999; 
+            --ovb-hot-pink: #FF3399;
+            --ovb-blue-light: #6699CC; 
+            --ovb-blue-medium: #336699; 
+            --ovb-light-grey: #E5E5E5;
+            --ovb-bg-grey: #F4F6F8;
+            --ovb-text: #333333; 
+            --border-radius: 12px; 
+            --transition: all 0.3s ease;
+            --shadow-card: 0 4px 20px rgba(0, 51, 102, 0.08);
+        }
+
+        * { box-sizing: border-box; outline: none; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--ovb-bg-grey); color: var(--ovb-text); margin: 0; padding-bottom: 50px; }
+
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+
+        /* HEADER & LANG PICKER */
+        .ovb-header { background: linear-gradient(135deg, var(--ovb-blue), #336699); color: white; padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .header-content { max-width: 900px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .ovb-logo-placeholder { background: white; color: var(--ovb-blue); font-weight: 900; font-size: 24px; padding: 5px 12px; border-radius: 4px; }
+        
+        .lang-switcher { display: flex; gap: 8px; }
+        .lang-btn { cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; opacity: 0.7; transition: 0.3s; padding: 5px 10px; border-radius: 20px; color: white; border: 1px solid rgba(255,255,255,0.3); text-transform: uppercase; }
+        .lang-btn:hover { opacity: 1; background: rgba(255,255,255,0.1); }
+        .lang-btn.active { opacity: 1; background: white; color: var(--ovb-blue); border-color: white; }
+        .flag { width: 18px; height: 12px; object-fit: cover; border-radius: 2px; }
+
+        /* PROGRESS BAR */
+        .progress-steps { display: flex; justify-content: space-between; position: relative; margin-bottom: 30px; }
+        .progress-bg-line { position: absolute; top: 15px; left: 20px; right: 20px; height: 2px; background: #ddd; z-index: 0; }
+        .progress-fill-line { position: absolute; top: 15px; left: 20px; height: 2px; background: var(--ovb-teal); z-index: 1; width: 40%; transition: width 0.4s; }
+        .step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 60px; }
+        .step-circle { width: 32px; height: 32px; border-radius: 50%; background: white; border: 2px solid #ddd; color: #999; display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 13px; }
+        .step.active .step-circle { border-color: var(--ovb-teal); color: var(--ovb-teal); box-shadow: 0 0 0 3px rgba(0, 153, 153, 0.1); }
+        .step.completed .step-circle { background: var(--ovb-teal); border-color: var(--ovb-teal); color: white; }
+
+        /* MAIN CONTENT */
+        .step-content { display: block; animation: fadeIn 0.4s; }
+        .main-form-card { background: white; border-radius: var(--border-radius); box-shadow: var(--shadow-card); padding: 30px; margin-bottom: 30px; }
+        .page-title { color: var(--ovb-blue); margin-top: 0; margin-bottom: 20px; font-size: 1.5rem; font-weight: 700; }
+
+        /* STYLES FOR STEP 3 SPECIFIC ELEMENTS */
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        
+        .plan-card { border: 2px solid #eee; border-radius: 12px; padding: 20px; cursor: pointer; background: white; transition: var(--transition); display: flex; gap: 15px; align-items: flex-start; }
+        .plan-card:hover { border-color: var(--ovb-blue-light); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        .plan-card input { margin-top: 4px; accent-color: var(--ovb-teal); flex-shrink: 0; width: 20px; height: 20px; }
+        
+        .card-content { width: 100%; }
+        .card-content strong { color: var(--ovb-blue); display: block; font-size: 1.1em; margin-bottom: 5px; }
+        .card-content small ul { padding-left: 20px; margin: 5px 0 0 0; color: #555; font-size: 0.9em; list-style-type: disc; }
+        .card-content small li { margin-bottom: 3px; }
+
+        /* EXPANDABLE DETAILS STYLES */
+        .details-link { color: var(--ovb-teal); font-size: 0.85em; font-weight: 700; text-decoration: none; cursor: pointer; margin-top: 8px; display: inline-flex; align-items: center; gap: 4px; transition: 0.2s; }
+        .details-link:hover { color: var(--ovb-blue); }
+        .details-content { display: none; margin-top: 10px; background: #f8f9fa; padding: 12px; border-radius: 8px; font-size: 0.85em; color: #555; border: 1px solid #eee; }
+        .details-content.open { display: block; animation: fadeIn 0.3s; }
+        .details-table-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #e0e0e0; }
+        .details-table-row:last-child { border-bottom: none; }
+        .details-val { font-weight: 700; color: var(--ovb-blue); text-align: right; }
+        .details-sub-label { display: block; font-size: 0.85em; color: #777; font-weight: 400; }
+
+        /* UX / PERSUASION BOX */
+        .ux-persuasion-box { background: #EAF2F8; border-left: 5px solid var(--ovb-blue); padding: 20px; border-radius: 8px; margin-top: 30px; margin-bottom: 20px; display: flex; gap: 15px; align-items: start; }
+        .ux-persuasion-icon { color: var(--ovb-blue); font-size: 32px; flex-shrink: 0; }
+        .ux-content h4 { margin: 0 0 5px 0; color: var(--ovb-blue); font-size: 1.1em; }
+        .ux-content p { margin: 0; color: #555; font-size: 0.95em; line-height: 1.5; }
+
+        /* MEDICAL SECTION */
+        .medical-section { background: white; border: 1px solid var(--ovb-light-grey); border-radius: 12px; padding: 25px; margin-top: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .section-header { color: var(--ovb-blue); font-size: 1.1em; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        
+        .medical-question { font-size: 0.95em; color: var(--ovb-text); line-height: 1.6; margin-bottom: 15px; background: #f8f9fa; padding: 15px; border-left: 4px solid var(--ovb-blue); border-radius: 4px; }
+        
+        .medical-sub-question { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #eee; }
+        .medical-sub-question:last-child { border-bottom: none !important; margin-bottom: 0 !important; }
+
+        /* BUTTONS */
+        .health-btn { padding: 8px 25px; border: 1px solid #ccc; background: white; border-radius: 20px; cursor: pointer; transition: 0.2s; font-weight: 600; color: #666; margin-right: 10px; font-size: 13px; }
+        .health-btn:hover { background: #f0f0f0; }
+        .health-btn.selected-yes { background: var(--ovb-hot-pink); color: white; border-color: var(--ovb-hot-pink); box-shadow: 0 2px 8px rgba(255, 51, 153, 0.3); }
+        .health-btn.selected-no { background: var(--ovb-teal); color: white; border-color: var(--ovb-teal); box-shadow: 0 2px 8px rgba(0, 153, 153, 0.3); }
+
+        .form-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; flex-wrap: wrap; gap: 15px; }
+        .btn { padding: 12px 30px; border-radius: 25px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 15px; }
+        .btn-primary { background: var(--ovb-teal); color: white; box-shadow: 0 4px 10px rgba(0,153,153,0.3); }
+        .btn-primary:hover { background: #008080; transform: translateY(-2px); }
+        .btn-secondary { background: transparent; border: 1px solid #ccc; color: #666; }
+        .btn-secondary:hover { background: #f5f5f5; color: #333; }
+        
+        /* SKIP BUTTON STYLE */
+        .btn-skip { background: transparent; color: #888; border: none; font-size: 13px; text-decoration: underline; cursor: pointer; margin: 0 auto; order: 2; }
+        .btn-skip:hover { color: var(--ovb-hot-pink); }
+        
+        @media (min-width: 768px) {
+            .btn-skip { margin: 0; order: 0; text-decoration: none; font-weight: normal; border: 1px solid transparent; padding: 10px 20px; border-radius: 20px; }
+            .btn-skip:hover { background: #FFF5F5; border-color: #FFCCD5; }
+        }
+
+        /* REVEAL PANEL */
+        .addon-reveal { display: none; animation: fadeIn 0.5s; padding: 20px; background: #F0FCFC; border-radius: 8px; border: 1px solid var(--ovb-teal); margin-top: 15px; }
+        .addon-reveal.visible { display: block; }
+        .addon-reveal-label { font-size: 0.8em; font-weight: 700; color: var(--ovb-teal); text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 0.5px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* DEBUG BAR */
+        .debug-bar { background: #333; color: white; padding: 10px 20px; margin-bottom: 20px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+        .debug-btn { background: #555; color: white; border: 1px solid #777; padding: 5px 10px; margin-left: 5px; cursor: pointer; border-radius: 4px; transition: 0.2s; }
+        .debug-btn:hover { background: #777; }
+        .debug-active { background: var(--ovb-teal); border-color: var(--ovb-teal); }
+    </style>
+</head>
+<body>
+
+    <header class="ovb-header">
+        <div class="header-content">
+            <div class="ovb-logo-placeholder">OVB</div>
+            <div class="lang-switcher">
+                <div class="lang-btn active" id="lang-pl" onclick="setLang('pl')"><img src="https://flagcdn.com/w40/pl.png" class="flag"> PL</div>
+                <div class="lang-btn" id="lang-en" onclick="setLang('en')"><img src="https://flagcdn.com/w40/gb.png" class="flag"> EN</div>
+                <div class="lang-btn" id="lang-ua" onclick="setLang('ua')"><img src="https://flagcdn.com/w40/ua.png" class="flag"> UA</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- SIMULATION CONTROLS -->
+        <div class="debug-bar">
+            <div><span id="txt-sim-age">Symulacja Wiek:</span></div>
+            <div>
+                <button class="debug-btn debug-active" id="btn-grp-1" onclick="changeGroup(1)">18-54</button>
+                <button class="debug-btn" id="btn-grp-2" onclick="changeGroup(2)">55-69</button>
+                <button class="debug-btn" id="btn-grp-3" onclick="changeGroup(3)">70+</button>
+            </div>
+            <div id="stickyTotalDisplay" style="font-weight:bold; color:var(--ovb-teal); background:white; padding:5px 12px; border-radius:20px;">0.00 zł</div>
+        </div>
+
+        <div class="progress-steps">
+            <div class="progress-bg-line"></div><div class="progress-fill-line" id="progressFill"></div>
+            <div id="s1" class="step completed"><div class="step-circle"><span class="material-icons-outlined" style="font-size:16px">check</span></div></div>
+            <div id="s2" class="step completed"><div class="step-circle"><span class="material-icons-outlined" style="font-size:16px">check</span></div></div>
+            <div id="s3" class="step active"><div class="step-circle">3</div></div>
+            <div id="s4" class="step"><div class="step-circle">4</div></div>
+            <div id="s5" class="step"><div class="step-circle">5</div></div>
+            <div id="s6" class="step"><div class="step-circle">6</div></div>
+        </div>
+
+        <!-- STEP 3 CONTENT -->
+        <div id="step-3" class="step-content">
+            <div class="main-form-card">
+                <h1 class="page-title" id="lbl-title">Rozszerz Ochronę (Cegiełki)</h1>
+                
+                <!-- JS Injects Bricks Here -->
+                <div id="bricksContainer"></div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" id="btn-back">Wstecz</button>
+                    <!-- Skip Button for UX -->
+                    <button class="btn-skip" id="btn-skip" onclick="skipStep()">Pomiń dodatki i przejdź dalej</button>
+                    <button class="btn btn-primary" id="btn-next">Dalej <span class="material-icons-outlined">arrow_forward</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- TRANSLATIONS CONFIGURATION ---
+        const translations = {
+            pl: {
+                title: "Rozszerz Ochronę (Cegiełki)",
+                simAge: "Symulacja Wiek:",
+                back: "Wstecz",
+                next: "Dalej",
+                skip: "Pomiń dodatki i przejdź dalej",
+                yes: "TAK",
+                no: "NIE",
+                qualified: "Jesteś uprawniony:",
+                qualifiedKardio: "Jesteś uprawniony (Wszystkie odpowiedzi NIE):",
+                specPackages: "Pakiety Specjalistyczne",
+                seniorMsg: "Brak dostępnych pakietów dodatkowych (cegiełek) dla Grupy Senior 70+.",
+                
+                // UX Persuasion
+                persuasionTitle: "Dlaczego warto sprawdzić?",
+                persuasionText: "Odpowiedz na 3 proste pytania zdrowotne. Jeśli Twoje zdrowie na to pozwala, otrzymasz dostęp do <strong>wysokich wypłat (nawet 50 000 zł)</strong> za poważne zachorowania, które są niedostępne w standardowym pakiecie. To nic nie kosztuje.",
+                
+                // Common labels
+                showDetails: "Pokaż pełny zakres",
+                hideDetails: "Zwiń szczegóły",
+
+                // Pack Names
+                packActive: "Pakiet ACTIVE",
+                packKids: "Pakiet KIDS",
+                packOnko: "Pakiet ONKO",
+                packKardio: "Pakiet KARDIO",
+                
+                // Surveys
+                surveyOnko: "Ankieta Onkologiczna",
+                surveyKardio: "Ankieta Kardiologiczna",
+                
+                // Questions
+                qOnko: `Czy był/a Pan/i kiedykolwiek leczony/a z powodu nowotworu złośliwego (raka, mięsaka, czerniaka złośliwego, chłoniaka, białaczki lub innej formy nowotworu złośliwego) lub czy jest Pan/i diagnozowany/a w związku z objawami sugerującymi chorobę nowotworową?`,
+                qKardio1: "1. Czy kiedykolwiek rozpoznawano lub był/a Pan/i leczony/a z powodu zawału serca, choroby niedokrwiennej serca (choroby wieńcowej), miażdżycy tętnic kończyn dolnych i/lub tętnic szyjnych, cukrzycy, udaru mózgu, przemijających zaburzeń krążenia mózgowego?",
+                qKardio2: "2. Czy w ciągu ostatnich 5 lat był/a Pan/i leczony/a w szpitalu z powodu niewydolności serca, zaburzeń rytmu serca, wady zastawkowej serca, zaburzeń neurologicznych?",
+                qKardio3: "3. Czy w ciągu ostatnich 3 miesięcy zalecono Panu/i przeprowadzenie diagnostyki w związku z podejrzeniem istnienia schorzeń wymienionych powyżej?",
+
+                // Descriptors (Group 1 - Standard)
+                // Updated Active Details (Summary for Card)
+                descActiveSummary: "<li>Trwały uszczerbek (NW): <strong>40 000 zł</strong></li><li>Szpital (NW): <strong>nawet do 1200 zł/dzień</strong></li><li>Zwrot kosztów leczenia: <strong>10 000 zł</strong></li>",
+                
+                // Full Active Table - Precise Mapping from PDF
+                dtActive: `
+                    <div class="details-table-row"><span>Trwały uszczerbek (NW) <br><small class="details-sub-label">400 zł za 1% uszczerbku</small></span><span class="details-val">40 000 zł</span></div>
+                    <div class="details-table-row"><span>Pobyt w szpitalu (NW) <br><small class="details-sub-label">do 14 dni / od 15. dnia</small></span><span class="details-val">400 zł / 200 zł <br> (za dzień)</span></div>
+                    <div class="details-table-row"><span>Dodatkowo OIOM (do 5 dni)</span><span class="details-val">+400 zł/dzień</span></div>
+                    <div class="details-table-row"><span>Szpital NW przy Pracy <br><small class="details-sub-label">do 14 dni / od 15. dnia</small></span><span class="details-val">800 zł / 320 zł <br> (za dzień)</span></div>
+                    <div class="details-table-row"><span>Wypadek Komunikacyjny <br><small class="details-sub-label">do 14 dni / od 15. dnia</small></span><span class="details-val">800 zł / 320 zł <br> (za dzień)</span></div>
+                    <div class="details-table-row"><span>Wyp. Komunikacyjny w Pracy <br><small class="details-sub-label">do 14 dni / od 15. dnia</small></span><span class="details-val" style="color:#008080">1 200 zł / 440 zł <br> (za dzień)</span></div>
+                    <div class="details-table-row"><span>Rekonwalescencja (NW) <br><small class="details-sub-label">od 1 do 30 dnia</small></span><span class="details-val">400 zł/dzień</span></div>
+                    <div class="details-table-row"><span>Refundacja kosztów leczenia (NW)</span><span class="details-val">10 000 zł</span></div>
+                    <div class="details-table-row"><span>Przedmioty ortopedyczne</span><span class="details-val">10 000 zł</span></div>
+                    <div style="margin-top:10px; font-size:10px; color:#999; text-align:right;">Limity max: 40/80/120 tys. zł zależnie od zdarzenia</div>
+                `,
+
+                // Full KIDS Table
+                descKids: "<li>Śmierć Dziecka (NW): <strong>20 000 zł</strong></li><li>Poważne zachorowanie: <strong>10 000 zł</strong></li><li>Pobyt w szpitalu: <strong>100 zł/60 zł</strong></li><li><strong>Mediplan Dziecko</strong> (Wsparcie medyczne)</li>",
+                dtKids: `
+                    <div class="details-table-row"><span style="color:#008080; font-weight:700;">Mediplan Dziecko</span><span class="details-val">zgodnie z OWU</span></div>
+                    <div class="details-table-row"><span>Śmierć Dziecka</span><span class="details-val">10 000 zł</span></div>
+                    <div class="details-table-row"><span>Śmierć Dziecka (NW)</span><span class="details-val">20 000 zł</span></div>
+                    <div class="details-table-row"><span>Trwały uszczerbek (NW)</span><span class="details-val">10 000 zł</span></div>
+                    <div class="details-table-row"><span>Poważne zachorowanie <br><small class="details-sub-label">23 jednostki chorobowe</small></span><span class="details-val">10 000 zł</span></div>
+                    <div class="details-table-row"><span>Szpital (NW) <br><small class="details-sub-label">do 14 dni / od 15. dnia</small></span><span class="details-val">100 zł / 50 zł <br>(za dzień)</span></div>
+                    <div class="details-table-row"><span>Szpital (Choroba) <br><small class="details-sub-label">do 14 dni / od 15. dnia</small></span><span class="details-val">60 zł / 50 zł <br>(za dzień)</span></div>
+                    <div class="details-table-row"><span>Leki po szpitalu (Ryczałt)</span><span class="details-val">200 zł</span></div>
+                `,
+                
+                descOnko1: "<li>Poważne zachorowanie (Nowotwór): <strong>40 000 zł</strong></li><li>Pobyt w szpitalu: <strong>25 000 zł</strong></li><li>Leczenie specjalistyczne: <strong>5 000 zł</strong></li><li><strong>Druga Opinia Medyczna</strong> (w Polsce lub za granicą)</li>",
+                
+                descKardio1: "<li>Zawał serca / Udar mózgu: <strong>50 000 zł</strong></li><li>Pobyt w szpitalu: <strong>20 000 zł</strong></li><li>Leczenie specjalistyczne: <strong>5 000 zł</strong></li>",
+
+                // Descriptors (Group 2 - 55+)
+                descOnko2: "<li>Poważne zachorowanie (Nowotwór): <strong>20 000 zł</strong></li><li>Pobyt w szpitalu: <strong>20 000 zł</strong></li><li>Leczenie specjalistyczne: <strong>7 000 zł</strong></li><li><strong>Druga Opinia Medyczna</strong> (w Polsce lub za granicą)</li>",
+                
+                descKardio2: "<li>Zawał serca / Udar mózgu: <strong>20 000 zł</strong></li><li>Pobyt w szpitalu: <strong>10 000 zł</strong></li><li>Leczenie specjalistyczne: <strong>5 000 zł</strong></li>"
+            },
+            en: {
+                title: "Extend Protection (Add-ons)",
+                simAge: "Simulate Age:",
+                back: "Back",
+                next: "Next",
+                skip: "Skip add-ons and proceed",
+                yes: "YES",
+                no: "NO",
+                qualified: "You are eligible:",
+                qualifiedKardio: "You are eligible (All answers NO):",
+                specPackages: "Specialist Packages",
+                seniorMsg: "No add-on packages available for Senior 70+ Group.",
+                
+                persuasionTitle: "Why check this?",
+                persuasionText: "Answer 3 simple health questions. If eligible, you unlock <strong>high payouts (up to 50k PLN)</strong> for critical illnesses that are not available in the standard plan. It costs nothing to check.",
+                
+                showDetails: "Show full scope",
+                hideDetails: "Hide details",
+
+                packActive: "ACTIVE Package",
+                packKids: "KIDS Package",
+                packOnko: "ONCO Package",
+                packKardio: "CARDIO Package",
+                
+                surveyOnko: "Oncology Survey",
+                surveyKardio: "Cardiology Survey",
+                
+                qOnko: `Have you ever been treated for malignant neoplasm (cancer, sarcoma, malignant melanoma, lymphoma, leukemia) or are you being diagnosed with symptoms suggesting neoplastic disease?`,
+                qKardio1: "1. Have you ever been diagnosed or treated for heart attack, coronary heart disease, atherosclerosis, diabetes, stroke, or transient ischemic attack?",
+                qKardio2: "2. Have you been hospitalized in the last 5 years for heart failure, arrhythmia, valvular heart disease, or neurological disorders?",
+                qKardio3: "3. Have you been recommended diagnostics for any of the above conditions in the last 3 months?",
+
+                // Descriptors (Group 1 - Standard)
+                descActiveSummary: "<li>Perm. Impairment (Accident): <strong>40 000 PLN</strong></li><li>Hospital (Accident): <strong>up to 1200 PLN/day</strong></li><li>Treatment Costs: <strong>10 000 PLN</strong></li>",
+                dtActive: `
+                    <div class="details-table-row"><span>Perm. Impairment (Acc.)</span><span class="details-val">40 000 PLN</span></div>
+                    <div class="details-table-row"><span>Hospital Acc. (1-14 / 15+)</span><span class="details-val">400 / 200 PLN <br> (per day)</span></div>
+                    <div class="details-table-row"><span>ICU (up to 5 days)</span><span class="details-val">+400 PLN/day</span></div>
+                    <div class="details-table-row"><span>Work Accident Hospital</span><span class="details-val">800 / 320 PLN <br> (per day)</span></div>
+                    <div class="details-table-row"><span>Traffic Accident Hospital</span><span class="details-val">800 / 320 PLN <br> (per day)</span></div>
+                    <div class="details-table-row"><span>Work Traffic Acc. Hosp.</span><span class="details-val" style="color:#008080">1 200 / 440 PLN <br> (per day)</span></div>
+                    <div class="details-table-row"><span>Convalescence</span><span class="details-val">400 PLN/day</span></div>
+                    <div class="details-table-row"><span>Treatment Costs</span><span class="details-val">10 000 PLN</span></div>
+                    <div class="details-table-row"><span>Orthopedic Equip.</span><span class="details-val">10 000 PLN</span></div>
+                `,
+
+                descKids: "<li>Child Death (Accident): <strong>20 000 PLN</strong></li><li>Critical Illness: <strong>10 000 PLN</strong></li><li>Hospital Stay: <strong>100/60 PLN</strong></li><li><strong>Mediplan Child</strong> (Medical Support)</li>",
+                dtKids: `
+                    <div class="details-table-row"><span style="color:#008080; font-weight:700;">Mediplan Child</span><span class="details-val">per GTC</span></div>
+                    <div class="details-table-row"><span>Child Death</span><span class="details-val">10 000 PLN</span></div>
+                    <div class="details-table-row"><span>Child Death (Accident)</span><span class="details-val">20 000 PLN</span></div>
+                    <div class="details-table-row"><span>Perm. Impairment (Acc.)</span><span class="details-val">10 000 PLN</span></div>
+                    <div class="details-table-row"><span>Critical Illness</span><span class="details-val">10 000 PLN</span></div>
+                    <div class="details-table-row"><span>Hospital (Accident)</span><span class="details-val">100 / 50 PLN <br>(per day)</span></div>
+                    <div class="details-table-row"><span>Hospital (Illness)</span><span class="details-val">60 / 50 PLN <br>(per day)</span></div>
+                    <div class="details-table-row"><span>Post-hospital meds</span><span class="details-val">200 PLN</span></div>
+                `,
+
+                descOnko1: "<li>Critical Illness (Cancer): <strong>40 000 PLN</strong></li><li>Hospital Stay: <strong>25 000 PLN</strong></li><li>Specialist Treatment: <strong>5 000 PLN</strong></li><li><strong>Second Medical Opinion</strong> (in Poland or abroad)</li>",
+                descKardio1: "<li>Heart Attack / Stroke: <strong>50 000 PLN</strong></li><li>Hospital Stay: <strong>20 000 PLN</strong></li><li>Specialist Treatment: <strong>5 000 PLN</strong></li>",
+
+                // Descriptors (Group 2 - 55+)
+                descOnko2: "<li>Critical Illness (Cancer): <strong>20 000 PLN</strong></li><li>Hospital Stay: <strong>20 000 PLN</strong></li><li>Specialist Treatment: <strong>7 000 PLN</strong></li><li><strong>Second Medical Opinion</strong> (in Poland or abroad)</li>",
+                descKardio2: "<li>Heart Attack / Stroke: <strong>20 000 PLN</strong></li><li>Hospital Stay: <strong>10 000 PLN</strong></li><li>Specialist Treatment: <strong>5 000 PLN</strong></li>"
+            },
+            ua: {
+                title: "Розширити захист (Додатки)",
+                simAge: "Симуляція віку:",
+                back: "Назад",
+                next: "Далі",
+                skip: "Пропустити додатки та продовжити",
+                yes: "ТАК",
+                no: "НІ",
+                qualified: "Ви маєте право:",
+                qualifiedKardio: "Ви маєте право (Всі відповіді НІ):",
+                specPackages: "Спеціалізовані пакети",
+                seniorMsg: "Немає доступних пакетів для групи Сеньйор 70+.",
+                
+                persuasionTitle: "Чому варто перевірити?",
+                persuasionText: "Дайте відповідь на 3 прості питання. Якщо здоров'я дозволяє, ви отримаєте доступ до <strong>високих виплат (до 50 тис. PLN)</strong>, недоступних у стандартному плані. Перевірка безкоштовна.",
+                
+                showDetails: "Показати повний обсяг",
+                hideDetails: "Приховати деталі",
+
+                packActive: "Пакет ACTIVE",
+                packKids: "Пакет KIDS",
+                packOnko: "Пакет ONKO",
+                packKardio: "Пакет KARDIO",
+                
+                surveyOnko: "Онкологічне опитування",
+                surveyKardio: "Кардіологічне опитування",
+                
+                qOnko: `Чи лікувалися Ви коли-небудь від злоякісного новоутворення (раку, саркоми, меланоми, лімфоми, лейкемії) або чи проходите діагностику у зв'язку з підозрою на онкологічне захворювання?`,
+                qKardio1: "1. Чи був у Вас діагностований або лікований інфаркт, ішемічна хвороба серця, атеросклероз, діабет, інсульт або транзиторна ішемічна атака?",
+                qKardio2: "2. Чи лікувалися Ви в стаціонарі протягом останніх 5 років з приводу серцевої недостатності, аритмії, вад клапанів серця або неврологічних розладів?",
+                qKardio3: "3. Чи рекомендували Вам діагностику будь-якого з перерахованих вище станів протягом останніх 3 місяців?",
+
+                // Descriptors (Group 1 - Standard)
+                descActiveSummary: "<li>Стійке ушкодження (НВ): <strong>40 000 PLN</strong></li><li>Лікарня (НВ): <strong>навіть до 1200 PLN/день</strong></li><li>Витрати на лікування: <strong>10 000 PLN</strong></li>",
+                dtActive: `
+                    <div class="details-table-row"><span>Стійке ушкодження (НВ)</span><span class="details-val">40 000 PLN</span></div>
+                    <div class="details-table-row"><span>Лікарня НВ (1-14 / 15+)</span><span class="details-val">400 / 200 PLN <br> (день)</span></div>
+                    <div class="details-table-row"><span>Реанімація (до 5 днів)</span><span class="details-val">+400 PLN/день</span></div>
+                    <div class="details-table-row"><span>Лікарня НВ (Робота)</span><span class="details-val">800 / 320 PLN <br> (день)</span></div>
+                    <div class="details-table-row"><span>ДТП Лікарня</span><span class="details-val">800 / 320 PLN <br> (день)</span></div>
+                    <div class="details-table-row"><span>ДТП Лікарня (Робота)</span><span class="details-val" style="color:#008080">1 200 / 440 PLN <br> (день)</span></div>
+                    <div class="details-table-row"><span>Реконвалесценція</span><span class="details-val">400 PLN/день</span></div>
+                    <div class="details-table-row"><span>Витрати на лікування</span><span class="details-val">10 000 PLN</span></div>
+                `,
+
+                descKids: "<li>Смерть дитини (НВ): <strong>20 000 PLN</strong></li><li>Критичні захворювання: <strong>10 000 PLN</strong></li><li>Лікарня: <strong>100/60 PLN</strong></li><li><strong>Mediplan Дитина</strong> (Медична підтримка)</li>",
+                dtKids: `
+                    <div class="details-table-row"><span style="color:#008080; font-weight:700;">Mediplan Дитина</span><span class="details-val">згідно з Умовами</span></div>
+                    <div class="details-table-row"><span>Смерть Дитини</span><span class="details-val">10 000 PLN</span></div>
+                    <div class="details-table-row"><span>Смерть Дитини (НВ)</span><span class="details-val">20 000 PLN</span></div>
+                    <div class="details-table-row"><span>Стійке ушкодження (НВ)</span><span class="details-val">10 000 PLN</span></div>
+                    <div class="details-table-row"><span>Критичні захворювання</span><span class="details-val">10 000 PLN</span></div>
+                    <div class="details-table-row"><span>Лікарня (НВ)</span><span class="details-val">100 / 50 PLN <br>(день)</span></div>
+                    <div class="details-table-row"><span>Лікарня (Хвороба)</span><span class="details-val">60 / 50 PLN <br>(день)</span></div>
+                    <div class="details-table-row"><span>Ліки після лікарні</span><span class="details-val">200 PLN</span></div>
+                `,
+
+                descOnko1: "<li>Критичні захв. (Рак): <strong>40 000 PLN</strong></li><li>Лікарня: <strong>25 000 PLN</strong></li><li>Спец. лікування: <strong>5 000 PLN</strong></li><li><strong>Друга думка лікаря</strong> (в Польщі або за кордоном)</li>",
+                descKardio1: "<li>Інфаркт / Інсульт: <strong>50 000 PLN</strong></li><li>Лікарня: <strong>20 000 PLN</strong></li><li>Спец. лікування: <strong>5 000 PLN</strong></li>",
+
+                // Descriptors (Group 2 - 55+)
+                descOnko2: "<li>Критичні захв. (Рак): <strong>20 000 PLN</strong></li><li>Лікарня: <strong>20 000 PLN</strong></li><li>Спец. лікування: <strong>7 000 PLN</strong></li><li><strong>Друга думка лікаря</strong> (в Польщі або за кордоном)</li>",
+                descKardio2: "<li>Інфаркт / Інсульт: <strong>20 000 PLN</strong></li><li>Лікарня: <strong>10 000 PLN</strong></li><li>Спец. лікування: <strong>5 000 PLN</strong></li>"
+            }
+        };
+
+        // --- GLOBAL STATE ---
+        let currentLang = 'pl';
+        let currentGroup = 1;
+        let activeAddonsMap = new Map();
+        let kardioAnswers = [null, null, null]; 
+
+        // --- FUNCTIONS ---
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('lang-' + lang).classList.add('active');
+            updateStaticText();
+            renderBricks(currentGroup);
+        }
+
+        function updateStaticText() {
+            const t = translations[currentLang];
+            document.getElementById('lbl-title').innerText = t.title;
+            document.getElementById('txt-sim-age').innerText = t.simAge;
+            document.getElementById('btn-back').innerText = t.back;
+            document.getElementById('btn-skip').innerText = t.skip;
+            document.getElementById('btn-next').innerHTML = `${t.next} <span class="material-icons-outlined">arrow_forward</span>`;
+        }
+
+        function changeGroup(grp) {
+            currentGroup = grp;
+            document.querySelectorAll('.debug-btn').forEach(btn => btn.classList.remove('debug-active'));
+            document.getElementById('btn-grp-' + grp).classList.add('debug-active');
+            renderBricks(currentGroup);
+        }
+
+        function renderBricks(group) {
+            const t = translations[currentLang];
+            const c = document.getElementById('bricksContainer'); 
+            c.innerHTML = ''; 
+            activeAddonsMap.clear(); 
+            kardioAnswers = [null, null, null]; 
+            updateStickyTotal(); 
+
+            // Logic Senior (Group 3)
+            if(group === 3) { 
+                c.innerHTML=`<div style="text-align:center; padding: 40px; color: #777; background: #f9f9f9; border-radius: 8px;">${t.seniorMsg}</div>`; 
+                return; 
+            }
+            
+            // PRICES
+            const priceStandard = 29.90;
+            const price55Plus = 49.90;
+
+            const onkoPrice = group === 1 ? priceStandard : price55Plus;
+            const kardioPrice = group === 1 ? priceStandard : price55Plus;
+            const kidsPrice = priceStandard; 
+            const activePrice = priceStandard; 
+
+            const onkoDesc = group === 1 ? t.descOnko1 : t.descOnko2;
+            const kardioDesc = group === 1 ? t.descKardio1 : t.descKardio2;
+
+            // --- STANDARD PACKAGES (Active & Kids) ---
+            const div = document.createElement('div'); 
+            div.className='options-grid';
+            
+            // Show Standard packs for Group 1 AND Group 2 (Updated Logic)
+            if(group === 1 || group === 2) {
+                // Active (With Expandable Table)
+                const lblActive = document.createElement('label'); 
+                lblActive.className='plan-card'; 
+                lblActive.style.flexDirection = 'column'; 
+                lblActive.style.alignItems = 'stretch';
+                
+                lblActive.innerHTML = `
+                    <div style="display:flex; gap:15px; align-items:flex-start">
+                        <input type="checkbox" onchange="toggleAddon('active',${activePrice},'${t.packActive}')">
+                        <div class="card-content">
+                            <strong>${t.packActive} (+${activePrice.toFixed(2)} zł)</strong>
+                            <small><ul>${t.descActiveSummary}</ul></small>
+                            
+                            <div class="details-link" onclick="toggleDetails(event, this)">
+                                <span>${t.showDetails}</span> <span class="material-icons-outlined" style="font-size:16px">expand_more</span>
+                            </div>
+                            <div class="details-content">
+                                ${t.dtActive}
+                            </div>
+                        </div>
+                    </div>`;
+                div.appendChild(lblActive);
+
+                // Kids (With Expandable Table - UPDATED v5)
+                const lblKids = document.createElement('label'); 
+                lblKids.className='plan-card'; 
+                lblKids.style.flexDirection = 'column'; 
+                lblKids.style.alignItems = 'stretch';
+                
+                lblKids.innerHTML = `
+                    <div style="display:flex; gap:15px; align-items:flex-start">
+                        <input type="checkbox" onchange="toggleAddon('kids',${kidsPrice},'${t.packKids}')">
+                        <div class="card-content">
+                            <strong>${t.packKids} (+${kidsPrice.toFixed(2)} zł)</strong>
+                            <small><ul>${t.descKids}</ul></small>
+                            
+                            <div class="details-link" onclick="toggleDetails(event, this)">
+                                <span>${t.showDetails}</span> <span class="material-icons-outlined" style="font-size:16px">expand_more</span>
+                            </div>
+                            <div class="details-content">
+                                ${t.dtKids}
+                            </div>
+                        </div>
+                    </div>`;
+                div.appendChild(lblKids);
+            }
+            c.appendChild(div);
+
+            // --- UX PERSUASION BOX ---
+            const persuasionBox = document.createElement('div');
+            persuasionBox.className = 'ux-persuasion-box';
+            persuasionBox.innerHTML = `
+                <span class="material-icons-outlined ux-persuasion-icon">lightbulb</span>
+                <div class="ux-content">
+                    <h4>${t.persuasionTitle}</h4>
+                    <p>${t.persuasionText}</p>
+                </div>
+            `;
+            c.appendChild(persuasionBox);
+
+            // --- MEDICAL SECTION (ONKO & KARDIO) ---
+            const medDiv = document.createElement('div'); 
+
+            // Kardio Questions Loop
+            const kardioQuestionsList = [t.qKardio1, t.qKardio2, t.qKardio3];
+            let kardioQuestionsHTML = '';
+            kardioQuestionsList.forEach((q, index) => {
+                kardioQuestionsHTML += `
+                    <div class="medical-sub-question">
+                        <div class="medical-question">${q}</div>
+                        <div class="medical-actions">
+                            <button class="health-btn" onclick="handleHealth(true, this, 'kardio', ${index})">${t.yes}</button>
+                            <button class="health-btn" onclick="handleHealth(false, this, 'kardio', ${index})">${t.no}</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            medDiv.innerHTML = `
+                <div class="medical-section">
+                    <div class="section-header"><span class="material-icons-outlined">medical_services</span> ${t.specPackages}</div>
+                    
+                    <!-- ONKO -->
+                    <div style="margin-bottom:30px">
+                        <strong style="color:var(--ovb-blue); display:block; margin-bottom:10px;">${t.surveyOnko}</strong>
+                        <div class="medical-question">${t.qOnko}</div>
+                        <div class="medical-actions">
+                            <button class="health-btn" onclick="handleHealth(true, this, 'onko')">${t.yes}</button>
+                            <button class="health-btn" onclick="handleHealth(false, this, 'onko')">${t.no}</button>
+                        </div>
+                        <div id="onkoReveal" class="addon-reveal">
+                            <span class="addon-reveal-label">${t.qualified}</span>
+                            <label class="plan-card">
+                                <input type="checkbox" id="chk_onko" onchange="toggleAddon('onko', ${onkoPrice}, '${t.packOnko}')">
+                                <div class="card-content">
+                                    <strong>${t.packOnko} (+${onkoPrice.toFixed(2)} zł)</strong>
+                                    <small><ul>${onkoDesc}</ul></small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- KARDIO -->
+                    <div>
+                        <strong style="color:var(--ovb-blue); display:block; margin-bottom:10px;">${t.surveyKardio}</strong>
+                        ${kardioQuestionsHTML}
+                        
+                        <div id="kardioReveal" class="addon-reveal">
+                            <span class="addon-reveal-label">${t.qualifiedKardio}</span>
+                            <label class="plan-card">
+                                <input type="checkbox" id="chk_kardio" onchange="toggleAddon('kardio', ${kardioPrice}, '${t.packKardio}')">
+                                <div class="card-content">
+                                    <strong>${t.packKardio} (+${kardioPrice.toFixed(2)} zł)</strong>
+                                    <small><ul>${kardioDesc}</ul></small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            `;
+            c.appendChild(medDiv);
+        }
+
+        // --- TOGGLE DETAILS FUNCTION ---
+        function toggleDetails(e, btn) {
+            e.preventDefault();
+            e.stopPropagation(); // Prevent card selection
+            const content = btn.nextElementSibling;
+            const t = translations[currentLang];
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                btn.innerHTML = `<span>${t.showDetails}</span> <span class="material-icons-outlined" style="font-size:16px">expand_more</span>`;
+            } else {
+                content.classList.add('open');
+                btn.innerHTML = `<span>${t.hideDetails}</span> <span class="material-icons-outlined" style="font-size:16px">expand_less</span>`;
+            }
+        }
+
+        function toggleAddon(id, p, n) {
+            if(activeAddonsMap.has(id)) activeAddonsMap.delete(id); 
+            else activeAddonsMap.set(id, {price:p, name:n});
+            updateStickyTotal(); 
+        }
+
+        function handleHealth(isYes, btn, type, index = -1) {
+            const siblings = btn.parentElement.querySelectorAll('.health-btn');
+            siblings.forEach(b => b.className = 'health-btn'); 
+            if(isYes) btn.classList.add('selected-yes'); else btn.classList.add('selected-no');
+
+            const reveal = document.getElementById(type + 'Reveal');
+            const chk = document.getElementById('chk_' + type);
+
+            if (type === 'onko') {
+                if(isYes) {
+                    reveal.classList.remove('visible'); 
+                    if(chk && chk.checked) { chk.checked = false; toggleAddon(type, 0, ''); }
+                } else {
+                    reveal.classList.add('visible');
+                }
+            } 
+            else if (type === 'kardio') {
+                if (index >= 0) kardioAnswers[index] = isYes;
+                const allAnswered = kardioAnswers.every(ans => ans !== null);
+                const anyYes = kardioAnswers.some(ans => ans === true);
+
+                if (allAnswered && !anyYes) reveal.classList.add('visible');
+                else {
+                    reveal.classList.remove('visible');
+                    if(chk && chk.checked) { chk.checked = false; toggleAddon(type, 0, ''); }
+                }
+            }
+        }
+        
+        function skipStep() {
+            activeAddonsMap.clear();
+            updateStickyTotal();
+            alert("Przekierowanie do Kroku 4 (Dane osobowe) bez wybranych dodatków.");
+        }
+
+        function updateStickyTotal() {
+            let total = 0;
+            activeAddonsMap.forEach(v => total += v.price);
+            document.getElementById('stickyTotalDisplay').innerText = total.toFixed(2) + " zł";
+        }
+
+        window.onload = function() {
+            setLang('pl'); // Default load
+        }
+    </script>
+</body>
+</html>
