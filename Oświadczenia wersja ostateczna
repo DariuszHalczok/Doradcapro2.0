@@ -93,7 +93,7 @@
             border-left: 4px solid var(--ovb-teal);
             border-radius: 6px; 
             margin-bottom: 20px; 
-            line-height: 1.6; 
+            line-height: 1.8; 
             color: #444; 
             box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
@@ -242,7 +242,6 @@
         <!-- 4. RODO -->
         <div class="form-section" style="border-left: 5px solid #90CAF9;">
             <div class="section-header"><span class="material-icons-outlined icon" style="color:#1E88E5">policy</span> <span id="lbl-sec-4">4. Informacja RODO</span></div>
-            
             <div class="field-group">
                 <label class="option-row"><input type="checkbox" name="rodo_ack" required> <span class="option-text" id="lbl-rodo-text">Potwierdzam zapoznanie się z informacją RODO.</span></label>
                 <div class="read-more" onclick="Modal.open('rodo')"><span id="lbl-read-rodo">Pokaż pełną informację RODO</span></div>
@@ -404,7 +403,86 @@
             terms_content: `Oświadczenia o chęci zawarcia umowy ubezpieczenia\nPrzystępując do Umowy grupowego ubezpieczenia na życie CERTUM/CERTUM MAX (dalej: umowa ubezpieczenia) zostałem poinformowany, że\n1. Towarzystwo za pośrednictwem sms wysłanego na nr telefonu wskazany w deklaracji przystąpienia przekaże informację o rozpoczęciu ochrony ubezpieczeniowej.\n2. Odpowiedzialność Towarzystwa trwa 1 miesiąc, z możliwością jej automatycznego przedłużenia na kolejny, analogiczny co do długości okres, pod warunkiem opłacenia składki w terminie do 26 dnia miesiąca poprzedzającego okres, na który odpowiedzialność Towarzystwa ma zostać przedłużona.\n3. Brak wpłaty składki w terminie, o którym mowa w pkt 2 powyżej, skutkuje nieprzedłużeniem odpowiedzialności Towarzystwa na kolejny okres.\n4. Wznowienie odpowiedzialności może nastąpić, jeżeli łącznie spełnione są warunki przewidziane w OWU (m.in. nie więcej niż 26 dni przerwy, bez zmiany warunków Umowy oraz z uwzględnieniem limitów wieku / podgrup zgodnie z OWU).`,
             owu_content: `AKTUALNE WARUNKI (ZMIANY OWU) – pkt 30–44\n\n30. Art. XIV ust. 1 OWU przyjmuje następujące brzmienie: „W przypadku zakończenia odpowiedzialności Towarzystwa z tytułu Umowy w stosunku do Ubezpieczonego z powodu ukończenia określonego wieku wskazanego w Art. X ust. 2 pkt 4) Ubezpieczony ma prawo do indywidualnej kontynuacji ubezpieczenia, jeżeli łącznie spełnione zostały następujące warunki:\n1) Ubezpieczony złoży w Towarzystwie wniosek przed upływem 3 miesięcy od daty zajścia któregokolwiek z wyżej wymienionych zdarzeń;\n2) Ubezpieczony był objęty ochroną ubezpieczeniową z tytułu Umowy przez co najmniej 1 miesiąc...”\n\n31. Art. II pkt 77 OWU: definicja wcześniejszej umowy ubezpieczenia.\n\n32. Limity wieku i pakiety (START-VIP do 56 lat, Silver+ do 70 lat).\n\n44. Przystąpienie do pakietu ONKO/KARDIO wyłącznie po pozytywnej ocenie medycznej.`,
             excluded_content: `Oświadczam, że nie wykonuję żadnego z wymienionych zawodów: górnik, konwojent, ochroniarz z bronią, elektryk >1kV, kaskader, pirotechnik, marynarz, ratownik, żołnierz zawodowy, funkcjonariusz służb mundurowych, treser zwierząt, akrobata.\nOraz nie wykonuję prac: na platformie wiertniczej, w rafinerii, w tartaku, pod ziemią, pod wodą, przy zrywce drzew, na wysokościach >10m, materiały wybuchowe.`,
-            rodo_content: `INFORMACJA O PRZETWARZANIU DANYCH OSOBOWYCH (RODO) – część dla Ubezpieczającego\n1) Administratorzy danych: SKFC oraz Generali Życie T.U. S.A.\n2) Zakres danych: identyfikacyjne, kontaktowe, status ochrony. OVB nie ma dostępu do odpowiedzi medycznych.\n3) Okres przechowywania: 12 lat od dnia zawarcia umowy.`,
+            rodo_content: `INFORMACJA O PRZETWARZANIU DANYCH OSOBOWYCH (RODO)
+
+1) KTO JEST ADMINISTRATOREM DANYCH?
+W zależności od celu przetwarzania, administratorami Twoich danych są:
+
+A) Generali Życie Towarzystwo Ubezpieczeń S.A. („Generali”)
+– administrator danych w zakresie zawarcia i wykonywania umowy ubezpieczenia, oceny ryzyka, obsługi roszczeń i wypłaty świadczeń.
+Kontakt: iod@generali.pl
+Adres: ul. Senatorska 18, 00-082 Warszawa.
+
+B) Stowarzyszenie Klientów Finance Club („Stowarzyszenie”) – Ubezpieczający
+– administrator danych w zakresie:
+- prowadzenia Grupy Otwartej / członkostwa honorowego umożliwiającego przystąpienie do ubezpieczenia,
+- administrowania umową grupową (obsługa przystąpień, zmian, składek, statusu ochrony, komunikacji organizacyjnej),
+- marketingu i edukacji klientów – wyłącznie, jeżeli wyrazisz odrębną zgodę.
+Kontakt RODO: rodo@financeclub.pl
+
+C) OVB Allfinanz Polska Spółka Finansowa Sp. z o.o. („OVB”)
+– w procesie zawarcia/obsługi ubezpieczenia może działać jako podmiot przetwarzający na podstawie umów powierzenia (bez danych medycznych),
+– może działać jako odrębny administrator w zakresie realizacji obowiązków wynikających z przepisów o dystrybucji ubezpieczeń oraz rozliczeń prowizyjnych, a także marketingu – wyłącznie, jeżeli wyrazisz odrębną zgodę.
+Kontakt ds. danych osobowych: dane.osobowe@ovb.com.pl
+Adres: ul. Mierosławskiego 11A, 01-527 Warszawa.
+
+2) JAKIE DANE PRZETWARZAMY?
+- dane identyfikacyjne i kontaktowe (np. imię, nazwisko, PESEL/data urodzenia, adres, telefon, e-mail),
+- dane związane z przystąpieniem i zakresem ochrony (np. podgrupa/pakiet, suma ubezpieczenia, składka, status ochrony),
+- numer deklaracji / identyfikator wniosku,
+- dane rozliczeniowe i operacyjne (np. płatności składek, historia zmian),
+- dane o zdrowiu: przetwarzane przez Generali wyłącznie w zakresie niezbędnym do oceny ryzyka i obsługi roszczeń.
+Uwaga: OVB oraz poszczególni doradcy nie mają dostępu do odpowiedzi medycznych.
+
+3) SKĄD MAMY TWOJE DANE I JAK PRZEBIEGA PRZEPŁYW?
+Dane są wprowadzane w aplikacji Doradca.pro i przekazywane do Generali za pośrednictwem interfejsu API w celu zawarcia i obsługi ubezpieczenia.
+Kopie deklaracji oraz odpowiedzi na pytania medyczne są przechowywane na serwerach zlokalizowanych w Polsce.
+
+4) W JAKIM CELU I NA JAKIEJ PODSTAWIE PRAWNEJ PRZETWARZAMY DANE?
+A) Zawarcie i wykonanie umowy ubezpieczenia / obsługa umowy grupowej:
+- art. 6 ust. 1 lit. b RODO (niezbędność do wykonania umowy lub podjęcia działań przed jej zawarciem),
+- art. 6 ust. 1 lit. c RODO (obowiązek prawny),
+- art. 6 ust. 1 lit. f RODO (prawnie uzasadniony interes – np. obsługa, bezpieczeństwo, dochodzenie/obrona roszczeń).
+
+B) AML/PEP i obowiązki regulacyjne:
+- art. 6 ust. 1 lit. c RODO (obowiązek prawny) oraz przepisy szczególne właściwe dla sektora finansowego/ubezpieczeniowego.
+
+C) Marketing i edukacja (Generali / Stowarzyszenie / OVB):
+- art. 6 ust. 1 lit. a RODO (Twoja zgoda) – realizowane wyłącznie, jeśli zaznaczysz odpowiednie checkboxy.
+Zgodę możesz wycofać w każdym momencie.
+
+D) Dane o zdrowiu:
+- dane o zdrowiu przetwarza Generali w związku z ubezpieczeniem, w tym na podstawie udzielonej przez Ciebie zgody w formularzu oraz właściwych przepisów dotyczących działalności ubezpieczeniowej.
+
+5) KTO MOŻE OTRZYMAĆ TWOJE DANE?
+Odbiorcami danych mogą być:
+- Generali i Stowarzyszenie (w zakresie realizacji umowy grupowej),
+- OVB – wyłącznie w zakresie niezbędnym do obsługi dystrybucji i rozliczeń (bez danych medycznych),
+- dostawcy IT i hostingu (np. Doradca.pro, serwery) działający jako podmioty przetwarzające,
+- podmioty uprawnione na podstawie przepisów prawa (np. organy/instytucje uprawnione),
+- podmioty wykonujące działalność leczniczą / NFZ – wyłącznie w zakresie i na zasadach wynikających z udzielonej zgody i przepisów (dotyczy Generali).
+
+6) CZY DANE SĄ PRZEKAZYWANE POZA UE/EOG?
+Co do zasady dane są przetwarzane w Polsce lub na terenie UE/EOG.
+Jeżeli wyjątkowo dojdzie do przekazania danych poza UE/EOG (np. w związku z usługami IT), nastąpi to wyłącznie zgodnie z RODO i z zastosowaniem odpowiednich zabezpieczeń (np. standardowe klauzule umowne UE). Masz prawo uzyskać informacje o zastosowanych zabezpieczeniach – skontaktuj się z administratorem.
+
+7) JAK DŁUGO PRZECHOWUJEMY DANE?
+- Kopie deklaracji oraz dokumenty związane z przystąpieniem i wykonywaniem umowy są przechowywane przez 12 lat od dnia zawarcia/przystąpienia, a następnie mogą zostać zniszczone, chyba że dłuższe przechowywanie jest wymagane przepisami lub konieczne do ustalenia, dochodzenia lub obrony roszczeń.
+- Stowarzyszenie przechowuje oryginały deklaracji przystąpienia przez 12 lat oraz udostępnia je na wniosek Generali.
+
+8) JAKIE MASZ PRAWA?
+Masz prawo do:
+- dostępu do danych,
+- sprostowania danych,
+- ograniczenia przetwarzania,
+- sprzeciwu wobec przetwarzania (gdy podstawą jest uzasadniony interes),
+- przenoszenia danych (gdy ma zastosowanie),
+- usunięcia danych (w granicach prawa),
+- wycofania zgody w dowolnym momencie (bez wpływu na zgodność przetwarzania przed wycofaniem),
+- wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych (PUODO).
+
+9) CZY DANE SĄ PROFILOWANE / CZY SĄ DECYZJE AUTOMATYCZNE?
+Generali może stosować (w dopuszczalnym zakresie) zautomatyzowaną ocenę ryzyka ubezpieczeniowego, co może wpływać na możliwość przystąpienia do określonego zakresu ochrony.`,
             health_text: `Oświadczam, że w okresie ostatnich 5 lat stan mojego zdrowia nie uległ istotnemu pogorszeniu czyli:
 
 <ul><li>nie byłem(am) leczony(a) szpitalnie, ani nie jest planowane takie leczenie (z wyjątkiem usunięcia wyrostka robaczkowego, pęcherzyka żółciowego, migdałków, hemoroidów, łagodnych torbieli, przeprowadzenia artroskopii, operacji przepukliny, przegrody nosa, zaćmy, leczenia złamania kości, usunięcia zęba, porodu);</li>
@@ -442,17 +520,8 @@
             terms_content: "Declarations of willingness to conclude an insurance contract\nAccessing the Group Life Insurance Agreement CERTUM/CERTUM MAX (hereinafter: insurance agreement), I have been informed that:\n1. The Company will send information about the commencement of insurance coverage via SMS to the phone number indicated in the accession declaration.\n2. The Company's liability lasts for 1 month, with the possibility of its automatic extension for another analogous period, provided that the premium is paid by the 26th day of the month preceding the period for which the Company's liability is to be extended.\n3. Failure to pay the premium by the deadline referred to in point 2 above results in the non-extension of the Company's liability for the next period.\n4. Resumption of liability may occur if the conditions provided for in the GTC are jointly met (including no more than 26 days gap, without changing the Agreement conditions and taking into account age limits/subgroups according to the GTC).",
             owu_content: "CURRENT CONDITIONS (GTC CHANGES) – pts 30–44\n\n30. Art. XIV sec. 1 GTC takes the following wording:\n'In the event of termination of the Company's liability under the Agreement in relation to the Insured due to reaching a specific age indicated in Art. X sec. 2 pt 4), the Insured has the right to individual continuation of insurance if the following conditions are jointly met:\n1) The Insured submits an application to the Company before the expiry of 3 months from the date of occurrence of any of the above-mentioned events;\n2) The Insured was covered by insurance protection under the Agreement for at least 1 month...'\n\n31. Art. II pt 77 GTC receives the following wording:\n'77. previous insurance agreement – an insurance agreement meeting one of the following conditions: a) group life insurance agreement; b) Individual Continuation agreement...'\n\n32. Art. IV sec. 10 GTC: Subgroups/packages and age limits: START-VIP up to 56 years; SILVER-PLATINUM up to 70 years; SENIOR up to 75 years.\n\n33. Art. IV sec. 11 GTC: Change of subgroup/package only on policy anniversary.\n\n34. Art. IV sec. 11’ GTC: Change to higher packages requires positive risk assessment.\n\n35. Art. V sec. 1 GTC: Conditions for accession: min 15 years, max 75, member of Open Group, no L4, no excluded professions.\n\n44. Accession to ONKO/KARDIO package solely after positive medical assessment.",
             excluded_content: "I declare that I do not practice any of the following professions:\n\nminer, conveyer of valuables and money, security guard with a weapon permit, electrician working on networks with voltage higher than 1kV, stuntman, pyrotechnician, war correspondent, sailor, rescuer, professional soldier, Municipal/Commune Guard officer, uniformed services officer (including firefighter, policeman, Prison Service officer, Border Guard, Government Protection Bureau, Internal Security Agency, Central Investigation Bureau, Central Anti-Corruption Bureau), dangerous animal trainer, zoo or circus animal caretaker, acrobat, circus artist, professional athlete.\n\nAnd I do not perform work:\non an oil rig, in a refinery, in a sawmill, underground, underwater, in logging or timber transport, at heights above 10 meters, as an employee using explosives and flammable materials, deep-sea fishing employee, aircraft personnel.",
-            rodo_content: "INFORMATION ON PERSONAL DATA PROCESSING (GDPR) – part for the Policyholder\n\n1) Data Controllers:\n- Finance Club Clients Association (Policyholder) – regarding honorary membership and administration of the Group Agreement.\n- Generali Życie T.U. S.A. – as insurer regarding the conclusion and execution of the insurance contract.\n\n2) Scope of data: The Association processes identification and contact data, declaration number, protection variant, protection status, and settlement data. OVB Allfinanz sp. z o.o. and advisors/intermediaries do not have access to answers to medical questions or medical documentation.\n\n3) Processing method: Data is entered in the Doradca.pro application and transferred via API to Generali. Copies of declarations and medical answers are stored on servers in Poland.\n\n4) Storage period: Copies of declarations and data related to the conclusion and execution of the Group Agreement are stored for 12 years from the date of concluding the agreement.\n\n5) Data recipients: Generali Życie T.U. S.A., IT/hosting providers (including Doradca.pro). OVB may receive data necessary for brokerage/commission settlements – without medical data.\n\n6) Rights: Right to access data, rectification, restriction of processing, objection, and lodging a complaint with the President of the Personal Data Protection Office.",
-            health_text: `I declare that in the last 5 years my health has not significantly deteriorated, meaning:
-
-<ul><li>I have not been hospitalized, nor is such treatment planned (except for removal of appendix, gallbladder, tonsils, hemorrhoids, benign cysts, arthroscopy, hernia repair, nasal septum, cataracts, bone fracture treatment, tooth extraction, childbirth);</li>
-<li>no abnormalities were found in diagnostic tests performed, requiring treatment lasting longer than 1 month.</li></ul>
-
-<strong>At the same time, I declare that:</strong>
-<ul><li>I have not remained unfit for work for longer than 30 days in the last 12 months (does not apply to incapacity for work related to pregnancy);</li>
-<li>I do not have a certificate of partial incapacity for work or service;</li>
-<li>I am not waiting for diagnostic tests recommended by a doctor;</li>
-<li>I have not been diagnosed with any of the listed chronic diseases or conditions: cancer, coronary heart disease, heart attack, heart defect, stroke, transient ischemic attack (TIA), diabetes, bronchial asthma or other chronic respiratory disease, chronic liver, pancreas or kidney disease, mental disorders, alcohol disease, HIV infection.</li></ul>`,
+            rodo_content: "INFORMATION ON PERSONAL DATA PROCESSING (GDPR)\n\n1) WHO IS THE DATA CONTROLLER?\nA) Generali Życie T.U. S.A. ('Generali') – controller for insurance contract execution, risk assessment, claims.\nB) Finance Club Clients Association ('Association') – Policyholder – controller for membership, group agreement administration, marketing (if consented).\nC) OVB Allfinanz Polska Sp. z o.o. ('OVB') – processor for support; separate controller for distribution duties and marketing (if consented).\n\n2) WHAT DATA DO WE PROCESS?\n- ID/contact data, insurance scope data, declaration number, payment/status data.\n- Health data: processed by Generali solely for risk/claims.\nNote: OVB and advisors do not have access to medical answers.\n\n3) SOURCE AND FLOW?\nData entered in Doradca.pro -> API to Generali. Servers in Poland.\n\n4) PURPOSE AND LEGAL BASIS?\nA) Contract execution: Art. 6(1)(b), (c), (f) GDPR.\nB) AML/PEP: Art. 6(1)(c) GDPR.\nC) Marketing: Art. 6(1)(a) GDPR (Consent).\nD) Health data: processed by Generali based on consent and insurance laws.\n\n5) RECIPIENTS?\nGenerali, Association, OVB (limited), IT/hosting providers (processors), authorized bodies, medical entities (Generali only).\n\n6) TRANSFER OUTSIDE EU?\nGenerally no. If yes, with standard contractual clauses.\n\n7) RETENTION?\n12 years from accession date.\n\n8) RIGHTS?\nAccess, rectification, restriction, objection, portability, deletion, withdrawal of consent, complaint to PUODO.\n\n9) PROFILING?\nGenerali may use automated risk assessment.",
+            health_text: "I declare that in the last 5 years my health has not significantly deteriorated, meaning:\n\n• I have not been hospitalized, nor is such treatment planned (except for removal of appendix, gallbladder, tonsils, hemorrhoids, benign cysts, arthroscopy, hernia repair, nasal septum, cataracts, bone fracture treatment, tooth extraction, childbirth);\n• no abnormalities were found in diagnostic tests performed, requiring treatment lasting longer than 1 month.\n\nAt the same time, I declare that:\n• I have not remained unfit for work for longer than 30 days in the last 12 months (does not apply to incapacity for work related to pregnancy);\n• I do not have a certificate of partial incapacity for work or service;\n• I am not waiting for diagnostic tests recommended by a doctor;\n• I have not been diagnosed with any of the listed chronic diseases or conditions: cancer, coronary heart disease, heart attack, heart defect, stroke, transient ischemic attack (TIA), diabetes, bronchial asthma or other chronic respiratory disease, chronic liver, pancreas or kidney disease, mental disorders, alcohol disease, HIV infection.",
             q1: "1) Have you suffered from the following diseases in the last 5 years? cancer, coronary heart disease, heart attack, heart defect, stroke, transient ischemic attack (TIA), hypertension, diabetes, bronchial asthma or other chronic respiratory disease, chronic liver, pancreas or kidney disease, mental disorders, alcohol disease, HIV infection.",
             q2: "2) Have you been treated in a hospital in the last 5 years (except for removal of appendix, gallbladder, tonsils, hemorrhoids, benign cysts, arthroscopy, hernia repair, nasal septum, cataracts, bone fracture treatment, tooth extraction, childbirth) or is such treatment planned?",
             q3: "3) Have you felt any of the following ailments in the last year: chest pain, fainting, hemoptysis, blood in stool, shortness of breath, palpable lump or enlargement of one breast, fever of unexplained cause, progressive weight loss?",
@@ -482,17 +551,8 @@
             terms_content: "Декларації про бажання укласти договір страхування\nПриєднуючись до Договору групового страхування життя CERTUM/CERTUM MAX (далі: договір страхування), я був поінформований, що:\n1. Товариство за допомогою SMS, надісланого на номер телефону, вказаний у декларації про приєднання, передасть інформацію про початок страхового захисту.\n2. Відповідальність Товариства триває 1 місяць з можливістю її автоматичного продовження на наступний аналогічний період за умови сплати внеску до 26-го дня місяця, що передує періоду, на який відповідальність Товариства має бути продовжена.\n3. Несплата внеску у строк, зазначений у п. 2 вище, призводить до непродовження відповідальності Товариства на наступний період.\n4. Відновлення відповідальності може відбутися, якщо сукупно виконані умови, передбачені в OWU (зокрема, не більше 26 днів перерви, без зміни умов Договору та з урахуванням вікових лімітів/підгруп відповідно до OWU).",
             owu_content: "АКТУАЛЬНІ УМОВИ (ЗМІНИ OWU) – пп. 30–44\n\n30. Ст. XIV п. 1 OWU набуває такого змісту:\n«У разі припинення відповідальності Товариства за Договором щодо Застрахованого через досягнення певного віку, зазначеного в Ст. X п. 2 пп. 4), Застрахований має право на індивідуальне продовження страхування, якщо сукупно виконані такі умови:\n1) Застрахований подасть до Товариства заяву до закінчення 3 місяців з дати настання будь-якої з вищезазначених подій;\n2) Застрахований був охоплений страховим захистом за Договором щонайменше 1 місяць...»\n\n31. Ст. II п. 77 OWU отримує такий зміст:\n«77. попередній договір страхування – договір страхування, що відповідає одній з таких умов: a) договір групового страхування життя; b) договір Індивідуального Продовження...»\n\n32. Ст. IV п. 10 OWU: Підгрупи/пакети та вікові ліміти: START-VIP до 56 років; SILVER-PLATINUM до 70 років; SENIOR до 75 років.\n\n33. Ст. IV п. 11 OWU: Зміна підгрупи/пакету лише в річницю полісу.\n\n34. Ст. IV п. 11’ OWU: Зміна на вищі пакети вимагає позитивної оцінки ризику.\n\n35. Ст. V п. 1 OWU: Умови приєднання: мін. 15 років, макс. 75, член Відкритої Групи, відсутність L4, відсутність виключених професій.\n\n44. Приєднання до пакету ONKO/KARDIO виключно після позитивної медичної оцінки.",
             excluded_content: "Я заявляю, що не виконую жодної з перерахованих професій:\n\nшахтар, конвоїр цінностей та грошей, охоронець з дозволом на зброю, електрик, що працює в мережі з напругою вище 1 кВ, каскадер, піротехнік, військовий кореспондент, моряк, рятувальник, професійний солдат, співробітник муніципальної варти, співробітник силових структур (зокрема пожежник, поліцейський, співробітник тюремної служби, прикордонної служби, Бюро охорони уряду, Агентства внутрішньої безпеки, Центрального слідчого бюро, Центрального антикорупційного бюро), дресирувальник небезпечних тварин, доглядач тварин у зоопарку або цирку, акробат, цирковий артист, професійний спортсмен.\n\nА також не виконую робіт:\nна буровій платформі, на нафтопереробному заводі, на лісопильні, під землею, під водою, при трелюванні або вирубці дерев та вивезенні деревини, на висоті понад 10 метрів, як працівник, що використовує вибухові та легкозаймисті матеріали, працівник глибоководного рибальства, персонал літаків.",
-            rodo_content: "ІНФОРМАЦІЯ ПРО ОБРОБКУ ПЕРСОНАЛЬНИХ ДАНИХ (RODO) – частина для Страхувальника\n\n1) Адміністратори даних:\n- Асоціація Клієнтів Finance Club (Страхувальник) – у сфері почесного членства та адміністрування Групового Договору.\n- Generali Życie T.U. S.A. – як страховик (окремий адміністратор) у сфері укладення та виконання договору страхування.\n\n2) Обсяг даних: Асоціація обробляє ідентифікаційні та контактні дані, номер декларації, варіант захисту, статус захисту та розрахункові дані. OVB Allfinanz sp. z o.o. та консультанти не мають доступу до відповідей на медичні питання або медичної документації.\n\n3) Спосіб обробки: Дані вводяться в додатку Doradca.pro та передаються через інтерфейс API до Generali. Копії декларацій та медичні відповіді зберігаються на серверах у Польщі.\n\n4) Період зберігання: Копії декларацій та дані, пов'язані з укладенням та виконанням Групового Договору, зберігаються протягом 12 років.\n\n5) Отримувачі даних: Generali Życie T.U. S.A., постачальники IT/хостингу (включаючи Doradca.pro). OVB може отримувати дані, необхідні для розрахунків посередництва – без медичних даних.\n\n6) Права: Право доступу до даних, їх виправлення, обмеження обробки, заперечення та подання скарги Голові Управління захисту персональних даних (UODO).",
-            health_text: `Я заявляю, що за останні 5 років стан мого здоров'я суттєво не погіршився, а саме:
-
-<ul><li>я не перебував(ла) на стаціонарному лікуванні, і таке лікування не планується (за винятком видалення апендикса, жовчного міхура, мигдаликів, геморою, доброякісних кіст, проведення артроскопії, операції грижі, носової перегородки, катаракти, лікування перелому кістки, видалення зуба, пологів);</li>
-<li>не виявлено відхилень від норми у виконаних діагностичних дослідженнях, що потребують лікування тривалістю понад 1 місяць.</li></ul>
-
-<strong>Водночас я заявляю, що:</strong>
-<ul><li>я не був(ла) непрацездатним(ою) понад 30 днів протягом останніх 12 місяців (не стосується непрацездатності, пов'язаної з вагітністю);</li>
-<li>я не маю довідки про часткову непрацездатність до роботи або служби;</li>
-<li>я не очікую на виконання рекомендованих лікарем діагностичних досліджень;</li>
-<li>у мене не було діагностовано жодної з перерахованих хронічних хвороб або станів: онкологічне захворювання, ішемічна хвороба серця, інфаркт міокарда, вада серця, інсульт, транзиторна ішемічна атака (TIA), діабет, бронхіальна астма або інше хронічне захворювання дихальної системи, хронічне захворювання печінки, підшлункової залози або нирок, психічні розлади, алкогольна хвороба, вірусна інфекція ВІЛ.</li></ul>`,
+            rodo_content: "ІНФОРМАЦІЯ ПРО ОБРОБКУ ПЕРСОНАЛЬНИХ ДАНИХ (RODO)\n\n1) ХТО Є АДМІНІСТРАТОРОМ ДАНИХ?\nА) Generali Życie T.U. S.A. – адміністратор у сфері договору страхування.\nБ) Асоціація Клієнтів Finance Club – Страхувальник – адміністратор у сфері членства та маркетингу.\nВ) OVB Allfinanz Polska Sp. z o.o. – обробляє дані за дорученням; окремий адміністратор для дистрибуції.\n\n2) ЯКІ ДАНІ МИ ОБРОБЛЯЄМО?\n- Ідентифікаційні, контактні, дані про страхування.\n- Дані про здоров'я: обробляє тільки Generali.\nУвага: OVB не має доступу до медичних даних.\n\n3) ДЖЕРЕЛО ТА ПОТІК ДАНИХ?\nDoradca.pro -> API до Generali. Сервери в Польщі.\n\n4) МЕТА ТА ПІДСТАВА?\nА) Виконання договору: ст. 6(1)(b) RODO.\nБ) AML/PEP: ст. 6(1)(c) RODO.\nВ) Маркетинг: ст. 6(1)(a) RODO (Згода).\nГ) Здоров'я: згода та страхові закони.\n\n5) ОТРИМУВАЧІ?\nGenerali, Асоціація, OVB, IT-постачальники, уповноважені органи.\n\n6) ПЕРЕДАЧА ЗА МЕЖІ ЄС?\nЗазвичай ні. Якщо так – стандартні застереження.\n\n7) ЗБЕРІГАННЯ?\n12 років від дати приєднання.\n\n8) ПРАВА?\nДоступ, виправлення, видалення, заперечення, скарга до UODO.\n\n9) ПРОФІЛЮВАННЯ?\nGenerali може використовувати автоматизовану оцінку ризику.",
+            health_text: "Я заявляю, що за останні 5 років стан мого здоров'я суттєво не погіршився, а саме:\n\n• я не перебував(ла) на стаціонарному лікуванні, і таке лікування не планується (за винятком видалення апендикса, жовчного міхура, мигдаликів, геморою, доброякісних кіст, проведення артроскопії, операції грижі, носової перегородки, катаракти, лікування перелому кістки, видалення зуба, пологів);\n• не виявлено відхилень від норми у виконаних діагностичних дослідженнях, що потребують лікування тривалістю понад 1 місяць.\n\nВодночас я заявляю, що:\n• я не був(ла) непрацездатним(ою) понад 30 днів протягом останніх 12 місяців (не стосується непрацездатності, пов'язаної з вагітністю);\n• я не маю довідки про часткову непрацездатність до роботи або служби;\n• я не очікую на виконання рекомендованих лікарем діагностичних досліджень;\n• у мене не було діагностовано жодної з перерахованих хронічних хвороб або станів: онкологічне захворювання, ішемічна хвороба серця, інфаркт міокарда, вада серця, інсульт, транзиторна ішемічна атака (TIA), артеріальна гіпертензія, діабет, бронхіальна астма або інше хронічне захворювання дихальної системи, хронічне захворювання печінки, підшлункової залози або нирок, психічні розлади, алкогольна хвороба, вірусна інфекція ВІЛ.",
             q1: "1) Чи хворіли Ви протягом останніх 5 років на наступні хвороби? онкологічне захворювання, ішемічна хвороба серця, інфаркт міокарда, вада серця, інсульт, транзиторна ішемічна атака (TIA), артеріальна гіпертензія, діабет, бронхіальна астма або інше хронічне захворювання дихальної системи, хронічне захворювання печінки, підшлункової залози або нирок, психічні розлади, алкогольна хвороба, вірусна інфекція ВІЛ.",
             q2: "2) Чи лікувалися Ви в лікарні протягом останніх 5 років (за винятком видалення апендикса, жовчного міхура, мигдаликів, геморою, доброякісних кіст, проведення артроскопії, операції грижі, носової перегородки, катаракти, лікування перелому кістки, видалення зуба, пологів) або чи планується таке лікування?",
             q3: "3) Чи відчували Ви протягом останнього року будь-які з наступних нездужань: біль у грудній клітці, непритомність, кровохаркання, наявність крові в калі, задишка, відчутний вузлик або збільшення однієї молочної залози, лихоманка, причину якої не з'ясовано, прогресуюча втрата ваги?",
