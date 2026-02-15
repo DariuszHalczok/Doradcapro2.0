@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVB - Portal Doradcy CERTUM - Grupa Otwarta</title>
+    <!-- Google Fonts: Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        /* --- OVB DESIGN SYSTEM VARIABLES --- */
+        :root {
+            --ovb-blue: #003366; 
+            --ovb-white: #FFFFFF; 
+            --ovb-teal: #009999; 
+            --ovb-hot-pink: #FF3399;
+            --ovb-blue-light: #6699CC; 
+            --ovb-blue-medium: #336699; 
+            --ovb-light-grey: #E5E5E5;
+            --ovb-text: #333333; 
+            --border-radius: 12px; 
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --success-bg: #e6fffa; 
+            --success-text: #008080;
+        }
+
+        * { box-sizing: border-box; outline: none; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #F0F2F5; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            min-height: 100vh;
+            color: var(--ovb-text);
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--ovb-white);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 50px;
+        }
+
+        /* Header */
+        header {
+            background: var(--ovb-blue);
+            color: white;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 { margin: 0; font-size: 1.4rem; font-weight: 600; }
+        .logo-placeholder { font-weight: 800; font-size: 1.8rem; letter-spacing: 2px; }
+
+        /* Step Navigation */
+        .steps-bar {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid var(--ovb-light-grey);
+            padding: 15px 40px;
+            overflow-x: auto;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            margin-right: 25px;
+            color: #999;
+            font-weight: 500;
+            white-space: nowrap;
+            font-size: 0.85rem;
+        }
+
+        .step-item.active { color: var(--ovb-blue); }
+        .step-item.completed { color: var(--ovb-teal); }
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            font-size: 0.75rem;
+        }
+        .active .step-number { background: var(--ovb-blue); color: white; }
+        .completed .step-number { background: var(--ovb-teal); color: white; }
+
+        /* Content Areas */
+        .content { padding: 40px; }
+        .step-section { display: none; animation: fadeIn 0.5s ease; }
+        .step-section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Typography & Basics */
+        h2 { color: var(--ovb-blue); margin-top: 0; font-size: 1.6rem; }
+        p { line-height: 1.6; color: #555; margin-bottom: 20px; }
+
+        /* Buttons (General App) */
+        .btn-row { display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px; }
+        button.btn-primary, button.btn-secondary, button.btn-teal {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .btn-primary { background: var(--ovb-blue); color: white; }
+        .btn-primary:hover { background: var(--ovb-blue-medium); box-shadow: 0 4px 12px rgba(0,51,102,0.2); transform: translateY(-1px); }
+        .btn-secondary { background: #eee; color: #666; }
+        .btn-teal { background: var(--ovb-teal); color: white; }
+        .btn-teal:hover { opacity: 0.9; box-shadow: 0 4px 12px rgba(0,153,153,0.2); }
+
+        /* Email Preview Card (NLP & FRIS) */
+        .email-preview-wrapper {
+            background: #f4f4f4;
+            padding: 40px 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+        }
+
+        .email-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .email-header { background: var(--ovb-blue); color: #fff; padding: 30px; text-align: center; font-weight: bold; letter-spacing: 1px; font-size: 1.2rem; }
+        .email-body { padding: 40px; color: #333; }
+        
+        .email-cta {
+            display: block;
+            background: var(--ovb-teal);
+            color: #fff;
+            text-decoration: none;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin: 35px 0;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0,153,153,0.3);
+            cursor: pointer;
+            border: none;
+            width: 100%;
+        }
+        .email-cta:hover { background: #008080; }
+
+        /* Review Section (Step 4) */
+        .summary-card {
+            background: #fff;
+            border: 1px solid var(--ovb-light-grey);
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            min-height: 400px;
+        }
+
+        .data-review-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            margin: 25px 0;
+        }
+
+        .review-item strong { color: var(--ovb-blue-light); display: block; margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .review-item span { font-size: 1rem; color: var(--ovb-blue); font-weight: 600; }
+
+        /* PDF Download Button */
+        .pdf-download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border: 2px solid var(--ovb-blue);
+            color: var(--ovb-blue);
+            padding: 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 20px 0;
+            transition: var(--transition);
+        }
+        .pdf-download-btn:hover { background: #f0f4f8; }
+        .pdf-download-btn i { margin-right: 10px; }
+
+        /* Auth Sections (PESEL & SMS) */
+        .auth-container {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .auth-section {
+            text-align: center;
+            padding: 40px;
+            background: #f0f7f7;
+            border-radius: 12px;
+            border: 2px dashed var(--ovb-teal);
+            margin-top: 30px;
+        }
+
+        .input-hero {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px;
+            font-size: 24px;
+            text-align: center;
+            letter-spacing: 4px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            margin: 20px auto;
+            display: block;
+            font-weight: bold;
+            color: var(--ovb-blue);
+            transition: var(--transition);
+        }
+        .input-hero:focus { border-color: var(--ovb-teal); box-shadow: 0 0 0 4px rgba(0,153,153,0.1); }
+
+        /* --- STYLES FOR FINAL RECEIPT (Step 5) --- */
+        .preview-container {
+            background-color: var(--ovb-white);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 51, 102, 0.1);
+            max-width: 650px;
+            width: 100%;
+            border-top: 8px solid var(--ovb-blue);
+            margin: 0 auto;
+        }
+
+        .ovb-heading {
+            color: var(--ovb-blue) !important;
+            margin-bottom: 15px;
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        .ovb-info-box {
+            background-color: var(--ovb-light-grey) !important;
+            padding: 25px !important;
+            border-radius: 0 !important;
+            margin: 25px 0 !important;
+            text-align: left;
+            border-left: 5px solid var(--ovb-blue) !important;
+            color: var(--ovb-text);
+        }
+
+        .ovb-link {
+            color: var(--ovb-teal) !important;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .ovb-accent-text {
+            color: var(--ovb-blue) !important;
+            font-size: 1.2em;
+        }
+        
+        /* New Payment Rules Style */
+        .payment-rules {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .payment-rules h4 {
+            color: var(--ovb-blue);
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+        .payment-rules ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+        .payment-rules li {
+            margin-bottom: 8px;
+        }
+
+        .payment-section {
+            margin-top: 30px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            text-align: left;
+        }
+
+        .payment-header {
+            color: var(--ovb-blue);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            display: block;
+            font-weight: bold;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .payment-label {
+            font-size: 0.9em;
+            color: #666;
+            width: 100%;
+            margin-bottom: 2px;
+        }
+
+        .payment-value {
+            font-weight: bold;
+            color: var(--ovb-text);
+            font-size: 1.1em;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background-color: transparent;
+            border: 1px solid var(--ovb-teal);
+            color: var(--ovb-teal);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-left: 10px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--ovb-teal);
+            color: white;
+        }
+
+        .payment-details-container {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Updated Toast Style */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--ovb-blue);
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 12px;
+            position: fixed;
+            z-index: 2000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<div class="container">
+    <header>
+        <div class="logo-placeholder">OVB</div>
+        <h1>Portal Klienta CERTUM</h1>
+    </header>
+
+    <div class="steps-bar">
+        <div class="step-item completed" id="nav-1"><div class="step-number">1</div> Oferta</div>
+        <div class="step-item active" id="nav-3"><div class="step-number">2</div> Wiadomość</div>
+        <div class="step-item" id="nav-4"><div class="step-number">3</div> Weryfikacja</div>
+        <div class="step-item" id="nav-5"><div class="step-number">4</div> Finalizacja</div>
+    </div>
+
+    <div class="content">
+        <!-- KROK 3: PODGLĄD E-MAIL (FRIS & NLP) -->
+        <div id="step-3" class="step-section active">
+            <h2>Wiadomość do Klienta</h2>
+            <p>Poniżej podgląd wiadomości e-mail, która prowadzi do procesu weryfikacji.</p>
+
+            <div class="email-preview-wrapper">
+                <div class="email-card">
+                    <div class="email-header">AKTYWUJ SWOJĄ OCHRONĘ</div>
+                    <div class="email-body">
+                        <p style="font-size: 1.1rem; margin-bottom: 25px;"><strong>Dzień dobry!</strong></p>
+                        
+                        <p style="line-height: 1.8; margin-bottom: 25px;">
+                            Twoja ochrona jest prawie gotowa. Przygotowaliśmy dla Ciebie dedykowany plan: <strong>Ubezpieczenie Generali – oferta dla członków honorowych SKFC</strong> (Polisa 90000785745).
+                        </p>
+                        <p style="line-height: 1.8; margin-bottom: 25px;">
+                            <strong>To Ty decydujesz, czy wystartuje.</strong> W załączniku znajduje się wzór Deklaracji Przystąpienia – zapoznaj się z nim.
+                        </p>
+                        
+                        <p style="line-height: 1.8; color: #cc0000; font-weight: bold; background: #fff0f0; padding: 10px; border-radius: 4px;">
+                            <i class="material-icons-outlined" style="vertical-align: middle; font-size: 18px;">lock</i>
+                            Ważne: Plik z Deklaracją jest zabezpieczony hasłem. Jest nim Twój numer PESEL.
+                        </p>
+
+                        <div style="background: #f0f7f7; border-left: 5px solid #009999; padding: 20px; margin: 30px 0;">
+                            <strong style="display:block; margin-bottom:10px; color:#003366;">Jak sfinalizować wniosek?</strong>
+                            <ol style="margin: 0; padding-left: 20px; line-height: 1.8;">
+                                <li>Kliknij w przycisk poniżej.</li>
+                                <li>Podaj swój PESEL (weryfikacja tożsamości).</li>
+                                <li>Zatwierdź umowę kodem SMS.</li>
+                            </ol>
+                        </div>
+
+                        <button class="email-cta" onclick="startVerificationFlow()">
+                            PRZEJDŹ DO FINALIZACJI
+                        </button>
+                        
+                        <p style="text-align: center; color: #888; font-size: 0.9rem;">
+                            Dziękujemy za zaufanie.<br>Zespół OVB Allfinanz Polska
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="btn-row">
+                <button class="btn-primary" onclick="startVerificationFlow()">SYMULUJ KLIKNIĘCIE KLIENTA</button>
+            </div>
+        </div>
+
+        <!-- KROK 4: WERYFIKACJA I PODPIS -->
+        <div id="step-4" class="step-section">
+            <div class="summary-card">
+                
+                <!-- ETAP 1: TYLKO PESEL (Dane ukryte) -->
+                <div id="phase-pesel" class="auth-container">
+                    <i class="material-icons-outlined" style="font-size: 64px; color: var(--ovb-blue);">lock</i>
+                    <h2 style="margin-top: 20px;">Bezpieczeństwo danych</h2>
+                    <p style="font-size: 1.1rem;">Aby wyświetlić szczegóły wniosku i przejść dalej, prosimy o weryfikację tożsamości.</p>
+                    
+                    <div style="background: #f9f9f9; padding: 30px; border-radius: 12px; margin-top: 30px;">
+                        <label for="input-pesel" style="display:block; margin-bottom: 10px; color: #555;">Wpisz swój numer PESEL:</label>
+                        <input type="text" id="input-pesel" class="input-hero" placeholder="PESEL" maxlength="11">
+                        <button class="btn-primary" style="width: 100%; max-width: 300px; margin-top: 10px; font-size: 1.1rem; padding: 15px;" onclick="verifyPesel()">
+                            WERYFIKUJ I POKAŻ WNIOSEK
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ETAP 2: PODSUMOWANIE + SMS (Ukryte na start) -->
+                <div id="phase-summary" class="hidden">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                        <h2 style="margin:0;">Podsumowanie Wniosku</h2>
+                        <span style="background:var(--ovb-teal); color:white; padding:6px 15px; border-radius:20px; font-size:0.8rem; font-weight:bold;">ZWERYFIKOWANO</span>
+                    </div>
+
+                    <p>Twoje dane zostały poprawnie zweryfikowane. Poniżej znajdują się szczegóły Twojej ochrony.</p>
+
+                    <!-- Dane klienta -->
+                    <div class="data-review-grid">
+                        <div class="review-item"><strong>Ubezpieczony</strong><span>Jan Kowalski</span></div>
+                        <div class="review-item"><strong>Numer PESEL</strong><span id="display-pesel">85010101234</span></div>
+                        <div class="review-item"><strong>Pakiet</strong><span>PREMIUM (Podgrupa 1)</span></div>
+                        <div class="review-item"><strong>Składka miesięczna</strong><span>69,99 PLN</span></div>
+                        <div class="review-item"><strong>Polisa</strong><span>90000785745</span></div>
+                        <div class="review-item"><strong>Start ochrony</strong><span>01.04.2026</span></div>
+                    </div>
+
+                    <!-- Przycisk PDF z komunikatem -->
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="#" class="pdf-download-btn" onclick="alert('Pobieranie pliku: Deklaracja_CERTUM_Jan_Kowalski.pdf (Hasło: Twój PESEL)')">
+                            <i class="material-icons-outlined">file_download</i>
+                            POBIERZ DEKLARACJĘ (PDF)
+                        </a>
+                        <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                            <i class="material-icons-outlined" style="vertical-align: middle; font-size: 16px;">info</i>
+                            Tu możesz ponownie pobrać swoją deklarację. Została ona również wysłana na Twój e-mail.
+                        </p>
+                    </div>
+
+                    <!-- Sekcja SMS -->
+                    <div class="auth-section">
+                        <h3 style="margin-top:0; color:var(--ovb-blue);">Zatwierdzenie Umowy</h3>
+                        <p style="font-size:1rem; margin-bottom: 25px;">
+                            Na Twój numer telefonu wysłaliśmy właśnie kod autoryzacyjny.<br>
+                            Wpisz go poniżej, aby sfinalizować proces.
+                        </p>
+                        
+                        <input type="text" id="input-sms" class="input-hero" placeholder="KOD SMS" maxlength="6">
+                        
+                        <button class="btn-teal" style="width: 100%; max-width: 400px; font-size: 1.1rem; padding: 18px;" onclick="finalizeApplication()">
+                            ZATWIERDZAM UMOWĘ
+                        </button>
+                        <p style="margin-top:20px; font-size:0.9rem; color:#888; cursor:pointer; text-decoration: underline;" onclick="showToast('Wysłano kod ponownie...')">Nie otrzymałem kodu? Wyślij ponownie.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- KROK 5: SUKCES (Finalizacja) -->
+        <div id="step-5" class="step-section">
+            <div class="preview-container">
+                <div style="text-align: center;">
+                    <h3 class="ovb-heading">Dziękujemy! Twoja deklaracja została przesłana.</h3>
+                    
+                    <p>Cieszymy się, że jesteś z nami. Formalności zgłoszeniowe masz już za sobą.</p>
+                    
+                    <div class="ovb-info-box">
+                        <div class="payment-rules">
+                            <h4><i class="material-icons-outlined" style="vertical-align: bottom; font-size: 1.2rem; margin-right: 5px;">calendar_today</i>Ważne terminy i zasady płatności</h4>
+                            <ul>
+                                <li><strong>Termin wpłaty:</strong> Składka musi wpłynąć do <strong>26. dnia miesiąca</strong>, aby ochrona była aktywna od 1. dnia kolejnego miesiąca.</li>
+                                <li><strong>Rekomendacja:</strong> Ustaw zlecenie stałe na <strong>20. dnia miesiąca</strong> – dzięki temu masz pewność, że środki dotrą na czas.</li>
+                                <li><strong>Przypomnienia:</strong> Jeśli składka nie dotrze do 20., otrzymasz od nas uprzejme przypomnienie i dodatkowy czas do 26.</li>
+                                <li><strong>Brak wpłaty (1 miesiąc):</strong> Jeśli nie wpłacisz składki, zawiesimy ochronę na miesiąc. Gdy uregulujesz płatność, ochrona wróci bez karencji od kolejnego miesiąca.</li>
+                                <li><strong>Brak wpłaty (2 miesiące):</strong> Dwukrotny brak wpłaty oznacza rezygnację – ochrona wygaśnie.</li>
+                            </ul>
+                        </div>
+
+                        <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+
+                        <div>
+                            W dniu startu ochrony (1. dnia miesiąca) otrzymasz <strong>SMS z potwierdzeniem</strong>, a Twój Certyfikat będzie dostępny tutaj:<br>
+                            <a href="https://konto.generali.pl/sign-in" target="_blank" class="ovb-link">https://konto.generali.pl/sign-in</a>
+                        </div>
+                    </div>
+
+                    <div class="payment-section">
+                        <strong class="payment-header">Dane do przelewu do Generali:</strong>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <div class="payment-label">Odbiorca:</div>
+                            <div class="payment-value">Generali Towarzystwo Ubezpieczeń S.A.<br>ul. Senatorska 18, 00-082 Warszawa</div>
+                        </div>
+
+                        <div class="payment-row">
+                            <div style="flex-grow: 1;">
+                                <div class="payment-label">Numer rachunku:</div>
+                                <div class="payment-details-container">
+                                    <span class="payment-value ovb-accent-text">97 1030 1944 4702 9940 2030 3546</span>
+                                    <button class="copy-btn" onclick="copyText('97103019444702994020303546', 'Numer rachunku')">Kopiuj</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-row">
+                            <div style="flex-grow: 1;">
+                                <div class="payment-label">Numer Certyfikatu (Tytuł przelewu):</div>
+                                <div class="payment-details-container">
+                                    <span class="payment-value">PL-OVB-987654321</span>
+                                    <button class="copy-btn" onclick="copyText('PL-OVB-987654321', 'Numer Certyfikatu')">Kopiuj</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-row">
+                            <div style="flex-grow: 1;">
+                                <div class="payment-label">Kwota składki:</div>
+                                <div class="payment-details-container">
+                                    <span class="payment-value">69.99 zł</span>
+                                    <button class="copy-btn" onclick="copyText('69.99', 'Kwota')">Kopiuj</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="text-align: center; margin-top: 30px; font-size: 0.9rem; color: #666;">
+                    <i class="material-icons-outlined" style="vertical-align: middle; font-size: 16px;">email</i>
+                    Powyższa instrukcja płatności została wysłana również na Twój adres e-mail.
+                </p>
+
+                <div style="margin-top: 20px; text-align: center;">
+                    <button class="btn-secondary" onclick="location.reload()">Zamknij</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // --- LOGIKA NAWIGACJI ---
+    function goToStep(stepNumber) {
+        document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.step-item').forEach(n => n.classList.remove('active', 'completed'));
+        
+        document.getElementById('step-' + stepNumber).classList.add('active');
+        
+        for(let i=1; i<=5; i++) {
+            const nav = document.getElementById('nav-' + i);
+            if(!nav) continue;
+            if(i < stepNumber) nav.classList.add('completed');
+            if(i === stepNumber) nav.classList.add('active');
+        }
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    // Krok 3 -> 4 (Start procesu)
+    function startVerificationFlow() {
+        showToast("Przekierowanie do bezpiecznej strony...");
+        setTimeout(() => {
+            // Reset widoku w kroku 4
+            document.getElementById('phase-pesel').classList.remove('hidden');
+            document.getElementById('phase-summary').classList.add('hidden');
+            document.getElementById('input-pesel').value = ''; 
+            goToStep(4);
+        }, 800);
+    }
+
+    // Krok 4: Weryfikacja PESEL -> Odkrycie Danych -> SMS w locie
+    function verifyPesel() {
+        const pesel = document.getElementById('input-pesel').value;
+        
+        // Prosta walidacja długości (dla testów 11 cyfr, ale można wpisać cokolwiek o tej długości)
+        if (pesel.length < 11) {
+            alert("Proszę wpisać poprawny, 11-cyfrowy numer PESEL.");
+            return;
+        }
+
+        showToast("Weryfikacja tożsamości...");
+        
+        // Symulacja ładowania i wysyłki SMS
+        setTimeout(() => {
+            // Ukryj PESEL, pokaż podsumowanie
+            document.getElementById('phase-pesel').classList.add('hidden');
+            document.getElementById('phase-summary').classList.remove('hidden');
+            
+            // Przepisz PESEL do widoku
+            document.getElementById('display-pesel').innerText = pesel;
+            
+            // Komunikat o SMS
+            showToast("✅ Dane poprawne. Wysłano kod SMS.");
+            
+            // Focus na SMS
+            setTimeout(() => document.getElementById('input-sms').focus(), 500);
+        }, 1500);
+    }
+
+    // Krok 4 -> 5: Finalizacja Kodem SMS
+    function finalizeApplication() {
+        const sms = document.getElementById('input-sms').value;
+        
+        // Test: przepuszcza wszystko co ma min. 4 znaki
+        if (sms.length < 4) {
+            alert("Wpisz kod otrzymany w wiadomości SMS.");
+            return;
+        }
+
+        showToast("Zatwierdzanie umowy...");
+
+        setTimeout(() => {
+            goToStep(5);
+            // showToast("✅ Sukces! Umowa zawarta.");
+            // Komunikat niepotrzebny, bo od razu widać ekran sukcesu
+        }, 1500);
+    }
+
+    // --- FUNKCJA KOPIOWANIA (Z Twojego kodu) ---
+    function copyText(text, label) {
+        // Create a temporary textarea element
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        
+        // Ensure it's not visible but part of the DOM
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        document.body.appendChild(textArea);
+        
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            var successful = document.execCommand('copy');
+            if (successful) {
+                showToast("Skopiowano: " + label);
+            } else {
+                showToast("Nie udało się skopiować.");
+            }
+        } catch (err) {
+            console.error('Błąd kopiowania', err);
+            showToast("Błąd kopiowania. Spróbuj ręcznie.");
+        }
+        
+        document.body.removeChild(textArea);
+    }
+
+    // --- UTILS (Zaktualizowany Toast) ---
+    function showToast(message) {
+        var toast = document.getElementById("toast");
+        toast.innerText = message;
+        toast.className = "show";
+        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+</script>
+
+</body>
+</html>
