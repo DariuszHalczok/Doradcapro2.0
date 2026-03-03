@@ -1,0 +1,898 @@
+<!-- ZAŁADOWANIE NIEZBĘDNYCH BIBLIOTEK (Wersje stabilne z Cloudflare CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
+
+<!-- KONFIGURACJA TAILWINDA -->
+<script>
+  tailwind.config = {
+    corePlugins: {
+      preflight: false,
+    }
+  }
+</script>
+
+<!-- KONTENER APLIKACJI Z EKRANEM ŁADOWANIA -->
+<div id="ovb-app-root" style="width: 100%; min-height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; margin-top: 20px;">
+    <svg style="animation: spin 1s linear infinite; width: 40px; height: 40px; color: #009999; margin-bottom: 15px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity: 0.25;"></circle>
+      <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style="opacity: 0.75;"></path>
+    </svg>
+    <h2 style="color: #003366; font-family: sans-serif; font-size: 18px; font-weight: bold; margin: 0;">Ładowanie Generatora Ofert OVB...</h2>
+    <p style="color: #64748b; font-family: sans-serif; font-size: 13px; margin-top: 5px;">Inicjowanie bezpiecznego środowiska ubezpieczeniowego.</p>
+    <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+</div>
+
+<!-- LOGIKA APLIKACJI REACT W UKRYTYM BLOKU (OMINANIE BLOKAD CLICKFUNNELS) -->
+<script id="ovb-react-source" type="text/plain">
+const { useState, useEffect, useRef } = React;
+
+// --- ZASTĘPCZE IKONY SVG (aby uniknąć problemów z ładowaniem zewnętrznych bibliotek) ---
+const ShieldCheck = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2-1 4-2 7-2 2.5 0 4.5 1 7 2a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>;
+const User = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
+const Settings = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>;
+const FileText = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>;
+const Printer = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>;
+const FileOutput = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M4 7V4a2 2 0 0 1 2-2 2 2 0 0 0-2 2"/><path d="M4 15v-3a2 2 0 0 1 2-2h14"/><path d="M14 22H6a2 2 0 0 1-2-2v-3"/><path d="m14 10-3 3 3 3"/></svg>;
+
+// --- FUNKCJA OBLICZANIA WIEKU KLIENTA ---
+const calculateAge = (dobString) => {
+    if (!dobString) return '';
+    let birthDate;
+    if (dobString.includes('.')) {
+        const parts = dobString.split('.');
+        if (parts.length === 3) {
+            birthDate = new Date(parts[2] + "-" + parts[1] + "-" + parts[0]);
+        }
+    } else {
+        birthDate = new Date(dobString);
+    }
+    if (!birthDate || isNaN(birthDate)) return '';
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+};
+
+// --- DANE PRODUKTOWE ---
+const OFFER_DATA = {
+    '16-55': {
+        heroAge: '16–55 lat',
+        heroInfo: 'Ochrona do 70. roku życia',
+        packages: [
+            { id: 'start', name: 'START', price: 59, sum: '25 000 zł' },
+            { id: 'standard', name: 'STANDARD', price: 79, sum: '60 000 zł' },
+            { id: 'family', name: 'FAMILY', price: 119, sum: '150 000 zł' },
+            { id: 'premium', name: 'PREMIUM', price: 149, sum: '200 000 zł' },
+            { id: 'vip', name: 'VIP', price: 199, sum: '250 000 zł' }
+        ],
+        addons: [
+            { 
+                id: 'active', 
+                name: 'PAKIET ACTIVE',
+                icon: '🏃',
+                price: 29.90, 
+                rows: [
+                    { label: 'Trwały uszczerbek na zdrowiu (NW)', value: '40 000 zł', sub: '(400 zł za 1%)' },
+                    { label: 'Pobyt w szpitalu wskutek NW', value: 'do 14 dni: 400 zł / doba<br/>od 15-30: 200 zł / doba' },
+                    { label: 'Dodatkowo OIOM do 5 dni', value: '400 zł / doba' },
+                    { label: 'Szpital wskutek NW w pracy/komunikacyjny', value: 'do 14 dni: 800 zł / doba<br/>od 15-30: 320 zł / doba' },
+                    { label: 'Szpital wskutek wyp. komunikacyjnego przy pracy', value: 'do 14 dni: 1200 zł / doba' },
+                    { label: 'Rekonwalescencja po NW', value: '40 000 zł', sub: '(400 zł/doba)' },
+                    { label: 'Refundacja kosztów (ortopedia / leczenie)', value: 'po 10 000 zł' }
+                ]
+            },
+            { 
+                id: 'kids', 
+                name: 'PAKIET KIDS',
+                icon: '👶',
+                price: 29.90,
+                rows: [
+                    { label: 'Śmierć Dziecka (każda / NW)', value: '10 000 zł / 20 000 zł' },
+                    { label: 'Trwały uszczerbek na zdrowiu Dziecka (NW)', value: '10 000 zł', sub: '(100 zł za 1%)' },
+                    { label: 'Poważne zachorowanie Dziecka (23 choroby)', value: '10 000 zł' },
+                    { label: 'Pobyt Dziecka w szpitalu', value: 'NW: 100 zł/doba<br/>Choroba: 60 zł/doba' },
+                    { label: 'Ryczałt na leki po pobycie w szpitalu', value: '200 zł' },
+                    { label: 'Mediplan Dziecko', value: 'Zapewniony', valueStyle: { color: '#009999', fontWeight: 'bold' } }
+                ]
+            },
+            { 
+                id: 'onko', 
+                name: 'PAKIET ONKO',
+                icon: '🎗️',
+                price: 29.90, 
+                rows: [
+                    { label: 'Poważne zachorowanie na nowotwór złośliwy', value: '40 000 zł' },
+                    { label: 'Leczenie specjalistyczne onkologiczne', value: '5 000 zł' },
+                    { label: 'Pobyt w szpitalu w zw. z nowotworem', value: 'do 14 dni: 250 zł / doba' },
+                    { label: 'Assistance Onkologiczny / Druga opinia', value: 'Zapewnione', valueStyle: { color: '#009999', fontWeight: 'bold' } }
+                ],
+                condition: {
+                    title: 'WARUNEK PRZYSTĄPIENIA:',
+                    text: 'Dołączysz, jeśli Twoja odpowiedź brzmi <strong>NIE</strong> na pytanie: "Czy był/a Pan/i kiedykolwiek leczony/a z powodu nowotworu złośliwego lub czy jest Pan/i diagnozowany/a w związku z objawami sugerującymi chorobę nowotworową?"'
+                }
+            },
+            { 
+                id: 'kardio', 
+                name: 'PAKIET KARDIO',
+                icon: '❤️',
+                price: 29.90, 
+                rows: [
+                    { label: 'Poważne zachorowanie (zawał serca lub udar)', value: '50 000 zł' },
+                    { label: 'Leczenie specjalistyczne kardiologiczne', value: '5 000 zł' },
+                    { label: 'Pobyt w szpitalu wskutek zawału lub udaru', value: '20 000 zł', sub: '(400 zł/doba)' }
+                ],
+                condition: {
+                    title: 'WARUNEK PRZYSTĄPIENIA:',
+                    text: 'Dołączysz, jeśli Twoja odpowiedź brzmi <strong>NIE</strong> na pytania: Czy chorowałeś m.in. na niedokrwienie serca, miażdżycę, cukrzycę, lub byłeś w szpitalu (5 lat) w związku z niewydolnością serca lub zaburzeniami neurologicznymi?'
+                }
+            }
+        ],
+        info: '<strong>1. Program ubezpieczeniowy przewiduje następujące okresy karencji (ograniczenie odpowiedzialności) dla osób przystępujących do umowy:</strong><br/>• <strong>3 miesiące</strong> – pobyt Ubezpieczonego w szpitalu, pobyt Ubezpieczonego w szpitalu wskutek zawału serca lub udaru mózgu, pobyt Ubezpieczonego w szpitalu w związku z zachorowaniem na nowotwór złośliwy, pobyt Ubezpieczonego w szpitalu w szpitalu rehabilitacyjnym, ryczałtowe pokrycie kosztów leków zaleconych po pobycie Ubezpieczonego w szpitalu, pobyt Dziecka w szpitalu, ryczałtowe pokrycie kosztów leków zaleconych po pobycie Dziecka Ubezpieczonego w szpitalu – świadczenie dzienne, poważne zachorowanie Ubezpieczonego, poważne zachorowanie Dziecka, poważne zachorowanie Ubezpieczonego na nowotwór złośliwy, poważne zachorowanie Ubezpieczonego na zawał serca lub udaru mózgu, operacje chirurgiczne Ubezpieczonego, leczenie specjalistyczne onkologiczne, leczenie specjalistyczne kardiologiczne, zabiegi specjalistyczne Ubezpieczonego<br/>• <strong>6 miesięcy</strong> - śmierć Ubezpieczonego wskutek zawału serca lub udaru mózgu, trwały uszczerbek na zdrowiu Ubezpieczonego wskutek zawału serca lub udaru mózgu, śmierć Dziecka, śmierć Rodziców, śmierć Teściów<br/>• <strong>9 miesięcy</strong> - urodzenie Dziecka, urodzenie Dziecka martwego lub poronienia.'
+    },
+    '55-69': {
+        heroAge: '55–69 lat',
+        heroInfo: 'Ochrona do 70. roku życia',
+        packages: [
+            { id: 'silver', name: 'SILVER 55+', price: 89, sum: '40 000 zł' },
+            { id: 'gold', name: 'GOLD 55+', price: 149, sum: '70 000 zł' },
+            { id: 'platinum', name: 'PLATINUM 55+', price: 249, sum: '150 000 zł' }
+        ],
+        addons: [
+            { 
+                id: 'active', 
+                name: 'PAKIET ACTIVE',
+                icon: '🏃',
+                price: 29.90,
+                rows: [
+                    { label: 'Trwały uszczerbek na zdrowiu (NW)', value: '40 000 zł', sub: '(400 zł za 1%)' },
+                    { label: 'Pobyt w szpitalu wskutek NW', value: 'do 14 dni: 400 zł / doba<br/>od 15-30: 200 zł / doba' },
+                    { label: 'Szpital wskutek NW w pracy/komunikacyjny', value: 'do 14 dni: 800 zł / doba<br/>od 15-30: 320 zł / doba' },
+                    { label: 'Szpital wskutek wyp. komunikacyjnego przy pracy', value: 'do 14 dni: 1200 zł / doba' },
+                    { label: 'Rekonwalescencja po NW', value: '40 000 zł', sub: '(400 zł/doba)' },
+                    { label: 'Refundacja kosztów (ortopedia / leczenie)', value: 'po 10 000 zł' }
+                ]
+            },
+            { 
+                id: 'kids', 
+                name: 'PAKIET KIDS',
+                icon: '👶',
+                price: 29.90,
+                rows: [
+                    { label: 'Śmierć Dziecka (każda / NW)', value: '10 000 zł / 20 000 zł' },
+                    { label: 'Trwały uszczerbek na zdrowiu Dziecka (NW)', value: '10 000 zł', sub: '(100 zł za 1%)' },
+                    { label: 'Poważne zachorowanie Dziecka (23 choroby)', value: '10 000 zł' },
+                    { label: 'Pobyt Dziecka w szpitalu', value: 'NW: 100 zł/doba<br/>Choroba: 60 zł/doba' },
+                    { label: 'Ryczałt na leki po pobycie w szpitalu', value: '200 zł' },
+                    { label: 'Mediplan Dziecko', value: 'Zapewniony', valueStyle: { color: '#009999', fontWeight: 'bold' } }
+                ]
+            },
+            { 
+                id: 'onko', 
+                name: 'PAKIET ONKO 55+',
+                icon: '🎗️',
+                price: 49.90, 
+                rows: [
+                    { label: 'Poważne zachorowanie na nowotwór złośliwy', value: '20 000 zł' },
+                    { label: 'Leczenie specjalistyczne onkologiczne', value: '7 000 zł' },
+                    { label: 'Pobyt w szpitalu w zw. z nowotworem', value: 'do 14 dni: 200 zł / doba' },
+                    { label: 'Assistance Onkologiczny / Druga opinia', value: 'Zapewnione', valueStyle: { color: '#009999', fontWeight: 'bold' } }
+                ],
+                condition: {
+                    title: 'WARUNEK PRZYSTĄPIENIA:',
+                    text: 'Dołączysz, jeśli Twoja odpowiedź brzmi <strong>NIE</strong> na pytanie: "Czy był/a Pan/i kiedykolwiek leczony/a z powodu nowotworu złośliwego lub czy jest Pan/i diagnozowany/a w związku z objawami sugerującymi chorobę nowotworową?"'
+                }
+            },
+            { 
+                id: 'kardio', 
+                name: 'PAKIET KARDIO 55+',
+                icon: '❤️',
+                price: 49.90, 
+                rows: [
+                    { label: 'Poważne zachorowanie (zawał serca lub udar)', value: '20 000 zł' },
+                    { label: 'Leczenie specjalistyczne kardiologiczne', value: '5 000 zł' },
+                    { label: 'Pobyt w szpitalu wskutek zawału lub udaru', value: '10 000 zł', sub: '(200 zł/doba)' }
+                ],
+                condition: {
+                    title: 'WARUNEK PRZYSTĄPIENIA:',
+                    text: 'Dołączysz, jeśli Twoja odpowiedź brzmi <strong>NIE</strong> na pytania: Czy chorowałeś m.in. na niedokrwienie serca, miażdżycę, cukrzycę, lub byłeś w szpitalu (5 lat) w związku z niewydolnością serca lub zaburzeniami neurologicznymi?'
+                }
+            }
+        ],
+        info: '<strong>Informacja o warunkach ubezpieczenia:</strong> Karencje: 3 miesiące (szpital, choroby), 6 miesięcy (zgony). Wypadki bez karencji. Pakiety dodatkowe chronią dokładnie tak, jak opisano powyżej.'
+    },
+    '70-75': {
+        heroAge: '70–75 lat',
+        heroInfo: 'Ochrona Bezterminowa',
+        packages: [
+            { id: 'senior-silver', name: 'SENIOR SILVER', price: 69, sum: '17 000 zł' },
+            { id: 'senior-gold', name: 'SENIOR GOLD', price: 99, sum: '24 000 zł' }
+        ],
+        addons: [],
+        info: '<strong>Informacja o warunkach ubezpieczenia:</strong> Gwarancja spokoju bez limitu wieku: Brak ankiety medycznej, polisa nigdy nie wygasa. Gwarantujemy sprawną wypłatę środków dla wskazanych przez Ciebie bliskich bez postępowania spadkowego.'
+    }
+};
+
+const formatPLN = (val) => new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN', maximumFractionDigits: 0 }).format(val);
+const getExpirationDate = () => {
+    const date = new Date();
+    date.setDate(date.getDate() + 5); 
+    return date.toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+};
+
+// --- KOMPONENT WIZUALNY PREZENTACJI ---
+const OfferGenerator = ({ 
+    clientData,
+    advisorData, 
+    segment,
+    onSegmentChange,
+    selectedPkgId,
+    selectedAddons,
+    onPackageChange,
+    onAddonToggle,
+    additionalNotes,
+    printWithClientData
+}) => {
+    const currentOfferData = OFFER_DATA[segment];
+    const currentPackage = (currentOfferData && currentOfferData.packages) ? currentOfferData.packages.find(p => p.id === selectedPkgId) : null;
+    
+    useEffect(() => {
+        if (currentOfferData && currentOfferData.packages) {
+            const packageExistsInSegment = currentOfferData.packages.some(p => p.id === selectedPkgId);
+            if (!packageExistsInSegment && currentOfferData.packages.length > 0) {
+                onPackageChange(currentOfferData.packages[0].id);
+            }
+        }
+    }, [segment, selectedPkgId, currentOfferData, onPackageChange]);
+    
+    const basePrice = currentPackage ? currentPackage.price : 0;
+    const totalMonthly = basePrice + selectedAddons.reduce((sum, id) => {
+        const addon = (currentOfferData && currentOfferData.addons) ? currentOfferData.addons.find(a => a.id === id) : null;
+        return sum + (addon ? addon.price : 0);
+    }, 0);
+
+    const offerRef = useRef(null);
+
+    const handleDownload = async (onlySelected) => {
+        if (!offerRef.current || typeof window.html2canvas === 'undefined') {
+            alert("Trwa ładowanie biblioteki do generowania obrazu. Spróbuj za chwilę.");
+            return;
+        }
+        
+        const offerElement = offerRef.current;
+        const originalTransform = offerElement.style.transform;
+        const originalMarginBottom = offerElement.style.marginBottom;
+        offerElement.style.transform = 'none';
+        offerElement.style.marginBottom = '0';
+        
+        if (onlySelected === true) {
+            offerElement.classList.add('card-mode');
+            const allPkgCells = offerElement.querySelectorAll('[data-pkg]');
+            for(let i=0; i<allPkgCells.length; i++) {
+                if (allPkgCells[i].getAttribute('data-pkg') !== selectedPkgId) allPkgCells[i].style.display = 'none';
+            }
+            const allCegielki = offerElement.querySelectorAll('.cegielka');
+            for(let i=0; i<allCegielki.length; i++) {
+                 const id = allCegielki[i].id.replace('cegielka-', '');
+                 if (!selectedAddons.includes(id) && id) allCegielki[i].style.display = 'none';
+            }
+        }
+
+        try {
+            const slides = [
+                offerElement.querySelector('#page-1'),
+                offerElement.querySelector('#page-2')
+            ];
+            
+            const nameSuffix = (clientData && clientData.name) ? '_' + clientData.name.replace(/\s/g, '_') : '';
+            const baseFname = (onlySelected === true) ? 'Wybrany_Pakiet_OVB' + nameSuffix : 'Propozycja_Ochrony_OVB' + nameSuffix;
+            
+            for (let i = 0; i < slides.length; i++) {
+                const slide = slides[i];
+                if (!slide) continue;
+
+                const canvas = await window.html2canvas(slide, { 
+                    scale: 2, 
+                    useCORS: true, 
+                    logging: false,
+                    backgroundColor: '#ffffff'
+                });
+                
+                const imgData = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = baseFname + '_Strona_' + (i + 1) + '.png';
+                link.href = imgData;
+                link.click();
+                
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+            
+        } catch (err) {
+            console.error(err);
+            alert("Błąd generowania plików PNG.");
+        } finally {
+            offerElement.style.transform = originalTransform || '';
+            offerElement.style.marginBottom = originalMarginBottom || '';
+            
+            if (onlySelected === true) {
+                offerElement.classList.remove('card-mode');
+                const allPkgCells = offerElement.querySelectorAll('[data-pkg]');
+                for(let i=0; i<allPkgCells.length; i++) { allPkgCells[i].style.display = ''; }
+                const allCegielki = offerElement.querySelectorAll('.cegielka');
+                for(let i=0; i<allCegielki.length; i++) { allCegielki[i].style.display = ''; }
+            }
+        }
+    };
+
+    if (!currentOfferData) return <div>Błąd danych oferty.</div>;
+
+    const renderTable = () => {
+        const getTdClass = (pkgId) => "styled-td " + (selectedPkgId !== pkgId ? "unselected-td" : "");
+        const getNaClass = (pkgId) => "styled-td " + (selectedPkgId !== pkgId ? "unselected-td na" : "na");
+
+        if (segment === '16-55') {
+            return (
+                <table style={{width: '100%', borderCollapse: 'separate', borderSpacing: 0, fontSize: '10px', marginBottom: 0}}>
+                  <thead>
+                    <tr>
+                      <th style={{width: '30%', padding: '10px 4px', textAlign: 'left', paddingLeft: '12px', background: 'white', color: '#003366', fontSize: '11px', borderBottom: '2px solid #003366', fontWeight: 600, verticalAlign: 'bottom'}}>Świadczenie</th>
+                      {currentOfferData && currentOfferData.packages ? currentOfferData.packages.map(p => (
+                          <th key={p.id} data-pkg={p.id} className={selectedPkgId === p.id ? 'selected-col' : 'unselected-col'} style={{width: '14%', padding: '10px 4px', textAlign: 'center', fontWeight: 600, verticalAlign: 'bottom', borderBottom: '2px solid #E5E5E5'}}>
+                              {p.name}
+                              <span className="price">{p.price} zł</span>
+                          </th>
+                      )) : null}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td className="styled-td-first">🚗 Śmierć w wypadku komunikacyjnym</td><td data-pkg="start" className={getTdClass('start')}>100 000 zł</td><td data-pkg="standard" className={getTdClass('standard')}>150 000 zł</td><td data-pkg="family" className={getTdClass('family')}>400 000 zł</td><td data-pkg="premium" className={getTdClass('premium')}>700 000 zł</td><td data-pkg="vip" className={getTdClass('vip')}>1 000 000 zł</td></tr>
+                    <tr><td className="styled-td-first">⚡ Śmierć wskutek NW</td><td data-pkg="start" className={getTdClass('start')}>50 000 zł</td><td data-pkg="standard" className={getTdClass('standard')}>100 000 zł</td><td data-pkg="family" className={getTdClass('family')}>200 000 zł</td><td data-pkg="premium" className={getTdClass('premium')}>400 000 zł</td><td data-pkg="vip" className={getTdClass('vip')}>600 000 zł</td></tr>
+                    <tr><td className="styled-td-first">💚 Śmierć Ubezpieczonego</td><td data-pkg="start" className={getTdClass('start')}>25 000 zł</td><td data-pkg="standard" className={getTdClass('standard')}>60 000 zł</td><td data-pkg="family" className={getTdClass('family')}>150 000 zł</td><td data-pkg="premium" className={getTdClass('premium')}>200 000 zł</td><td data-pkg="vip" className={getTdClass('vip')}>250 000 zł</td></tr>
+                    <tr><td className="styled-td-first">💼 Niezdolność do pracy NW</td><td data-pkg="start" className={getTdClass('start')}>50 000 zł</td><td data-pkg="standard" className={getTdClass('standard')}>50 000 zł</td><td data-pkg="family" className={getTdClass('family')}>100 000 zł</td><td data-pkg="premium" className={getTdClass('premium')}>150 000 zł</td><td data-pkg="vip" className={getTdClass('vip')}>200 000 zł</td></tr>
+                    <tr className="separator-row"><td className="styled-td-first">🦴 Trwały uszczerbek NW (1%)</td><td data-pkg="start" className={getTdClass('start')}>600 zł</td><td data-pkg="standard" className={getTdClass('standard')}>600 zł</td><td data-pkg="family" className={getTdClass('family')}>1 000 zł</td><td data-pkg="premium" className={getTdClass('premium')}>1 500 zł</td><td data-pkg="vip" className={getTdClass('vip')}>2 000 zł</td></tr>
+                    <tr><td className="styled-td-first">💔 Trwały uszczerbek zawał/udar (1%)</td><td data-pkg="start" className={getTdClass('start')}>600 zł</td><td data-pkg="standard" className={getTdClass('standard')}>600 zł</td><td data-pkg="family" className={getTdClass('family')}>1 000 zł</td><td data-pkg="premium" className={getTdClass('premium')}>1 500 zł</td><td data-pkg="vip" className={getTdClass('vip')}>2 000 zł</td></tr>
+                    <tr><td className="styled-td-first">🩹 Uraz niepowodujący uszczerbku</td><td data-pkg="start" className={getTdClass('start')}>200 zł</td><td data-pkg="standard" className={getTdClass('standard')}>200 zł</td><td data-pkg="family" className={getTdClass('family')}>200 zł</td><td data-pkg="premium" className={getTdClass('premium')}>200 zł</td><td data-pkg="vip" className={getTdClass('vip')}>200 zł</td></tr>
+                    <tr><td className="styled-td-first">🏠 Śmierć rodziców/teściów (NW)</td><td data-pkg="start" className={getTdClass('start')}>5 000 zł</td><td data-pkg="standard" className={getTdClass('standard')}>4 000 zł</td><td data-pkg="family" className={getTdClass('family')}>5 000 zł</td><td data-pkg="premium" className={getTdClass('premium')}>7 000 zł</td><td data-pkg="vip" className={getTdClass('vip')}>10 000 zł</td></tr>
+                    <tr><td className="styled-td-first">✝️ Śmierć rodziców/teściów (każda)</td><td data-pkg="start" className={getTdClass('start')}>1 000 zł</td><td data-pkg="standard" className={getTdClass('standard')}>1 500 zł</td><td data-pkg="family" className={getTdClass('family')}>2 200 zł</td><td data-pkg="premium" className={getTdClass('premium')}>3 000 zł</td><td data-pkg="vip" className={getTdClass('vip')}>4 000 zł</td></tr>
+                    <tr className="separator-row"><td className="styled-td-first">🏥 Pobyt w szpitalu (NW/Choroba)</td><td data-pkg="start" className={getTdClass('start')}>200/120 zł</td><td data-pkg="standard" className={getTdClass('standard')}>200/120 zł</td><td data-pkg="family" className={getTdClass('family')}>200/120 zł</td><td data-pkg="premium" className={getTdClass('premium')}>300/180 zł</td><td data-pkg="vip" className={getTdClass('vip')}>500/300 zł</td></tr>
+                    <tr><td className="styled-td-first">🏥 Szpital rehabilitacyjny (doba)</td><td data-pkg="start" className={getTdClass('start')}>50 zł</td><td data-pkg="standard" className={getTdClass('standard')}>50 zł</td><td data-pkg="family" className={getTdClass('family')}>50 zł</td><td data-pkg="premium" className={getTdClass('premium')}>100 zł</td><td data-pkg="vip" className={getTdClass('vip')}>100 zł</td></tr>
+                    <tr><td className="styled-td-first">💊 Ryczałt na leki po szpitalu</td><td data-pkg="start" className={getTdClass('start')}>200 zł</td><td data-pkg="standard" className={getTdClass('standard')}>200 zł</td><td data-pkg="family" className={getTdClass('family')}>200 zł</td><td data-pkg="premium" className={getTdClass('premium')}>400 zł</td><td data-pkg="vip" className={getTdClass('vip')}>400 zł</td></tr>
+                    <tr><td className="styled-td-first">💊 Poważne zachorowanie (45)</td><td data-pkg="start" className={getTdClass('start')}>5 000 zł</td><td data-pkg="standard" className={getTdClass('standard')}>5 000 zł</td><td data-pkg="family" className={getTdClass('family')}>10 000 zł</td><td data-pkg="premium" className={getTdClass('premium')}>10 000 zł</td><td data-pkg="vip" className={getTdClass('vip')}>10 000 zł</td></tr>
+                    <tr><td className="styled-td-first">⚕️ Zabiegi specjalistyczne</td><td data-pkg="start" className={getTdClass('start')}>4 000 zł</td><td data-pkg="standard" className={getTdClass('standard')}>5 000 zł</td><td data-pkg="family" className={getTdClass('family')}>5 000 zł</td><td data-pkg="premium" className={getTdClass('premium')}>6 000 zł</td><td data-pkg="vip" className={getTdClass('vip')}>7 000 zł</td></tr>
+                    <tr><td className="styled-td-first">🩺 Operacje chirurgiczne</td><td data-pkg="start" className={getTdClass('start')}>2 000 zł</td><td data-pkg="standard" className={getTdClass('standard')}>2 000 zł</td><td data-pkg="family" className={getTdClass('family')}>3 000 zł</td><td data-pkg="premium" className={getTdClass('premium')}>8 000 zł</td><td data-pkg="vip" className={getTdClass('vip')}>10 000 zł</td></tr>
+                    <tr className="separator-row"><td className="styled-td-first">👶 Urodzenie dziecka</td><td data-pkg="start" className={getNaClass('start')}>—</td><td data-pkg="standard" className={getTdClass('standard')}>2 000 zł</td><td data-pkg="family" className={getTdClass('family')}>2 000 zł</td><td data-pkg="premium" className={getNaClass('premium')}>—</td><td data-pkg="vip" className={getNaClass('vip')}>—</td></tr>
+                    <tr><td className="styled-td-first">🍼 Assistance po urodzeniu Dziecka</td><td data-pkg="start" className={getNaClass('start')}>—</td><td data-pkg="standard" className={getTdClass('standard')}>TAK</td><td data-pkg="family" className={getTdClass('family')}>TAK</td><td data-pkg="premium" className={getNaClass('premium')}>—</td><td data-pkg="vip" className={getNaClass('vip')}>—</td></tr>
+                    <tr><td className="styled-td-first">🚑 Medi Plan + Assistance</td><td colSpan="5" style={{textAlign:'center', fontWeight:'bold', color: '#009999', background: '#f8fafc', padding: '10px', borderBottom: '1px solid #f1f5f9'}}>ZAGWARANTOWANE W KAŻDYM WARIANCIE</td></tr>
+                  </tbody>
+                </table>
+            );
+        } else if (segment === '55-69') {
+            return (
+                <table style={{width: '100%', borderCollapse: 'separate', borderSpacing: 0, fontSize: '10px', marginBottom: 0}}>
+                  <thead>
+                    <tr>
+                      <th style={{width: '40%', padding: '10px 4px', textAlign: 'left', paddingLeft: '12px', background: 'white', color: '#003366', fontSize: '11px', borderBottom: '2px solid #003366', fontWeight: 600, verticalAlign: 'bottom'}}>Świadczenie</th>
+                      {currentOfferData && currentOfferData.packages ? currentOfferData.packages.map(p => (
+                          <th key={p.id} data-pkg={p.id} className={selectedPkgId === p.id ? 'selected-col' : 'unselected-col'} style={{width: '20%', padding: '10px 4px', textAlign: 'center', fontWeight: 600, verticalAlign: 'bottom', borderBottom: '2px solid #E5E5E5'}}>
+                              {p.name}
+                              <span className="price">{p.price} zł</span>
+                          </th>
+                      )) : null}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td className="styled-td-first">🚗 Śmierć w wypadku komunikacyjnym</td><td data-pkg="silver" className={getTdClass('silver')}>100 000 zł</td><td data-pkg="gold" className={getTdClass('gold')}>250 000 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>500 000 zł</td></tr>
+                    <tr><td className="styled-td-first">⚡ Śmierć wskutek NW</td><td data-pkg="silver" className={getTdClass('silver')}>70 000 zł</td><td data-pkg="gold" className={getTdClass('gold')}>130 000 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>300 000 zł</td></tr>
+                    <tr><td className="styled-td-first">💚 Śmierć Ubezpieczonego</td><td data-pkg="silver" className={getTdClass('silver')}>40 000 zł</td><td data-pkg="gold" className={getTdClass('gold')}>70 000 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>150 000 zł</td></tr>
+                    <tr className="separator-row"><td className="styled-td-first">🦴 Trwały uszczerbek NW (1%)</td><td data-pkg="silver" className={getTdClass('silver')}>500 zł</td><td data-pkg="gold" className={getTdClass('gold')}>700 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>1 500 zł</td></tr>
+                    <tr><td className="styled-td-first">🩹 Uraz niepowodujący uszczerbku</td><td data-pkg="silver" className={getTdClass('silver')}>200 zł</td><td data-pkg="gold" className={getTdClass('gold')}>200 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>200 zł</td></tr>
+                    <tr><td className="styled-td-first">🏠 Śmierć rodziców/teściów (NW)</td><td data-pkg="silver" className={getTdClass('silver')}>3 000 zł</td><td data-pkg="gold" className={getTdClass('gold')}>4 000 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>6 000 zł</td></tr>
+                    <tr><td className="styled-td-first">✝️ Śmierć rodziców/teściów (każda)</td><td data-pkg="silver" className={getTdClass('silver')}>1 500 zł</td><td data-pkg="gold" className={getTdClass('gold')}>2 000 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>2 500 zł</td></tr>
+                    <tr className="separator-row"><td className="styled-td-first">🏥 Pobyt w szpitalu (suma)</td><td data-pkg="silver" className={getTdClass('silver')}>20 000 zł</td><td data-pkg="gold" className={getTdClass('gold')}>20 000 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>30 000 zł</td></tr>
+                    <tr><td className="styled-td-first">→ stawka dzienna (NW/Choroba)</td><td data-pkg="silver" className={getTdClass('silver')}>200/120 zł</td><td data-pkg="gold" className={getTdClass('gold')}>200/120 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>300/180 zł</td></tr>
+                    <tr><td className="styled-td-first">💊 Ryczałt na leki po szpitalu</td><td data-pkg="silver" className={getTdClass('silver')}>200 zł</td><td data-pkg="gold" className={getTdClass('gold')}>200 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>200 zł</td></tr>
+                    <tr><td className="styled-td-first">💊 Poważne zachorowanie (45)</td><td data-pkg="silver" className={getTdClass('silver')}>5 000 zł</td><td data-pkg="gold" className={getTdClass('gold')}>5 000 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>8 000 zł</td></tr>
+                    <tr><td className="styled-td-first">🩺 Operacje chirurgiczne</td><td data-pkg="silver" className={getTdClass('silver')}>3 000 zł</td><td data-pkg="gold" className={getTdClass('gold')}>5 000 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>5 000 zł</td></tr>
+                    <tr><td className="styled-td-first">⚕️ Zabiegi specjalistyczne</td><td data-pkg="silver" className={getTdClass('silver')}>4 000 zł</td><td data-pkg="gold" className={getTdClass('gold')}>5 000 zł</td><td data-pkg="platinum" className={getTdClass('platinum')}>10 000 zł</td></tr>
+                    <tr className="separator-row"><td className="styled-td-first">📞 Assistance + Mediplan</td><td colSpan="3" style={{textAlign:'center', fontWeight:'bold', color: '#009999', background: '#f8fafc', padding: '12px', borderBottom: '1px solid #f1f5f9'}}>ZAGWARANTOWANE W KAŻDYM WARIANCIE</td></tr>
+                  </tbody>
+                </table>
+            );
+        } else {
+            return (
+                <table style={{width: '100%', borderCollapse: 'separate', borderSpacing: 0, fontSize: '10px', marginBottom: 0}}>
+                  <thead>
+                    <tr>
+                      <th style={{width: '50%', padding: '10px 4px', textAlign: 'left', paddingLeft: '12px', background: 'white', color: '#003366', fontSize: '11px', borderBottom: '2px solid #003366', fontWeight: 600, verticalAlign: 'bottom'}}>Świadczenie</th>
+                      {currentOfferData && currentOfferData.packages ? currentOfferData.packages.map(p => (
+                          <th key={p.id} data-pkg={p.id} className={selectedPkgId === p.id ? 'selected-col' : 'unselected-col'} style={{width: '25%', padding: '10px 4px', textAlign: 'center', fontWeight: 600, verticalAlign: 'bottom', borderBottom: '2px solid #E5E5E5'}}>
+                              {p.name}
+                              <span className="price">{p.price} zł</span>
+                          </th>
+                      )) : null}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td className="styled-td-first">🚗 Śmierć w wypadku komunikacyjnym</td><td data-pkg="senior-silver" className={getTdClass('senior-silver')}>30 000 zł</td><td data-pkg="senior-gold" className={getTdClass('senior-gold')}>50 000 zł</td></tr>
+                    <tr><td className="styled-td-first">⚡ Śmierć wskutek NW</td><td data-pkg="senior-silver" className={getTdClass('senior-silver')}>30 000 zł</td><td data-pkg="senior-gold" className={getTdClass('senior-gold')}>50 000 zł</td></tr>
+                    <tr><td className="styled-td-first">💚 Śmierć Ubezpieczonego</td><td data-pkg="senior-silver" className={getTdClass('senior-silver')}>17 000 zł</td><td data-pkg="senior-gold" className={getTdClass('senior-gold')}>24 000 zł</td></tr>
+                  </tbody>
+                </table>
+            );
+        }
+    };
+
+    const calculatedAge = (clientData && clientData.dob) ? calculateAge(clientData.dob) : '';
+    const headerTitle = (printWithClientData && clientData && clientData.name)
+        ? "OSOBISTY PLAN OCHRONY: " + clientData.name.toUpperCase()
+        : "PRYWATNY PLAN OCHRONY UBEZPIECZENIOWEJ";
+    
+    const headerSubtitle = (printWithClientData && calculatedAge)
+        ? "Wiek kalkulacyjny: " + calculatedAge + " lat" 
+        : "Rekomendacja na podstawie analizy potrzeb";
+
+    return (
+        <div className="flex flex-col gap-6 w-full">
+
+            {/* PANEL KONFIGURACYJNY */}
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-md flex flex-col gap-4">
+                <div className="flex justify-between items-center border-b pb-3">
+                    <h3 className="font-bold text-[#003366] flex items-center gap-2"><Settings className="w-5 h-5" /> Konfigurator Ofert</h3>
+                    <div className="flex gap-2 text-sm bg-slate-100 p-1 rounded-md">
+                        <button className={"px-4 py-1.5 rounded cursor-pointer font-bold transition-all " + (segment === '16-55' ? 'bg-white text-[#003366] shadow-sm' : 'text-slate-500 hover:text-slate-700')} onClick={() => onSegmentChange('16-55')}>Dorośli (16-55)</button>
+                        <button className={"px-4 py-1.5 rounded cursor-pointer font-bold transition-all " + (segment === '55-69' ? 'bg-white text-[#009999] shadow-sm' : 'text-slate-500 hover:text-slate-700')} onClick={() => onSegmentChange('55-69')}>Dojrzali (55-69)</button>
+                        <button className={"px-4 py-1.5 rounded cursor-pointer font-bold transition-all " + (segment === '70-75' ? 'bg-white text-[#CC0066] shadow-sm' : 'text-slate-500 hover:text-slate-700')} onClick={() => onSegmentChange('70-75')}>Senior (70+)</button>
+                    </div>
+                </div>
+
+                <div className="flex gap-3 overflow-x-auto py-2">
+                    {currentOfferData && currentOfferData.packages ? currentOfferData.packages.map(pkg => (
+                        <button key={pkg.id} onClick={() => onPackageChange(pkg.id)} className={"relative flex-1 min-w-[120px] p-3 rounded-lg border text-center transition-all " + (selectedPkgId === pkg.id ? 'bg-[#009999] text-white border-[#009999] shadow-lg transform scale-105 z-10' : 'bg-white hover:bg-slate-50 border-slate-200 text-[#003366]')}>
+                            <div className="text-xs font-bold uppercase tracking-wider opacity-80">{pkg.name}</div>
+                            <div className="text-lg font-bold mt-1">{pkg.price} zł</div>
+                        </button>
+                    )) : null}
+                </div>
+
+                {currentOfferData && currentOfferData.addons && currentOfferData.addons.length > 0 ? (
+                    <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-100">
+                        {currentOfferData.addons.map(addon => (
+                            <label key={addon.id} className={"flex items-center gap-3 px-4 py-3 rounded-lg border cursor-pointer text-xs font-bold transition-all " + (selectedAddons.includes(addon.id) ? 'bg-[#F2F2F2] border-[#009999] text-[#009999] shadow-sm' : 'bg-white border-slate-200 text-[#003366] hover:bg-slate-50')}>
+                                <input type="checkbox" checked={selectedAddons.includes(addon.id)} onChange={() => onAddonToggle(addon.id)} className="w-5 h-5 text-[#009999] focus:ring-[#009999] border-gray-300 rounded" />
+                                <span>{addon.name}</span> 
+                                <span className={"ml-auto " + (selectedAddons.includes(addon.id) ? "text-[#009999]" : "text-slate-400")}>+{addon.price.toFixed(2)} zł</span>
+                            </label>
+                        ))}
+                    </div>
+                ) : null}
+            </div>
+
+            {/* PREVIEW KARTY / ULOTKI W FORMACIE A4 (PIONOWYM) - PODZIELONE NA STRONY */}
+            <div className="w-full overflow-x-auto bg-[#334155] p-6 rounded-xl flex flex-col items-center gap-8 shadow-inner border border-slate-700 h-[800px] overflow-y-auto">
+                <style>{`
+                    .document-wrapper { display: flex; flex-direction: column; gap: 40px; transform: scale(0.85); transform-origin: top center; margin-bottom: -10%; width: 800px; }
+                    
+                    .page-container {
+                        width: 800px; 
+                        min-height: 1131px; 
+                        background: #FFFFFF; 
+                        padding: 0; 
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+                        display: flex; 
+                        flex-direction: column; 
+                        font-family: 'Segoe UI', Arial, sans-serif; 
+                        color: #003366; 
+                        box-sizing: border-box;
+                        text-rendering: geometricPrecision;
+                        -webkit-font-smoothing: antialiased;
+                    }
+                    
+                    .header { background: #003366; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;}
+                    .client-header-info { font-size: 16px; font-weight: 800; color: white; letter-spacing: 0.5px;}
+                    .client-header-selection { background: rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 6px; border-left: 4px solid #66CCCC; font-size: 11px; color: #F2F2F2; }
+                    .client-header-selection strong { color: #66CCCC; font-size: 14px; }
+                    
+                    .hero { background: linear-gradient(135deg, #003366 0%, #336699 100%); padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;}
+                    .hero-label { color: #66CCCC; font-size: 18px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px;}
+                    .hero-sublabel { color: #E5E5E5; font-size: 12px; font-weight: 500;}
+                    .hero-badge { background: #009999; padding: 8px 20px; border-radius: 6px; text-align: center; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+                    .hero-badge-age { font-size: 24px; font-weight: 800; margin: 2px 0; }
+                    
+                    .content { display: flex; flex-direction: column; padding: 25px 30px; flex: 1; }
+                    .section-title { font-size: 15px; font-weight: 800; color: #003366; margin-bottom: 15px; text-transform: uppercase; border-bottom: 3px solid #E5E5E5; padding-bottom: 6px;}
+                    
+                    /* STYLE TABELI DO JS CSS */
+                    th.unselected-col { background: #f8fafc; color: #94a3b8; border-top: 1px solid #e2e8f0; }
+                    th.unselected-col .price { color: #94a3b8; font-size: 13px; display: block; margin-top: 4px; font-weight: normal;}
+                    
+                    .styled-td { padding: 8px 4px; text-align: center; border-bottom: 1px solid #f1f5f9; color: #003366; line-height: 1.2;}
+                    td.unselected-td { color: #cbd5e1; background: #fdfdfd; }
+                    
+                    .styled-td-first { padding: 8px 4px; text-align: left; padding-left: 12px; font-weight: 600; color: #003366; background: white; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
+                    tr.separator-row .styled-td, tr.separator-row .styled-td-first { border-top: 2px solid #e2e8f0; }
+                    
+                    th.selected-col { background-color: #009999 !important; color: white !important; border: 2px solid #009999; border-bottom: none; border-radius: 6px 6px 0 0; }
+                    th.selected-col .price { color: #FFFFFF !important; font-size: 15px; display: block; margin-top: 4px; font-weight: 800;}
+                    td.selected-col { background-color: #f0fdf4 !important; border-left: 2px solid #009999 !important; border-right: 2px solid #009999 !important; color: #003366 !important; font-weight: bold;}
+                    tr:last-child td.selected-col { border-bottom: 2px solid #009999 !important; border-radius: 0 0 6px 6px;}
+                    
+                    /* STYLE CEGIEŁEK (STRONA 2) */
+                    .cegielki { display: flex; flex-direction: column; flex: 1;}
+                    .cegielki-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 15px; border-bottom: 2px solid #E5E5E5; padding-bottom: 6px;}
+                    .cegielki-title { font-size: 16px; font-weight: 800; color: #CC0066; text-transform: uppercase; letter-spacing: 0.5px;}
+                    
+                    .cegielki-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+                    
+                    .cegielka { background: #FFFFFF; border-radius: 8px; display: flex; flex-direction: column; border: 1px solid #e2e8f0; overflow: hidden; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);}
+                    .cegielka.unselected-print { opacity: 0.7; filter: grayscale(100%); border-color: #e2e8f0; }
+                    .cegielka.selected-print { border: 2px solid #009999 !important; box-shadow: 0 6px 15px rgba(0,153,153,0.15) !important;}
+                    
+                    .cegielka-title-bar { padding: 10px 15px; font-weight: 800; font-size: 13px; color: #003366; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; background: #f8fafc;}
+                    .selected-print .cegielka-title-bar { background: #e6f5f5; color: #009999; }
+                    .cegielka-title-left { display: flex; align-items: center; gap: 8px; }
+                    
+                    .addon-row { display: flex; justify-content: space-between; padding: 6px 12px; border-bottom: 1px solid #f8fafc; font-size: 10px; align-items: center;}
+                    .addon-row:last-child { border-bottom: none; }
+                    .addon-label { flex: 1; padding-right: 10px; color: #334155; line-height: 1.3; font-weight: 500;}
+                    .addon-val-container { text-align: right; min-width: 80px; }
+                    .addon-val { font-weight: 800; color: #0f172a; line-height: 1.2; font-size: 11px;}
+                    .addon-sub { font-size: 8px; color: #94a3b8; margin-top: 2px; }
+                    
+                    .addon-condition { margin: 10px; padding: 10px; background: #fff1f2; border: 1px dashed #CC0066; color: #be123c; font-size: 8px; border-radius: 4px; line-height: 1.3;}
+                    .addon-condition strong { color: #9f1239; font-weight: 800; display: block; margin-bottom: 3px; font-size: 9px;}
+                    
+                    .notes-box { margin-top: 20px; background: #f8fafc; border-left: 4px solid #CC0066; padding: 15px; border-radius: 6px; font-size: 12px; color: #0f172a; font-style: italic; line-height: 1.5; }
+
+                    .summary-box { background: #f8fafc; border: 2px solid #003366; padding: 20px 25px; border-radius: 10px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;}
+                    .summary-text h4 { margin: 0 0 6px 0; color: #003366; font-size: 15px; font-weight: 800; text-transform: uppercase;}
+                    .summary-text p { margin: 0; color: #475569; font-size: 11px;}
+                    .summary-price { text-align: right; }
+                    .summary-price .total { font-size: 32px; font-weight: 800; color: #009999; line-height: 1; }
+                    .summary-price .daily { font-size: 12px; color: #64748b; margin-top: 6px; font-weight: 600;}
+
+                    .footer { padding: 15px 30px; display: flex; justify-content: space-between; align-items: flex-end; border-top: 2px solid #e2e8f0; background: white; margin-top: auto; flex-shrink: 0; }
+                    .advisor-card { text-align: right; }
+                    
+                    .document-wrapper.card-mode table { border: 3px solid #009999 !important; }
+                    .document-wrapper.card-mode th { width: auto !important; }
+                    .document-wrapper.card-mode th.selected-col, .document-wrapper.card-mode td.selected-col { background-color: #ffffff !important; font-size: 12px !important; border: none !important; border-bottom: 1px solid #e2e8f0 !important; }
+                    .document-wrapper.card-mode th.selected-col { font-size: 18px !important; border-bottom: 3px solid #009999 !important; padding: 15px !important; }
+                    .document-wrapper.card-mode th.selected-col .price { color: #009999 !important; font-size: 22px !important; margin-top: 6px !important; }
+                `}</style>
+
+                <div className="document-wrapper" ref={offerRef}>
+                    
+                    {/* STRONA 1: TABELA BAZOWA */}
+                    <div className="page-container" id="page-1">
+                        <div className="header">
+                            <div>
+                                <div className="client-header-info">{headerTitle}</div>
+                                {headerSubtitle ? <div className="client-header-info" style={{fontSize:'12px', fontWeight:'400', opacity:'0.9', marginTop: '4px'}}>{headerSubtitle}</div> : null}
+                            </div>
+                            <div className="client-header-selection">
+                                Wariant: <strong>{currentPackage ? currentPackage.name : ''}</strong> | Moduły: <strong>{selectedAddons.length}</strong>
+                            </div>
+                        </div>
+
+                        <div className="hero">
+                            <div className="hero-text">
+                                <div className="hero-label">Ochrona dla Ciebie i Twoich bliskich</div>
+                                <div className="hero-sublabel">Zabezpieczenie na wypadek nieprzewidzianych zdarzeń losowych, choroby i wypadku.</div>
+                            </div>
+                            <div className="hero-badge">
+                                <div className="hero-badge-label" style={{fontSize:'10px', textTransform: 'uppercase'}}>Wiek wstępu</div>
+                                <div className="hero-badge-age">{currentOfferData ? currentOfferData.heroAge : ''}</div>
+                                {(currentOfferData && currentOfferData.heroInfo) ? <div style={{fontSize:'10px', opacity: 0.9, marginTop: '2px', fontWeight: 500}}>{currentOfferData.heroInfo}</div> : null}
+                            </div>
+                        </div>
+
+                        <div className="content">
+                            <div className="section-title">KROK 1: TWÓJ FUNDAMENT OCHRONY (Wybór Wariantu)</div>
+                            {renderTable()}
+                            <div 
+                                style={{fontSize: '9px', marginTop:'auto', paddingTop: '15px', color:'#64748b', textAlign:'justify', lineHeight: '1.4'}} 
+                                dangerouslySetInnerHTML={{__html: (currentOfferData && currentOfferData.info) ? currentOfferData.info : ''}}
+                            />
+                        </div>
+
+                        <div className="footer">
+                            <div style={{fontSize:'11px', color:'#64748b', lineHeight:'1.5'}}>
+                                <strong>OVB Allfinanz Polska Sp. z o.o.</strong><br/>
+                                Data wygenerowania planu: {new Date().toLocaleDateString('pl-PL')}
+                            </div>
+                            <div className="advisor-card">
+                                <div style={{fontSize:'10px', color:'#64748b', textTransform:'uppercase', fontWeight:'700', marginBottom: '2px'}}>Twój Doradca:</div>
+                                <div style={{fontSize:'15px', fontWeight:'800', color:'#003366'}}>{(advisorData && advisorData.name) ? advisorData.name : 'Brak danych'}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* STRONA 2: DODATKI I PODSUMOWANIE */}
+                    <div className="page-container" id="page-2">
+                        <div className="header">
+                            <div>
+                                <div className="client-header-info">{headerTitle}</div>
+                                {headerSubtitle ? <div className="client-header-info" style={{fontSize:'12px', fontWeight:'400', opacity:'0.9', marginTop: '4px'}}>{headerSubtitle}</div> : null}
+                            </div>
+                            <div className="client-header-selection">
+                                Wariant: <strong>{currentPackage ? currentPackage.name : ''}</strong> | Moduły: <strong>{selectedAddons.length}</strong>
+                            </div>
+                        </div>
+
+                        <div className="content">
+                            {(currentOfferData && currentOfferData.addons && currentOfferData.addons.length > 0) ? (
+                                <div className="cegielki">
+                                    <div className="cegielki-header">
+                                        <div className="cegielki-title">KROK 2: TWOJE TARCZE DODATKOWE (Opcje)</div>
+                                    </div>
+                                    <div className="cegielki-grid">
+                                        {currentOfferData.addons.map(addon => {
+                                            const isSelected = selectedAddons.includes(addon.id);
+                                            return (
+                                            <div key={addon.id} id={"cegielka-" + addon.id} className={"cegielka " + (isSelected ? 'selected-print' : 'unselected-print')}>
+                                                <div className="cegielka-title-bar">
+                                                    <div className="cegielka-title-left">
+                                                        <span style={{fontSize: '15px'}}>{addon.icon}</span> 
+                                                        {addon.name}
+                                                    </div>
+                                                    {isSelected ? (
+                                                        <div style={{background: '#009999', color: 'white', padding: '3px 8px', borderRadius: '4px', fontSize: '9px', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 'bold'}}>
+                                                            <span>✓</span> AKTYWNE (+{addon.price.toFixed(2)} zł)
+                                                        </div>
+                                                    ) : (
+                                                        <div style={{color: '#94a3b8', fontSize: '9px'}}>OPCJA (+{addon.price.toFixed(2)} zł)</div>
+                                                    )}
+                                                </div>
+                                                
+                                                <div style={{flex: 1, paddingBottom: '6px', paddingTop: '4px'}}>
+                                                    {addon.rows && addon.rows.map((row, idx) => (
+                                                        <div key={idx} className="addon-row">
+                                                            <div className="addon-label" dangerouslySetInnerHTML={{__html: row.label}}></div>
+                                                            <div className="addon-val-container">
+                                                                <div className="addon-val" style={row.valueStyle} dangerouslySetInnerHTML={{__html: row.value}}></div>
+                                                                {row.sub ? <div className="addon-sub" dangerouslySetInnerHTML={{__html: row.sub}}></div> : null}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                {(addon.condition && isSelected) ? (
+                                                    <div className="addon-condition">
+                                                        <strong>{addon.condition.title}</strong>
+                                                        <div dangerouslySetInnerHTML={{__html: addon.condition.text}}></div>
+                                                    </div>
+                                                ) : null}
+                                            </div>
+                                        )})}
+                                    </div>
+                                </div>
+                            ) : null}
+
+                            {additionalNotes ? (
+                                <div className="notes-box">
+                                    {additionalNotes}
+                                </div>
+                            ) : null}
+
+                            <div className="summary-box" style={{marginTop: 'auto'}}>
+                                <div className="summary-text">
+                                    <h4>KROK 3: DECYZJA O BEZPIECZEŃSTWIE</h4>
+                                    <p>Zaproponowane warunki zarezerwowałem do <strong>{getExpirationDate()}</strong>.<br/>Skontaktuj się ze mną, aby uruchomić Twoją polisę.</p>
+                                </div>
+                                <div className="summary-price">
+                                    <div className="total">{totalMonthly.toFixed(2)} zł <span style={{fontSize:'14px', color:'#003366'}}>/ mc</span></div>
+                                    <div className="daily">To zaledwie {(totalMonthly/30).toFixed(2)} zł dziennie</div>
+                                </div>
+                            </div>
+                            
+                            <div style={{fontSize: '9px', marginTop:'15px', color:'#94a3b8', textAlign:'justify', lineHeight: '1.4'}}>
+                                Powyższe zestawienie ma charakter informacyjny i nie stanowi wiążącej oferty handlowej w myśl przepisów Kodeksu Cywilnego. Wiążące szczegóły ubezpieczenia znajdują się w dokumencie OWU.
+                            </div>
+                        </div>
+
+                        <div className="footer">
+                            <div style={{fontSize:'11px', color:'#64748b', lineHeight:'1.5'}}>
+                                <strong>OVB Allfinanz Polska Sp. z o.o.</strong><br/>
+                                Data wygenerowania planu: {new Date().toLocaleDateString('pl-PL')}
+                            </div>
+                            <div className="advisor-card">
+                                <div style={{fontSize:'10px', color:'#64748b', textTransform:'uppercase', fontWeight:'700', marginBottom: '2px'}}>Twój Doradca:</div>
+                                <div style={{fontSize:'15px', fontWeight:'800', color:'#003366'}}>{(advisorData && advisorData.name) ? advisorData.name : 'Brak danych'}</div>
+                                <div style={{fontSize:'14px', color:'#009999', fontWeight: '800'}}>📞 {(advisorData && advisorData.phone) ? advisorData.phone : ''}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            {/* PODSUMOWANIE (DLA KLIENTA NA STRONIE) */}
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-md flex flex-col gap-4 mt-6">
+                <div className="bg-[#003366] text-white p-4 rounded-lg flex flex-col md:flex-row justify-between items-center gap-4 shadow-md">
+                    <div className="flex flex-col items-center md:items-start">
+                        <div className="text-sm font-medium whitespace-nowrap opacity-90">Twoja łączna składka miesięczna:</div>
+                        <div className="text-3xl font-bold mt-1 text-[#66CCCC]">{totalMonthly.toFixed(2)} zł</div>
+                    </div>
+                    <div className="flex flex-col gap-2 w-full md:w-auto">
+                        <button onClick={() => handleDownload(false)} className={"w-full md:w-auto justify-center px-6 py-2.5 bg-[#009999] hover:bg-[#007a7a] rounded text-sm font-bold flex items-center gap-2 transition-colors"}><Printer className="w-4 h-4 mr-2" /> Pobierz Ofertę (Zestaw PNG)</button>
+                        <button onClick={() => handleDownload(true)} className={"w-full md:w-auto justify-center px-6 py-2.5 bg-[#336699] hover:bg-[#1f4a76] rounded text-sm font-bold flex items-center gap-2 transition-colors"}><FileOutput className="w-4 h-4 mr-2" /> Pobierz Tylko Wybrany Pakiet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// --- GŁÓWNY KONTENER / APLIKACJA ---
+function InsuranceDashboard() {
+  const [clientName, setClientName] = useState('Jan Kowalski');
+  const [clientDob, setClientDob] = useState('01.01.1990');
+  
+  const [advisorName, setAdvisorName] = useState('Twój Doradca OVB');
+  const [advisorPhone, setAdvisorPhone] = useState('600 100 200');
+
+  const [segment, setSegment] = useState('16-55');
+  const [currentPackageId, setCurrentPackageId] = useState('start');
+  const [currentAddonsIds, setCurrentAddonsIds] = useState([]);
+  
+  const [additionalNotes, setAdditionalNotes] = useState('Płynność finansowa i spokój: W razie nagłego wypadku lub poważnej choroby, otrzymasz środki, które pokryją stałe koszty utrzymania. Dzięki temu Twoja rodzina nie odczuje spadku poziomu życia, a Ty skupisz się wyłącznie na powrocie do zdrowia omijając kolejki NFZ.');
+  const [printWithClientData, setPrintWithClientData] = useState(true);
+
+  const handleSegmentChange = (newSegment) => {
+      setSegment(newSegment);
+      const defaults = { '16-55': 'start', '55-69': 'silver', '70-75': 'senior-silver' };
+      setCurrentPackageId(defaults[newSegment] || 'start');
+      setCurrentAddonsIds([]);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f8fafc] p-4 md:p-6 lg:p-8 font-sans text-[#003366] text-left">
+      <div className="max-w-[1400px] mx-auto space-y-6">
+        
+        <div className="bg-white p-6 rounded-xl border border-[#e2e8f0] shadow-sm flex items-center gap-5">
+          <div className="p-4 bg-[#003366] text-white rounded-xl shadow-inner"><ShieldCheck className="w-8 h-8" /></div>
+          <div>
+              <h1 className="text-2xl font-extrabold text-[#003366] tracking-tight m-0">Generator Projektów Ochrony OVB</h1>
+              <p className="text-[#009999] text-sm mt-1 font-medium m-0">Twórz profesjonalne, dwustronicowe oferty jako wysokiej jakości grafiki (PNG).</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            {/* PANEL DANYCH WEJŚCIOWYCH (LEWY) */}
+            <div className="lg:col-span-4 space-y-6">
+                
+                {/* DANE KLIENTA */}
+                <div className="bg-white p-6 rounded-xl border border-[#e2e8f0] shadow-sm space-y-5">
+                    <h3 className="font-bold text-[#003366] border-b border-[#e2e8f0] pb-3 flex items-center gap-2 text-lg m-0"><User className="w-5 h-5 text-[#009999]"/> 1. Parametry Klienta</h3>
+                    
+                    <div>
+                        <label className="text-xs font-bold text-[#003366] opacity-70 uppercase tracking-wider block mb-1">Imię i Nazwisko Klienta</label>
+                        <input value={clientName} onChange={e => setClientName(e.target.value)} className="w-full mt-1.5 p-3 border border-[#e2e8f0] rounded-lg focus:ring-2 focus:ring-[#009999] outline-none transition-all font-medium text-[#003366] shadow-sm" />
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold text-[#003366] opacity-70 uppercase tracking-wider block mb-1">Data urodzenia (DD.MM.RRRR lub RRRR-MM-DD)</label>
+                        <input value={clientDob} onChange={e => setClientDob(e.target.value)} placeholder="DD.MM.RRRR" className="w-full mt-1.5 p-3 border border-[#e2e8f0] rounded-lg focus:ring-2 focus:ring-[#009999] outline-none transition-all font-medium text-[#003366] shadow-sm" />
+                    </div>
+
+                    <div className="pt-4 border-t border-[#e2e8f0]">
+                        <label className="flex items-center gap-3 cursor-pointer text-sm font-medium text-[#003366] bg-[#f8fafc] p-3 rounded-lg border border-[#e2e8f0] hover:bg-[#f1f5f9] transition-colors m-0">
+                            <input type="checkbox" checked={printWithClientData} onChange={e => setPrintWithClientData(e.target.checked)} className="w-5 h-5 text-[#009999] rounded border-[#e2e8f0] focus:ring-[#009999] accent-[#009999]" />
+                            Pokaż spersonalizowane dane na prezentacji
+                        </label>
+                    </div>
+                </div>
+
+                {/* DANE DORADCY */}
+                <div className="bg-white p-6 rounded-xl border border-[#e2e8f0] shadow-sm space-y-5">
+                    <h3 className="font-bold text-[#003366] border-b border-[#e2e8f0] pb-3 flex items-center gap-2 text-lg m-0"><Settings className="w-5 h-5 text-[#009999]"/> 2. Twój Profil (Ekspert)</h3>
+                    <div>
+                        <label className="text-xs font-bold text-[#003366] opacity-70 uppercase tracking-wider block mb-1">Imię i Nazwisko</label>
+                        <input value={advisorName} onChange={e => setAdvisorName(e.target.value)} className="w-full mt-1.5 p-3 border border-[#e2e8f0] rounded-lg focus:ring-2 focus:ring-[#009999] outline-none transition-all font-medium text-[#003366] shadow-sm" />
+                    </div>
+                    <div>
+                        <label className="text-xs font-bold text-[#003366] opacity-70 uppercase tracking-wider block mb-1">Telefon Kontaktowy</label>
+                        <input value={advisorPhone} onChange={e => setAdvisorPhone(e.target.value)} className="w-full mt-1.5 p-3 border border-[#e2e8f0] rounded-lg focus:ring-2 focus:ring-[#009999] outline-none transition-all font-medium text-[#003366] shadow-sm" />
+                    </div>
+                </div>
+
+                {/* DODATKOWE INFORMACJE / NOTATKI */}
+                <div className="bg-white p-6 rounded-xl border border-[#e2e8f0] shadow-sm space-y-5">
+                    <h3 className="font-bold text-[#003366] border-b border-[#e2e8f0] pb-3 flex items-center gap-2 text-lg m-0"><FileText className="w-5 h-5 text-[#CC0066]"/> 3. Indywidualne Notatki</h3>
+                    <div>
+                        <label htmlFor="additionalNotes" className="text-xs font-bold text-[#003366] opacity-70 uppercase tracking-wider block mb-2">
+                            Twój osobisty komunikat na prezentacji
+                        </label>
+                        <textarea 
+                            id="additionalNotes"
+                            value={additionalNotes}
+                            onChange={(e) => setAdditionalNotes(e.target.value)}
+                            rows="5"
+                            className="w-full p-3 border border-[#e2e8f0] rounded-lg focus:ring-2 focus:ring-[#009999] outline-none transition-all text-sm font-medium text-[#003366] shadow-sm"
+                            placeholder="Wpisz tutaj dodatkowe informacje... (np. Zniżka dla stałego klienta ważna do końca miesiąca)"
+                        />
+                        <p className="text-[11px] text-[#009999] mt-2 font-medium m-0">Jeśli zostawisz to pole puste, blok z notatkami nie pojawi się na obrazku.</p>
+                    </div>
+                </div>
+                
+            </div>
+
+            {/* GENERATOR OFERTY I PODGLĄD (PRAWY) */}
+            <div className="lg:col-span-8">
+                <OfferGenerator 
+                    clientData={{ name: clientName, dob: clientDob }}
+                    advisorData={{ name: advisorName, phone: advisorPhone }}
+                    segment={segment}
+                    onSegmentChange={handleSegmentChange}
+                    selectedPkgId={currentPackageId}
+                    selectedAddons={currentAddonsIds}
+                    onPackageChange={setCurrentPackageId}
+                    onAddonToggle={(id) => setCurrentAddonsIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])}
+                    additionalNotes={additionalNotes}
+                    printWithClientData={printWithClientData}
+                />
+            </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+</script>
+
+<script>
+  // Mechanizm omijający blokady skryptów wewnątrz ClickFunnels
+  // Skrypt czeka, aż zewnętrzne pliki CDN (Babel, React) się pobiorą, a następnie RĘCZNIE kompiluje kod JSX.
+  (function() {
+    var attempts = 0;
+    
+    function init() {
+      // Sprawdzamy czy niezbędne biblioteki zostały załadowane
+      if (typeof window.Babel !== 'undefined' && typeof window.React !== 'undefined' && typeof window.ReactDOM !== 'undefined') {
+        try {
+          // Pobieramy bezpieczny kod jako zwykły tekst
+          var source = document.getElementById('ovb-react-source').textContent || document.getElementById('ovb-react-source').innerText;
+          
+          // Kompilujemy manualnie
+          var compiled = window.Babel.transform(source, { presets: ['env', 'react'] }).code;
+          
+          // Wrzucamy do standardowego tagu SCRIPT na samym dole body (Bypass ClickFunnels dom parser)
+          var script = document.createElement('script');
+          script.type = 'text/javascript';
+          script.innerHTML = compiled + "\n" +
+          "var rootElement = document.getElementById('ovb-app-root');\n" +
+          "if (rootElement) {\n" +
+          "    rootElement.innerHTML = '';\n" +
+          "    var root = ReactDOM.createRoot(rootElement);\n" +
+          "    root.render(React.createElement(InsuranceDashboard));\n" +
+          "}";
+          document.body.appendChild(script);
+          
+        } catch (err) {
+          console.error('Błąd kompilatora Babel: ', err);
+          document.getElementById('ovb-app-root').innerHTML = '<div style="color:#CC0066; padding:20px; font-family: sans-serif; text-align: center;"><b>Błąd kompilacji.</b><br/>Sprawdź konsolę przeglądarki. Skontaktuj się ze wsparciem technicznym.</div>';
+        }
+      } else {
+        // Ponawiaj próbę załadowania przez 10 sekund (100 prób co 100ms)
+        attempts++;
+        if(attempts < 100) {
+           setTimeout(init, 100);
+        } else {
+           document.getElementById('ovb-app-root').innerHTML = '<div style="color:#CC0066; padding:20px; font-family: sans-serif; text-align: center;"><b>Nie można załadować wymaganych plików.</b><br/>Twoja przeglądarka lub ad-blocker blokuje zewnętrzne biblioteki (React/Babel).</div>';
+        }
+      }
+    }
+    
+    // Uruchomienie bezpiecznej pętli sprawdzającej po załadowaniu drzewa strony
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  })();
+</script>
