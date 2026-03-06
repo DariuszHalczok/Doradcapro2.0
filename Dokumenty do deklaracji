@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dane Agenta Ubezpieczeniowego i RODO - OVB</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        :root {
+            /* OVB Brand Colors */
+            --ovb-blue: #003366; 
+            --ovb-teal: #009999; 
+            --ovb-bg-grey: #F4F6F8;
+            --text-dark: #333333;
+            --text-light: #555555;
+            --border-color: #E5E5E5;
+            
+            /* Generali Brand Colors */
+            --generali-red: #C61628;
+            --generali-dark: #4A4A4A;
+
+            --font-main: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body { 
+            font-family: var(--font-main); 
+            background-color: var(--ovb-bg-grey); 
+            color: var(--text-dark); 
+            margin: 0; 
+            padding: 40px 20px; 
+            line-height: 1.6; 
+        }
+
+        .document-container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 20px rgba(0, 51, 102, 0.08); 
+            padding: 50px; 
+        }
+
+        /* --- OVB STYLES (Part 1 & 2) --- */
+        .ovb-section h1 { 
+            color: var(--ovb-blue); 
+            font-size: 24px; 
+            margin-top: 0;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--ovb-teal);
+        }
+
+        .ovb-section h2 {
+            color: var(--ovb-blue);
+            font-size: 18px;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .ovb-section h2 .material-icons-outlined {
+            color: var(--ovb-teal);
+            font-size: 22px;
+        }
+
+        .ovb-section h3 {
+            color: var(--ovb-blue);
+            font-size: 15px;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: #f9fbfc;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .info-card h4 {
+            margin-top: 0;
+            color: var(--ovb-blue);
+            font-size: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .ovb-section p { margin: 0 0 15px 0; color: var(--text-light); font-size: 14px; }
+        .ovb-section ul, .ovb-section ol { margin: 0 0 15px 0; color: var(--text-light); padding-left: 20px; font-size: 14px; }
+        .ovb-section li { margin-bottom: 8px; }
+        .ovb-section strong { color: var(--text-dark); }
+
+        .highlight-box {
+            background: #E3F2FD;
+            border-left: 4px solid #2196F3;
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-box {
+            background: #FFF9C4;
+            border-left: 4px solid #FBC02D;
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .knf-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .knf-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--ovb-teal);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 15px;
+            border: 1px solid var(--ovb-teal);
+            border-radius: 6px;
+            transition: 0.2s;
+            width: fit-content;
+            font-size: 14px;
+        }
+
+        .knf-links a:hover {
+            background: var(--ovb-teal);
+            color: white;
+        }
+
+        .admin-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        /* --- PAGE BREAK / SEPARATOR --- */
+        .section-separator {
+            margin: 60px 0;
+            border: none;
+            border-top: 2px dashed var(--border-color);
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+
+        /* --- GENERALI STYLES (Part 3) --- */
+        .generali-block {
+            color: var(--generali-dark);
+            font-size: 14px;
+        }
+        
+        .generali-header-container {
+            border-bottom: 3px solid var(--generali-red);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .generali-logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--generali-red);
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .generali-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-transform: uppercase;
+        }
+
+        .generali-block ol.main-list {
+            list-style-type: decimal;
+            padding-left: 20px;
+            font-weight: 700;
+            color: var(--generali-red);
+        }
+
+        .generali-block ol.main-list > li {
+            margin-bottom: 25px;
+        }
+
+        .generali-block ol.main-list > li > span {
+            font-weight: 400;
+            color: var(--generali-dark);
+            display: block;
+            margin-top: 8px;
+        }
+
+        .generali-sublist {
+            list-style-type: none;
+            padding-left: 0;
+            counter-reset: subitem;
+            margin-top: 10px;
+            font-weight: 400;
+            color: var(--generali-dark);
+        }
+
+        .generali-sublist > li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .generali-sublist > li::before {
+            counter-increment: subitem;
+            content: counter(subitem) ")";
+            position: absolute;
+            left: 0;
+            font-weight: 600;
+        }
+
+        .generali-footer {
+            font-size: 10px;
+            color: #888;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+            margin-top: 40px;
+            text-align: justify;
+            line-height: 1.4;
+        }
+
+        .generali-footer-code {
+            font-weight: bold;
+            text-align: right;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+
+        @media (max-width: 768px) {
+            .info-grid { grid-template-columns: 1fr; }
+            .document-container { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="document-container">
+    
+    <div class="ovb-section">
+        <!-- ========================================== -->
+        <!-- CZĘŚĆ 1: DANE AGENTA UBEZPIECZENIOWEGO -->
+        <!-- ========================================== -->
+        <h1>Dane agenta ubezpieczeniowego</h1>
+
+        <div class="info-grid">
+            <!-- Dane Agenta -->
+            <div class="info-card">
+                <h4><span class="material-icons-outlined" style="vertical-align: middle; margin-right: 5px; font-size: 18px;">person</span> Osoba wykonująca czynności agencyjne</h4>
+                <p>
+                    <strong id="agent-name">{{ imie_i_nazwisko_agenta }}</strong><br>
+                    Numer pracownika: <span id="agent-id">{{ numer_pracownika }}</span><br>
+                    Numer KNF: <span id="agent-knf">{{ numer_knf_agenta }}</span>
+                </p>
+            </div>
+
+            <!-- Dane Firmy -->
+            <div class="info-card">
+                <h4><span class="material-icons-outlined" style="vertical-align: middle; margin-right: 5px; font-size: 18px;">business</span> Agent Ubezpieczeniowy</h4>
+                <p>
+                    <strong>OVB Allfinanz Polska Spółka Finansowa Sp. z o.o.</strong><br>
+                    ul. Mierosławskiego 11A<br>
+                    01-527 Warszawa<br>
+                    tel. 22 576 35 35
+                </p>
+                <p style="font-size: 13px; margin-bottom: 0;">
+                    <strong>KRS:</strong> 0000022449 (Sąd Rejonowy dla m.st. Warszawy XII Wydział Gospodarczy)<br>
+                    <strong>NIP:</strong> 522-10-12-197<br>
+                    <strong>Kapitał Zakładowy:</strong> 1 120 580,00 PLN (w całości opłacony)<br>
+                    <strong>Nr KNF agenta:</strong> 11121476/A
+                </p>
+            </div>
+        </div>
+
+        <h2><span class="material-icons-outlined">handshake</span> Współpracujące towarzystwa ubezpieczeniowe</h2>
+        <p>OVB Allfinanz Polska Spółka Finansowa Sp. z o.o. (Agent) działa na rzecz następujących towarzystw ubezpieczeniowych:</p>
+        <p style="font-size: 13px; line-height: 1.8;">
+            Sopockie Towarzystwo Ubezpieczeń na Życie ERGO Hestia S.A., Towarzystwo Ubezpieczeń i Reasekuracji Allianz Polska S.A., Compensa Towarzystwo Ubezpieczeń S.A., Vienna Life Towarzystwo Ubezpieczeń na Życie S.A., Generali T.U. S.A., Generali Życie T.U. S.A., Compensa Towarzystwo Ubezpieczeń S.A. (marka Wiener), Sopockie Towarzystwo Ubezpieczeń ERGO Hestia S.A., Leadenhall Insurance S.A., Nationale-Nederlanden Towarzystwo Ubezpieczeń na Życie Spółka Akcyjna, Prudential International Assurance plc Spółka Akcyjna Oddział w Polsce, Powszechny Zakład Ubezpieczeń Spółka Akcyjna, SIGNAL IDUNA Życie Polska Towarzystwo Ubezpieczeń S.A., SIGNAL IDUNA Polska Towarzystwo Ubezpieczeń S.A., UNIQA TU na Życie S.A., UNIQA TU S.A., TUiR WARTA S.A.
+        </p>
+
+        <div class="highlight-box">
+            <strong>Wynagrodzenie i kapitał:</strong><br>
+            Wynagrodzenie agenta ubezpieczeniowego otrzymywane w związku z proponowanym zawarciem umowy ubezpieczenia lub umowy gwarancji ubezpieczeniowej jest uwzględnione w kwocie składki ubezpieczeniowej i płatne agentowi ubezpieczeniowemu bezpośrednio przez towarzystwo ubezpieczeniowe.<br><br>
+            OVB Allfinanz Polska Spółka Finansowa Sp. z o.o. nie posiada żadnych akcji albo udziałów w Towarzystwach Ubezpieczeniowych, uprawniających co najmniej do 10% głosów na walnym Zgromadzeniu oraz Towarzystwa Ubezpieczeniowe nie posiadają żadnych akcji ani udziałów w OVB Allfinanz Polska Spółka Finansowa Sp. z o. o.
+        </div>
+
+        <div class="alert-box">
+            <span class="material-icons-outlined" style="vertical-align: middle; margin-right: 5px;">warning</span>
+            <strong>Ważna informacja o płatnościach:</strong><br>
+            Agent ubezpieczeniowy oraz osoby wykonujące czynności agencyjne nie przyjmują od klientów żadnych środków pieniężnych z tytułu składek ubezpieczeniowych ani nie pośredniczą w ich przekazywaniu do właściwego towarzystwa ubezpieczeń. Wszelkie płatności powinny być dokonywane bezpośrednio na rachunek bankowy właściwego towarzystwa ubezpieczeń.
+        </div>
+
+        <h2><span class="material-icons-outlined">gavel</span> Reklamacje i rozwiązywanie sporów</h2>
+        <p>Klient ma w każdym momencie możliwość złożenia reklamacji, wniesienia skargi oraz pozasądowego rozwiązywania sporów.</p>
+        
+        <p><strong>Reklamacja może być złożona:</strong></p>
+        <ol>
+            <li><strong>na piśmie w postaci papierowej</strong> w każdy przedstawiony poniżej sposób: złożona osobiście w siedzibie OVB - ul. Mierosławskiego 11A, 01-527 Warszawa albo przekazana osobiście każdemu współpracownikowi OVB obsługującemu klientów albo wysłana przesyłką pocztową lub nadana w placówce podmiotu zajmującego się doręczaniem korespondencji na terenie Unii Europejskiej na adres siedziby OVB- ul. Mierosławskiego 11A, 01-527 Warszawa, albo</li>
+            <li><strong>na piśmie w postaci elektronicznej:</strong> przesłana na adres email: <a href="mailto:compliance@hq.ovb.com.pl" style="color:var(--ovb-teal);">compliance@hq.ovb.com.pl</a> albo wysłana na adres do doręczeń elektronicznych: AE:PL-80751-36603-WTJDD-27;</li>
+            <li><strong>ustnie, w następujący sposób:</strong> telefonicznie do protokołu pod numerem 22 576 35 35 albo osobiście do protokołu podczas wizyty w siedzibie OVB ul. Mierosławskiego 11A, 01-527 Warszawa, albo osobiście do protokołu przekazana każdemu współpracownikowi OVB obsługującemu klientów.</li>
+        </ol>
+
+        <p><strong>Rozpatrywanie reklamacji:</strong></p>
+        <p>Odpowiedź na Reklamację udzielana jest bez zbędnej zwłoki, jednak <strong>nie później niż w terminie 30 dni</strong> od daty otrzymania Reklamacji. W szczególnie skomplikowanych przypadkach, uniemożliwiających rozpatrzenie Reklamacji i udzielenie odpowiedzi w terminie określonym powyżej, Klient zostanie poinformowany o przyczynie opóźnienia, zostaną wskazane okoliczności potrzebne do rozpatrzenia Reklamacji i określimy przewidywany termin jej rozpatrzenia i udzielenia odpowiedzi. Termin ten nie może przekroczyć 60 dni licząc od dnia otrzymania Reklamacji.</p>
+
+        <p><strong>Odpowiedź na Reklamację udzielana jest:</strong></p>
+        <ol>
+            <li><strong>w postaci elektronicznej</strong> – w przypadku gdy Reklamacja została złożona przez klienta na piśmie w postaci elektronicznej, chyba że klient wniósł o udzielenie odpowiedzi na piśmie w postaci papierowej:
+                <ul style="margin-top: 5px;">
+                    <li>z wykorzystaniem środka komunikacji elektronicznej albo innego wskazanego przez Klienta środka komunikacji elektronicznej – w przypadku, gdy Reklamacja została złożona przez klienta z wykorzystaniem środka komunikacji elektronicznej;</li>
+                    <li>na adres klienta do doręczeń elektronicznych, o którym mowa w art. 2 pkt 1 ustawy z dnia 18 listopada 2020 r. o doręczeniach elektronicznych, wpisany do bazy adresów elektronicznych, o której mowa w art. 25 tej ustawy – w przypadku gdy reklamacja została wysłana przez klienta na adres do doręczeń elektronicznych.</li>
+                </ul>
+            </li>
+            <li><strong>w postaci papierowej</strong> – w przypadku gdy Reklamacja została złożona przez klienta na piśmie w postaci papierowej, chyba że klient wniósł o udzielenie odpowiedzi na piśmie w postaci elektronicznej;</li>
+            <li><strong>w postaci papierowej albo elektronicznej</strong>, zgodnie z wnioskiem klienta – w przypadku gdy Reklamacja została złożona przez klienta ustnie.</li>
+        </ol>
+
+        <h2><span class="material-icons-outlined">verified</span> Weryfikacja w rejestrze KNF</h2>
+        <p>Sposób sprawdzenia wpisu do rejestru Komisji Nadzoru Finansowego (KNF) agenta ubezpieczeniowego lub osoby wykonującej czynności agencyjne. Sprawdzenia należy dokonać na stronie <strong>WWW.KNF.GOV.PL</strong>. W wyszukiwarce Rejestru Agentów Ubezpieczeniowych proszę podać co najmniej dwa parametry do wyszukania osoby wykonującej czynności agencyjne lub agenta ubezpieczeniowego (np. imię i nazwisko, nazwę firmy i miejscowość) i sprawdzenia jego statusu.</p>
+        
+        <p>Aby sprawdzić status osoby wykonującej czynności agencyjne lub agenta ubezpieczeniowego proszę kliknąć w jeden z poniższych linków:</p>
+        
+        <div class="knf-links">
+            <a href="https://rpu.knf.gov.pl/" target="_blank">
+                <span class="material-icons-outlined">search</span> Sprawdzenie osoby wykonującej czynności agencyjne w bazie KNF
+            </a>
+            <a href="https://rpu.knf.gov.pl/" target="_blank">
+                <span class="material-icons-outlined">search</span> Sprawdzenie agenta ubezpieczeniowego w bazie KNF
+            </a>
+        </div>
+
+        <hr class="section-separator">
+
+        <!-- ========================================== -->
+        <!-- CZĘŚĆ 2: KLAUZULA RODO OVB/SKFC -->
+        <!-- ========================================== -->
+        <div class="rodo-block">
+            <h1>INFORMACJA O PRZETWARZANIU DANYCH OSOBOWYCH (RODO) – WERSJA PEŁNA (art. 13 RODO)</h1>
+            <p style="font-weight: 600; color: var(--ovb-blue);">Dotyczy przystąpienia i obsługi Umowy grupowego ubezpieczenia na życie CERTUM 10 (Polisa nr 90000785745).</p>
+
+            <h3>1) ADMINISTRATORZY DANYCH I KONTAKT</h3>
+            <p>W zależności od celu przetwarzania administratorami Twoich danych osobowych są:</p>
+            
+            <div class="admin-cards">
+                <div class="info-card">
+                    <h4 style="color: var(--ovb-teal);">A) Generali Życie Towarzystwo Ubezpieczeń S.A. („Generali”)</h4>
+                    <p><strong>Adres:</strong> ul. Senatorska 18, 00-082 Warszawa<br>
+                    <strong>Kontakt w sprawach danych:</strong> <a href="mailto:iod@generali.pl" style="color:var(--ovb-teal);">iod@generali.pl</a><br>
+                    <strong>Rola:</strong> administrator danych w zakresie zawarcia i wykonywania umowy ubezpieczenia, oceny ryzyka ubezpieczeniowego, obsługi roszczeń i wypłaty świadczeń (w tym przetwarzania danych o zdrowiu).</p>
+                </div>
+                <div class="info-card">
+                    <h4 style="color: var(--ovb-teal);">B) Stowarzyszenie Klientów Finance Club („Stowarzyszenie”) – Ubezpieczający</h4>
+                    <p><strong>Adres:</strong> ul. Chrzanowskiego 19/13, 41-902 Bytom<br>
+                    <strong>Kontakt w sprawach danych:</strong> <a href="mailto:rodo@financeclub.pl" style="color:var(--ovb-teal);">rodo@financeclub.pl</a><br>
+                    <strong>Rola:</strong> administrator danych w zakresie prowadzenia Grupy Otwartej/członkostwa honorowego oraz administrowania umową grupową (obsługa przystąpień, zmian, składek, statusu ochrony, komunikacji organizacyjnej, przechowywanie dokumentacji zgodnie z zasadami umowy/OWU). Stowarzyszenie nie jest agentem ubezpieczeniowym.</p>
+                </div>
+                <div class="info-card">
+                    <h4 style="color: var(--ovb-teal);">C) OVB Allfinanz Polska Spółka Finansowa Sp. z o.o. („OVB”)</h4>
+                    <p><strong>Adres:</strong> ul. Mierosławskiego 11A, 01-527 Warszawa<br>
+                    <strong>Kontakt w sprawach danych:</strong> <a href="mailto:dane.osobowe@ovb.com.pl" style="color:var(--ovb-teal);">dane.osobowe@ovb.com.pl</a><br>
+                    <strong>Rola:</strong> przetwarzanie danych w zakresie niezbędnym do realizacji obowiązków wynikających z przepisów o dystrybucji ubezpieczeń oraz rozliczeń. OVB nie otrzymuje danych o zdrowiu ani odpowiedzi na pytania medyczne.</p>
+                </div>
+            </div>
+
+            <h3>2) KATEGORIE DANYCH, KTÓRE PRZETWARZAMY</h3>
+            <p>W zależności od etapu i celu przetwarzania mogą to być m.in.:</p>
+            <ul>
+                <li><strong>a) dane identyfikacyjne:</strong> imię, nazwisko, PESEL lub data urodzenia, adres;</li>
+                <li><strong>b) dane kontaktowe:</strong> telefon, e-mail;</li>
+                <li><strong>c) dane związane z przystąpieniem i ochroną:</strong> numer deklaracji/wniosku, data przystąpienia, podgrupa/pakiet, suma ubezpieczenia, składka, status ochrony, historia zmian;</li>
+                <li><strong>d) dane dotyczące obsługi świadczeń/roszczeń:</strong> informacje o zdarzeniach ubezpieczeniowych i dokumentacja niezbędna do ich obsługi (jeśli dotyczy);</li>
+                <li><strong>e) dane o zdrowiu (szczególna kategoria danych):</strong> wyłącznie w zakresie wymaganym do oceny ryzyka i obsługi roszczeń – przetwarzane przez Generali zgodnie z przepisami i udzielonymi oświadczeniami/zgodami wymaganymi przez ubezpieczyciela.</li>
+            </ul>
+            <div class="alert-box">
+                <span class="material-icons-outlined" style="vertical-align: middle; margin-right: 5px;">security</span>
+                <strong>Uwaga:</strong> OVB oraz poszczególni doradcy nie mają dostępu do odpowiedzi medycznych ani dokumentacji medycznej.
+            </div>
+
+            <!-- Reszta sekcji OVB/RODO skrócona wizualnie w kodzie, ale zawartość pełna -->
+            <h3>3) ŹRÓDŁO DANYCH I PRZEPŁYW DANYCH</h3>
+            <p>Dane pochodzą bezpośrednio od Ciebie (np. deklaracja przystąpienia/zmiany, kontakt e-mail/telefon, formularz).</p>
+            <p>Dane mogą być wprowadzane w aplikacji Doradca.pro i przekazywane do Generali za pośrednictwem interfejsu API w celu zawarcia i obsługi ubezpieczenia. Kopie dokumentów i odpowiedzi na pytania medyczne są przechowywane na serwerach zlokalizowanych w Polsce, zgodnie z zasadami umowy administrowania oraz OWU.</p>
+
+            <h3>4) CELE I PODSTAWY PRAWNE PRZETWARZANIA (art. 6 i 9 RODO)</h3>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li style="margin-bottom: 15px;"><strong>4.1 Zawarcie i wykonywanie umowy ubezpieczenia / umowy grupowej</strong> (obsługa przystąpień, zmian, składek, statusu ochrony, komunikacji organizacyjnej)<br>
+                <span style="color:#666;">Podstawa: art. 6 ust. 1 lit. b RODO (niezbędność do wykonania umowy / działania przed zawarciem).</span></li>
+                <li style="margin-bottom: 15px;"><strong>4.2 Wypełnianie obowiązków prawnych</strong> (np. obowiązki regulacyjne, rachunkowe, rozliczeniowe; AML/PEP – jeśli dotyczy)<br>
+                <span style="color:#666;">Podstawa: art. 6 ust. 1 lit. c RODO (obowiązek prawny).</span></li>
+                <li style="margin-bottom: 15px;"><strong>4.3 Prawnie uzasadniony interes administratorów</strong><br>
+                Dotyczy m.in.: zapewnienia bezpieczeństwa procesu, zapobiegania nadużyciom, prowadzenia analiz jakości/ryzyka operacyjnego, archiwizacji i audytowalności procesu, ustalania, dochodzenia lub obrony roszczeń.<br>
+                <span style="color:#666;">Podstawa: art. 6 ust. 1 lit. f RODO (uzasadniony interes).</span></li>
+                <li style="margin-bottom: 15px;"><strong>4.4 Marketing i edukacja (Generali / Stowarzyszenie / OVB) – tylko po Twojej zgodzie</strong><br>
+                Dotyczy wysyłki informacji promocyjnych/ofert i materiałów edukacyjnych, jeśli zaznaczysz odpowiednie checkboxy. Zgody mogą dotyczyć kanałów: e-mail, telefon (w tym SMS/RCS), komunikatory internetowe (np. WhatsApp/Messenger/Instagram) oraz automatyzacje obsługujące te kanały (np. chatboty/rozwiązania typu ManyChat) – zgodnie z ustawieniami prywatności danego komunikatora.<br>
+                <span style="color:#666;">Podstawa: art. 6 ust. 1 lit. a RODO (zgoda).</span></li>
+                <li style="margin-bottom: 15px;"><strong>4.5 Dane o zdrowiu (szczególna kategoria danych) – w związku z ubezpieczeniem</strong><br>
+                Dane o zdrowiu przetwarza Generali wyłącznie w zakresie niezbędnym do oceny ryzyka i obsługi roszczeń.<br>
+                <span style="color:#666;">Podstawa: art. 9 ust. 2 RODO – w szczególności zgoda udzielona w treści zgody medycznej wymaganej przez ubezpieczyciela oraz właściwe przepisy dotyczące działalności ubezpieczeniowej.</span></li>
+            </ul>
+
+            <h3>5) ODBIORCY DANYCH (KTO MOŻE OTRZYMAĆ DANE)</h3>
+            <p>Twoje dane mogą być ujawniane:</p>
+            <ul>
+                <li><strong>a) Generali</strong> – jako ubezpieczyciel (zawarcie/obsługa umowy, roszczenia);</li>
+                <li><strong>b) Stowarzyszeniu</strong> – jako Ubezpieczającemu (administrowanie umową grupową);</li>
+                <li><strong>c) OVB</strong> – wyłącznie w zakresie niezbędnym do dystrybucji/rozliczeń (bez danych o zdrowiu);</li>
+                <li><strong>d) podmiotom przetwarzającym</strong> działającym na zlecenie administratorów (np. dostawcy IT/hostingu, systemy formularzy, wsparcie techniczne), w tym Doradca.pro – na podstawie umów powierzenia;</li>
+                <li><strong>e) podmiotom uprawnionym</strong> na podstawie przepisów prawa (np. organy/instytucje uprawnione);</li>
+                <li><strong>f) w zakresie danych o zdrowiu</strong> – podmiotom wykonującym działalność leczniczą i NFZ, w zakresie wskazanym w zgodach wymaganych przez Generali i przepisach.</li>
+            </ul>
+
+            <h3>6) PRZEKAZYWANIE DANYCH POZA UE/EOG</h3>
+            <p>Co do zasady dane są przetwarzane w Polsce lub na terenie UE/EOG. Jeżeli wyjątkowo dojdzie do przekazania danych poza UE/EOG (np. w związku z usługami IT lub kanałami komunikacji), nastąpi to wyłącznie zgodnie z RODO i z zastosowaniem odpowiednich zabezpieczeń (np. standardowe klauzule umowne UE). Informacje o zabezpieczeniach możesz uzyskać, kontaktując się z właściwym administratorem.</p>
+
+            <h3>7) OKRES PRZECHOWYWANIA DANYCH (RETENCJA)</h3>
+            <p>Kopie deklaracji oraz dokumenty związane z przystąpieniem i wykonywaniem umowy są przechowywane przez 12 lat od dnia przystąpienia/zawarcia, a następnie mogą zostać zniszczone, chyba że:</p>
+            <ul>
+                <li>dłuższe przechowywanie jest wymagane przepisami prawa, lub</li>
+                <li>jest konieczne do ustalenia, dochodzenia lub obrony roszczeń.</li>
+            </ul>
+            <p>Stowarzyszenie przechowuje oryginały deklaracji przystąpienia przez 12 lat oraz udostępnia je na wniosek Generali.</p>
+
+            <div class="highlight-box">
+                <h3>8) CZY PODANIE DANYCH JEST OBOWIĄZKOWE?</h3>
+                Podanie danych jest <strong>dobrowolne, ale niezbędne</strong> do przystąpienia do umowy i uzyskania ochrony ubezpieczeniowej. Brak podania danych uniemożliwi objęcie ochroną.<br><br>
+                Zgody marketingowe są dobrowolne – brak zgody nie wpływa na możliwość objęcia ochroną.
+            </div>
+
+            <h3>9) TWOJE PRAWA (art. 15–22 RODO)</h3>
+            <p>Masz prawo do:</p>
+            <ul>
+                <li><strong>a)</strong> dostępu do danych (art. 15),</li>
+                <li><strong>b)</strong> sprostowania danych (art. 16),</li>
+                <li><strong>c)</strong> usunięcia danych – w zakresie, w jakim przepisy pozwalają (art. 17),</li>
+                <li><strong>d)</strong> ograniczenia przetwarzania (art. 18),</li>
+                <li><strong>e)</strong> przenoszenia danych – gdy ma zastosowanie (art. 20),</li>
+                <li><strong>f)</strong> sprzeciwu wobec przetwarzania opartego o uzasadniony interes (art. 21),</li>
+                <li><strong>g)</strong> wycofania zgody w dowolnym momencie (dotyczy zgód marketingowych; wycofanie nie wpływa na zgodność przetwarzania przed wycofaniem),</li>
+                <li><strong>h)</strong> wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych (PUODO).</li>
+            </ul>
+
+            <h3>10) PROFILOWANIE / ZAUTOMATYZOWANE PODEJMOWANIE DECYZJI</h3>
+            <p>Generali może stosować (w dopuszczalnym zakresie) zautomatyzowaną ocenę ryzyka ubezpieczeniowego, co może wpływać na możliwość przystąpienia do określonego zakresu ochrony lub warunków ochrony. Jeśli chcesz uzyskać dodatkowe informacje w tym zakresie – skontaktuj się z Generali.</p>
+
+            <h3>11) JAK WYCOFAĆ ZGODY MARKETINGOWE?</h3>
+            <p>Zgody marketingowe możesz wycofać w dowolnym momencie, kontaktując się z właściwym administratorem:</p>
+            <ul>
+                <li><strong>Stowarzyszenie:</strong> <a href="mailto:rodo@financeclub.pl" style="color:var(--ovb-teal);">rodo@financeclub.pl</a></li>
+                <li><strong>OVB:</strong> <a href="mailto:dane.osobowe@ovb.com.pl" style="color:var(--ovb-teal);">dane.osobowe@ovb.com.pl</a></li>
+                <li><strong>Generali:</strong> <a href="mailto:iod@generali.pl" style="color:var(--ovb-teal);">iod@generali.pl</a></li>
+            </ul>
+
+            <h3>12) REKLAMACJE / SKARGI – INFORMACJA DLA KLIENTA (DOTYCZY GENERALI I OVB)</h3>
+            <p><strong>12.1 Do kogo złożyć reklamację?</strong><br>
+            Reklamację składasz do podmiotu, którego działania dotyczy sprawa:</p>
+            <ul>
+                <li><strong>A) Generali</strong> – gdy reklamacja dotyczy ubezpieczenia (ochrona, zakres, składka, roszczenia/świadczenia, decyzje i obsługa umowy ubezpieczenia).</li>
+                <li><strong>B) OVB</strong> – gdy reklamacja dotyczy dystrybucji (pośrednictwa), obsługi sprzedażowej, sposobu przedstawienia oferty lub kontaktu marketingowego realizowanego przez OVB.</li>
+            </ul>
+
+            <p><strong>12.2 Jak złożyć reklamację?</strong><br>
+            <strong>Generali</strong> – kanały zgodnie z aktualną informacją Generali (np. formularz online, telefon, poczta, e-Doręczenia, osobiście).<br>
+            <strong>OVB</strong> – przykładowe kanały: u agenta (pisemnie lub ustnie do protokołu), pocztą na adres siedziby, e-mail: <a href="mailto:compliance@hq.ovb.com.pl" style="color:var(--ovb-teal);">compliance@hq.ovb.com.pl</a>.</p>
+
+            <p><strong>12.3 Termin odpowiedzi</strong><br>
+            Odpowiedź na reklamację udzielana jest bez zbędnej zwłoki, co do zasady w terminie 30 dni od dnia otrzymania reklamacji. W sprawach szczególnie skomplikowanych termin może zostać wydłużony – maksymalnie do 60 dni – wraz z informacją o przyczynach opóźnienia i przewidywanym terminie odpowiedzi.</p>
+
+            <p><strong>12.4 Co zawiera odpowiedź?</strong><br>
+            Odpowiedź powinna zawierać rozstrzygnięcie oraz uzasadnienie faktyczne i prawne, a w razie nieuwzględnienia roszczeń – informację o możliwych dalszych krokach.</p>
+
+            <p><strong>12.5 Dalsze możliwości</strong><br>
+            Jeżeli nie zgadzasz się z odpowiedzią, możesz skorzystać z pomocy Rzecznika Finansowego (co do zasady po złożeniu reklamacji i otrzymaniu odpowiedzi) oraz dochodzić roszczeń na drodze sądowej.</p>
+
+            <p><strong>12.6 Dane osobowe w reklamacji</strong><br>
+            W związku z przyjęciem i rozpatrzeniem reklamacji Generali lub OVB mogą przetwarzać Twoje dane osobowe w zakresie niezbędnym do identyfikacji sprawy, udzielenia odpowiedzi i udokumentowania przebiegu reklamacji. Podstawą przetwarzania jest w szczególności obowiązek prawny oraz/lub prawnie uzasadniony interes (obsługa reklamacji, obrona przed roszczeniami).</p>
+
+        </div>
+    </div> <!-- /ovb-section -->
+
+    <hr class="section-separator page-break">
+
+    <!-- ========================================== -->
+    <!-- CZĘŚĆ 3: KLAUZULA GENERALI (STYLIZOWANA) -->
+    <!-- ========================================== -->
+    <div class="generali-block">
+        <div class="generali-header-container">
+            <div class="generali-logo">GENERALI</div>
+            <div class="generali-title">INFORMACJA O PRZETWARZANIU DANYCH OSOBOWYCH</div>
+        </div>
+
+        <ol class="main-list">
+            <li>Kto jest administratorem Twoich danych osobowych
+                <span>My. Generali Życie Towarzystwo Ubezpieczeń S.A. jesteśmy administratorem Twoich danych osobowych. Możesz się z nami skontaktować:
+                    <ul class="generali-sublist">
+                        <li>listownie, wysyłając pismo na adres naszej siedziby: ul. Senatorska 18, 00-082 Warszawa;</li>
+                        <li>za pośrednictwem poczty elektronicznej, na adres e-mail: centrumklienta@generali.pl;</li>
+                        <li>telefonicznie, pod numerem: 913 913 913.</li>
+                    </ul>
+                </span>
+            </li>
+
+            <li>Jak możesz skontaktować się z Inspektorem Ochrony Danych
+                <span>Wyznaczyliśmy Inspektora Ochrony Danych, z którym możesz się skontaktować we wszelkich sprawach dotyczących ochrony danych osobowych wysyłając e-mail na adres: iod@generali.pl lub listownie, wysyłając pismo na adres naszej siedziby.</span>
+            </li>
+
+            <li>W jakich celach i na jakiej podstawie przetwarzamy Twoje dane
+                <span>Przetwarzamy Twoje dane osobowe w celu:
+                    <ul class="generali-sublist">
+                        <li>podjęcia działań przed zawarciem umowy (np. przygotowania oferty), zawarcia lub przystąpienia oraz wykonania umowy ubezpieczenia;</li>
+                        <li>oceny ryzyka ubezpieczeniowego, na podstawie obowiązku wynikającego z przepisów ustawy o działalności ubezpieczeniowej i reasekuracyjnej;</li>
+                        <li>wypełnienia ciążących na nas prawnych obowiązków, w sytuacji gdy znajdują zastosowanie przepisy o przeciwdziałaniu praniu pieniędzy i finansowaniu terroryzmu oraz w celu weryfikacji list sankcyjnych;</li>
+                        <li>wypełnienia ciążących na nas prawnych obowiązków, w sytuacji gdy znajdują zastosowanie przepisy o wykonywaniu międzynarodowych obowiązków podatkowych oraz wdrożenia ustawodawstwa FATCA;</li>
+                        <li>wypełnienia ciążących na nas prawnych obowiązków, w sytuacji gdy znajdują zastosowanie przepisy o wymianie informacji podatkowych z innymi państwami;</li>
+                        <li>rozpatrywania reklamacji, zgodnie z przepisami o rozpatrywaniu reklamacji przez podmioty rynku finansowego;</li>
+                        <li>statystycznym w związku z ustalaniem odpowiedniej wysokości składek ubezpieczeniowych, składek reasekuracyjnych, rezerw techniczno-ubezpieczeniowych dla celów wypłacalności i rezerw techniczno-ubezpieczeniowych dla celów rachunkowości co w odniesieniu do danych zwykłych, stanowi nasz prawnie uzasadniony interes, w zakresie przewidzianym przepisami ustawy o działalności ubezpieczeniowej i reasekuracyjnej;</li>
+                        <li>podejmowania czynności związanych z przeciwdziałaniem przestępstwom ubezpieczeniowym, w tym oceny zgłoszeń szkód ubezpieczeniowych pod kątem potencjalnych przestępstw, będącym realizacją naszego prawnie uzasadnionego interesu polegającego na zapobieganiu przestępstwom ubezpieczeniowym oraz obronie przed nadużyciami;</li>
+                        <li>analitycznym (doboru usług do potrzeb naszych klientów, optymalizacji naszych produktów w oparciu także o Twoje uwagi na ich temat i Twoje zainteresowanie) będącym realizacją naszego prawnie uzasadnionego interesu polegającego na doskonaleniu jakości naszych produktów i świadczonych usług;</li>
+                        <li>reasekuracji ryzyk będącym realizacją naszego prawnie uzasadnionego interesu polegającego na zmniejszeniu ryzyka ubezpieczeniowego;</li>
+                        <li>badania satysfakcji klientów będącym realizacją naszego prawnie uzasadnionego interesu polegającego na określaniu jakości naszej obsługi oraz poziomu zadowolenia naszych klientów z produktów i usług;</li>
+                        <li>wykonywania umowy o udział w programie lojalnościowym, w tym oferowania Ci przez nas zniżek w ramach takich programów, zgodnie z regulaminem, jeśli zdecydujesz się wziąć udział w programie lojalnościowym;</li>
+                        <li>ewentualnego ustalenia, dochodzenia lub obrony przed roszczeniami będącym realizacją naszego prawnie uzasadnionego interesu;</li>
+                        <li>oferowania produktów i usług podmiotów należących do Grupy Generali w Polsce (marketing bezpośredni), co stanowi realizację naszego prawnie uzasadnionego interesu polegającego na dostarczaniu zamówionej informacji handlowej. Obejmuje to także dostarczanie informacji o produktach i usługach innych podmiotów z Grupy Generali oraz jej dostosowanie do tego co uznamy za odpowiadające Twoim potrzebom i indywidualnym uwarunkowaniom, w oparciu o Twój profil;</li>
+                        <li>wypełnienia obowiązków prawnych wynikających z właściwych przepisów podatkowych i rachunkowych.</li>
+                    </ul>
+                </span>
+            </li>
+
+            <li>Jakie prawa przysługują Ci w związku z przetwarzaniem Twoich danych
+                <span>Przysługują Ci następujące uprawnienia:
+                    <ul class="generali-sublist">
+                        <li>prawo do wycofania zgody (tam, gdzie podstawą prawną przetwarzania jest zgoda) w dowolnym momencie. Wycofanie przez Ciebie zgody nie będzie jednak mieć wpływu na zgodność z prawem przetwarzania dokonanego przed jej wycofaniem;</li>
+                        <li>prawo dostępu do Twoich danych oraz otrzymania ich kopii;</li>
+                        <li>prawo sprostowania Twoich danych;</li>
+                        <li>prawo usunięcia lub ograniczenia przetwarzania danych;</li>
+                        <li>prawo do wniesienia sprzeciwu wobec przetwarzania danych, mającego za podstawę nasz prawnie uzasadniony interes;</li>
+                        <li>prawo przenoszenia danych;</li>
+                        <li>prawo wniesienia skargi do organu nadzorczego (w Polsce jest nim Prezes Urzędu Ochrony Danych Osobowych z siedzibą przy ul. Stawki 2, 00-193 Warszawa).</li>
+                    </ul>
+                </span>
+            </li>
+
+            <li>Komu przekazujemy Twoje dane
+                <span>
+                    <ul class="generali-sublist">
+                        <li>Twoje dane osobowe możemy ujawnić naszym podwykonawcom (podmiotom przetwarzającym) np. firmom zajmującym się likwidacją szkód, firmom informatycznym, księgowym, prawniczym, agentom ubezpieczeniowym z którymi współpracujemy.</li>
+                        <li>Twoje dane osobowe możemy przekazać podmiotom należącym do Globalnej Grupy Generali, w związku z wymianą informacji pomiędzy tymi podmiotami, w myśl przepisów o przeciwdziałaniu praniu pieniędzy i finansowaniu terroryzmu (aktualna lista podmiotów jest dostępna na www.generali.pl/global).</li>
+                        <li>Twoje dane osobowe możemy przekazać zakładom reasekuracji, operatorom pocztowym, podmiotom świadczącym usługi płatnicze, a także uprawnionym do tego organom lub instytucjom zgodnie z obowiązującymi przepisami prawa.</li>
+                        <li>Ponadto, jeśli wyrazisz na to zgodę, Twoje dane zostaną ujawnione innym podmiotom należącym do Grupy Generali w Polsce (Generali T.U. S.A., Generali Finance Sp. z o.o., Generali DFE zarządzany i reprezentowany przez Generali PTE S.A., Generali Investments TFI S.A.) i będą przetwarzane przez te podmioty w ich własnych celach marketingowych. Więcej na ten temat w punkcie 11. tej Informacji.</li>
+                    </ul>
+                </span>
+            </li>
+
+            <li>Jak długo będziemy przechowywać Twoje dane
+                <span>Długość okresu przechowywania przez nas Twoich danych osobowych zależy od celu przetwarzania oraz przepisów, które stanowią podstawę prawną przetwarzania. Twoje dane będziemy przechowywać:
+                    <ul class="generali-sublist">
+                        <li>gdy podstawą przetwarzania jest zgoda – do momentu wycofania zgody;</li>
+                        <li>gdy podstawą przetwarzania jest umowa – do momentu przedawnienia roszczeń z tytułu umowy;</li>
+                        <li>gdy podstawą przetwarzania jest ciążący na nas obowiązek prawny – przez okres wynikający z przepisów regulujących obowiązek przetwarzania przez nas danych;</li>
+                        <li>gdy podstawą przetwarzania jest prawnie uzasadniony interes i/lub uprawnienie wynikające z przepisów prawa – przez okres umożliwiający realizację tego interesu i/lub uprawnienia lub do momentu zgłoszenia skutecznego sprzeciwu wobec przetwarzania.</li>
+                    </ul>
+                </span>
+            </li>
+
+            <li>Czy podanie Twoich danych jest obowiązkowe
+                <span>
+                    <ul class="generali-sublist">
+                        <li>Podanie danych osobowych w związku z zawieraną umową jest niezbędne w celu dokonania oceny ryzyka ubezpieczeniowego oraz zawarcia i wykonywania umowy ubezpieczenia. Bez podania danych osobowych nie jest możliwe zawarcie umowy ubezpieczenia.</li>
+                        <li>Podanie danych osobowych w celach marketingowych jest dobrowolne.</li>
+                    </ul>
+                </span>
+            </li>
+
+            <li>Do jakich państw przekazujemy Twoje dane
+                <span>
+                    <ul class="generali-sublist">
+                        <li>Twoje dane osobowe przetwarzamy w Polsce lub w innych państwach tworzących Europejski Obszar Gospodarczy (EOG), w których swoje siedziby posiadają nasi partnerzy (np. dostawcy usług IT).</li>
+                        <li>Twoje dane osobowe przekazujemy do państw poza EOG m.in. w związku z badaniem satysfakcji klientów, podnoszeniem jakości naszych produktów, świadczeniem usług przez firmy informatyczne lub wymianą informacji między podmiotami z Globalnej Grupy Generali w myśl przepisów o przeciwdziałaniu praniu pieniędzy i finansowaniu terroryzmu. Przetwarzamy Twoje dane poza EOG tylko w sytuacji, gdy jest to konieczne, a odbiorcy Twoich danych zapewniają odpowiedni stopień ich ochrony. W tym celu stosujemy odpowiednie zabezpieczenia takie jak: standardowe klauzule umowne wydane przez Komisję Europejską, wiążące reguły korporacyjne, współpraca z podmiotami przetwarzającymi dane w państwach, w odniesieniu do których została wydana stosowna decyzja Komisji Europejskiej. Przysługuje Ci prawo uzyskania kopii tych zabezpieczeń, z którego możesz skorzystać kontaktując się z nami.</li>
+                    </ul>
+                </span>
+            </li>
+
+            <li>Jakie Twoje dane przetwarzamy i z jakich źródeł je pozyskujemy
+                <span>W przypadku niektórych produktów ubezpieczeniowych pozyskujemy Twoje dane osobowe od podmiotów trzecich, tj. od:
+                    <ul class="generali-sublist">
+                        <li>innych ubezpieczycieli i podmiotów świadczących usługi lecznicze oraz Narodowego Funduszu Zdrowia w tym w zakresie informacji o Twoim stanie zdrowia;</li>
+                        <li>organów ścigania i wymiaru sprawiedliwości, w zakresie informacji o zdarzeniach powodujących szkodę;</li>
+                        <li>podmiotu będącego ubezpieczającym w razie wskazania Ciebie jako ubezpieczonego, w zakresie Twoich danych identyfikacyjnych i kontaktowych oraz informacji o przedmiocie ubezpieczenia.</li>
+                    </ul>
+                    Dane te pozyskujemy jednak tylko w sytuacji, gdy ich pozyskanie jest w konkretnej sytuacji uzasadnione charakterem produktu ubezpieczeniowego, z którego korzystasz.
+                </span>
+            </li>
+
+            <li>Zautomatyzowane podejmowanie decyzji, w tym profilowanie Twoich danych
+                <span>
+                    <ul class="generali-sublist">
+                        <li>W niektórych przypadkach podejmujemy decyzje w sposób całkowicie zautomatyzowany (bez udziału człowieka). Decyzja ta jest oparta o profilowanie, czyli uwzględnia poza Twoimi danymi, także informacje pochodzące z automatycznej analizy dostępnych informacji i statystyk, w celu wsparcia procesu oceny ryzyka ubezpieczeniowego oraz likwidacji niektórych szkód. Decyzje te podejmujemy w oparciu o właściwe przepisy prawa, w szczególności przy uwzględnieniu informacji o Twojej dacie urodzenia, wieku, charakterze wykonywanej pracy, miejscu zamieszkania, przebiegu ubezpieczenia czy danych identyfikujących przedmiot ubezpieczenia. Decyzje podejmowane w ten sposób mają wpływ na wysokości składki, wysokości odszkodowania oraz innych świadczeń, a niekiedy mogą skutkować brakiem możliwości skorzystania z naszych niektórych produktów.</li>
+                        <li>W związku z podejmowaniem przez nas decyzji w opisany wyżej sposób przysługuje Ci prawo do otrzymania stosownych wyjaśnień co do podstaw podjętej decyzji, zakwestionowania tej decyzji, wyrażenia własnego stanowiska oraz do uzyskania interwencji ludzkiej.</li>
+                    </ul>
+                </span>
+            </li>
+
+            <li>Przetwarzanie Twoich danych przez inne spółki Grupy Generali w Polsce w celach marketingowych
+                <span>
+                    <ul class="generali-sublist">
+                        <li>W zakresie w jakim dobrowolnie udzielisz zgody na udostępnienie i przetwarzanie Twoich danych osobowych przez inne spółki Grupy Generali w Polsce (Generali T.U. S.A., Generali Finance Sp. z o.o., Generali DFE zarządzany i reprezentowany przez Generali PTE S.A. z siedzibami przy ul. Senatorskiej 18, 00-082 Warszawa) w celach marketingowych, te spółki będą administratorami Twoich danych osobowych.</li>
+                        <li>Spółki Grupy Generali w Polsce będą przetwarzały Twoje dane w zakresie obejmującym wszystkie informacje zawarte w formularzach, umowach, wnioskach lub ofertach, w tym informacje o produktach finansowych lub ubezpieczeniowych, przedmiotach ubezpieczenia, szkodach i ich likwidacji. Na podstawie tych danych, spółki z Grupy Generali w Polsce będą mogły kierować do Ciebie informacje o produktach finansowych lub ubezpieczeniowych, dostosowanych do Twoich potrzeb, ustalonych w oparciu o historię Twojej współpracy ze spółkami z Grupy Generali w Polsce. Komunikacja tych informacji będzie się odbywała wybranymi przez Ciebie kanałami, np. pocztą elektroniczną lub telefonicznie.</li>
+                        <li>Zgodę na udostępnianie danych i ich przetwarzanie możesz odwołać w każdym czasie kontaktując się administratorami w sposób opisany w pkt. 1. tej Informacji. Nie wpływa to jednak na zgodność z prawem przetwarzania i udostępnienia danych dokonanego wcześniej. Twoje dane będą przetwarzane przez spółki z Grupy Generali w Polsce do czasu odwołania zgody.</li>
+                        <li>W stosunku do każdej spółki z Grupy Generali w Polsce przysługują Ci takie same prawa, opisane w pkt 4. tej Informacji.</li>
+                        <li>Odbiorcami Twoich danych mogą być podwykonawcy (podmioty przetwarzające) np.: firmy informatyczne, agencje marketingowe, agenci ubezpieczeniowi z którymi współpracują spółki z Grupy Generali w Polsce.</li>
+                        <li>Kontakt ze spółkami z Grupy Generali w Polsce w sprawach związanych z przetwarzaniem danych osobowych jest możliwy za pośrednictwem Inspektora Ochrony Danych w sposób opisany w pkt. 2. tej Informacji. Więcej informacji o przetwarzaniu danych przez spółki z Grupy Generali w Polsce znajdziesz na stronie: https://www.generali.pl/polityka-prywatnosci.</li>
+                    </ul>
+                </span>
+            </li>
+        </ol>
+
+        <div class="generali-footer">
+            Generali Życie Towarzystwo Ubezpieczeń S.A. z siedzibą w Warszawie przy ul. Senatorskiej 18, zarejestrowana w rejestrze przedsiębiorców prowadzonym przez Sąd Rejonowy dla m.st. Warszawy, XII Wydział Gospodarczy Krajowego Rejestru Sądowego pod numerem KRS 0000025952, kapitał zakładowy 63.500.000 PLN wpłacony w całości, NIP 521-28-87-341, należąca do Grupy Generali, figurującej w Rejestrze Grup Ubezpieczeniowych prowadzonym przez Instytut Nadzoru Ubezpieczeniowego (IVASS) pod nr 26.
+            <div class="generali-footer-code">GEN-2023-03-01</div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
