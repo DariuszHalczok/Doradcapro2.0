@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVB - Analiza Potrzeb Klienta</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        /* --- OVB DESIGN SYSTEM VARIABLES --- */
+        :root {
+            --ovb-blue: #003366; 
+            --ovb-white: #FFFFFF; 
+            --ovb-teal: #009999; 
+            --ovb-hot-pink: #FF3399;
+            --ovb-blue-light: #6699CC; 
+            --ovb-blue-medium: #336699; 
+            --ovb-light-grey: #E5E5E5;
+            --ovb-text: #333333; 
+            --ovb-grey-text: #666666;
+            --border-radius: 8px; 
+            --transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; outline: none; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #F5F7FA; 
+            color: var(--ovb-text); 
+            margin: 0; 
+            padding-bottom: 50px; 
+        }
+
+        /* --- HEADER --- */
+        .ovb-header { 
+            background: linear-gradient(135deg, var(--ovb-blue), #336699); 
+            color: white; 
+            padding: 20px 0; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        .header-content { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .ovb-logo-placeholder { 
+            background: white; color: var(--ovb-blue); 
+            font-weight: 900; font-size: 24px; padding: 8px 12px; border-radius: 4px; 
+        }
+        .agent-details { border-left: 1px solid rgba(255,255,255,0.3); padding-left: 15px; margin-left: 15px; }
+
+        /* --- PROGRESS BAR (Uproszczony dla podglądu) --- */
+        .progress-section { background: white; padding: 15px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow-x: auto;}
+        .progress-steps { max-width: 1000px; margin: 0 auto; display: flex; justify-content: flex-start; gap: 20px; padding: 0 20px; }
+        .step { display: flex; flex-direction: column; align-items: center; width: 75px; }
+        .step-circle { width: 32px; height: 32px; border-radius: 50%; background: white; border: 2px solid #ddd; color: #999; display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 13px; margin-bottom: 5px; }
+        .step.active .step-circle { border-color: var(--ovb-teal); color: var(--ovb-teal); box-shadow: 0 0 0 3px rgba(0, 153, 153, 0.1); }
+        .step-label { font-size: 10px; text-transform: uppercase; font-weight: 600; color: #999; text-align: center; }
+        .step.active .step-label { color: var(--ovb-blue); }
+
+        /* --- CONTENT & FORMS --- */
+        .main-container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .page-title { color: var(--ovb-blue); margin-bottom: 25px; font-size: 1.8rem; }
+        .form-section { 
+            background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            padding: 30px; margin-bottom: 25px; border: 1px solid #eee; 
+        }
+
+        /* --- QUESTIONS UI --- */
+        .question-block { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
+        .question-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .question-text { font-size: 1.05em; color: var(--ovb-blue); font-weight: 600; margin-bottom: 10px; display: block; }
+        .radio-group { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
+        .radio-label { 
+            display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95em; 
+            padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; transition: 0.2s;
+        }
+        .radio-label:hover { background: #f9f9f9; border-color: var(--ovb-teal); }
+        .radio-label input[type="radio"] { width: 18px; height: 18px; accent-color: var(--ovb-teal); cursor: pointer; }
+
+        /* --- BUTTONS --- */
+        .form-actions { display: flex; justify-content: flex-end; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+        .btn { padding: 12px 30px; border-radius: 25px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 16px; }
+        .btn-primary { background: var(--ovb-teal); color: white; box-shadow: 0 4px 10px rgba(0,153,153,0.3); }
+        .btn-primary:hover:not(:disabled) { background: #008080; transform: translateY(-1px); }
+        .btn:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; color: #666; }
+
+        /* --- UTILS --- */
+        .hidden { display: none !important; }
+        
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 10px; text-align: center; }
+            .agent-details { border-left: none; padding-left: 0; margin-left: 0; }
+            .radio-group { flex-direction: column; gap: 10px; }
+            .btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="ovb-header">
+        <div class="header-content">
+            <div style="display:flex; align-items:center; flex-wrap: wrap; justify-content: center;">
+                <div class="ovb-logo-placeholder">OVB</div>
+                <div class="agent-details"><span style="font-weight:600">Dariusz Halczok</span><br><span style="font-size:0.8em; opacity:0.9">Dyrektor Krajowy</span></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- PROGRESS -->
+    <div class="progress-section">
+        <div class="progress-steps">
+            <div class="step active"><div class="step-circle">1</div><div class="step-label">APK</div></div>
+            <div class="step"><div class="step-circle">2</div><div class="step-label">Wiek</div></div>
+            <div class="step"><div class="step-circle">...</div><div class="step-label">Kolejne kroki</div></div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        
+        <!-- STEP 1: APK -->
+        <h1 class="page-title">Analiza Potrzeb Klienta (APK)</h1>
+        <div class="form-section">
+            
+            <div class="question-block">
+                <span class="question-text">1. Czy jesteś zainteresowany/a ochroną ubezpieczeniową w zakresie życia i zdrowia?</span>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="apk_q1" value="YES" onchange="App.validateAPK()"> Tak</label>
+                    <label class="radio-label"><input type="radio" name="apk_q1" value="NO" onchange="App.validateAPK()"> Nie</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <span class="question-text">2. Czy poszukujesz ochrony dla siebie, czy także dla swoich bliskich?</span>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="apk_q2" value="SELF" onchange="App.validateAPK()"> Tylko dla siebie</label>
+                    <label class="radio-label"><input type="radio" name="apk_q2" value="FAMILY" onchange="App.validateAPK()"> Dla siebie i bliskich</label>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <span class="question-text">3. Czy znajdujesz się pomiędzy 16 a 75 rokiem życia?</span>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="apk_q3" value="YES" onchange="App.validateAPK()"> Tak</label>
+                    <label class="radio-label"><input type="radio" name="apk_q3" value="NO" onchange="App.validateAPK()"> Nie</label>
+                </div>
+            </div>
+
+            <!-- Komunikat o braku możliwości przedstawienia oferty -->
+            <div id="apkRejectMsg" class="hidden" style="margin-top:20px; padding:15px; background:#FFF5F5; border:1px solid var(--ovb-hot-pink); border-radius:8px; color:var(--ovb-hot-pink); font-weight:600;">
+                <span class="material-icons-outlined" style="vertical-align: middle; margin-right: 5px;">error_outline</span>
+                Niestety, na podstawie podanych odpowiedzi nie możemy zaoferować Ci ubezpieczenia z tej oferty. Proces zostaje przerwany.
+            </div>
+
+        </div>
+        
+        <div class="form-actions">
+            <button class="btn btn-primary" id="btnStep1" onclick="App.goToNextStep()" disabled>
+                Rozpocznij proces <span class="material-icons-outlined">arrow_forward</span>
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        const App = {
+            state: {
+                apk: null
+            },
+            
+            // Funkcja wywoływana przy każdej zmianie radio buttona
+            validateAPK: () => {
+                // Pobieranie wartości zaznaczonych inputów
+                const q1 = document.querySelector('input[name="apk_q1"]:checked')?.value;
+                const q2 = document.querySelector('input[name="apk_q2"]:checked')?.value;
+                const q3 = document.querySelector('input[name="apk_q3"]:checked')?.value;
+                
+                const btn = document.getElementById('btnStep1');
+                const msg = document.getElementById('apkRejectMsg');
+
+                // Jeśli nie odpowiedziano na wszystkie pytania - czekamy
+                if (!q1 || !q2 || !q3) {
+                    btn.disabled = true;
+                    msg.classList.add('hidden');
+                    return;
+                }
+
+                // Logika biznesowa: Pytania 1 i 3 dyskwalifikują, jeśli odpowiedź to NIE
+                if (q1 === 'NO' || q3 === 'NO') {
+                    btn.disabled = true;
+                    msg.classList.remove('hidden'); // Pokaż komunikat błędu
+                } else {
+                    btn.disabled = false; // Aktywuj przycisk Dalej
+                    msg.classList.add('hidden'); // Ukryj komunikat błędu
+                    
+                    // Zapisz stan, gdyby był potrzebny później
+                    App.state.apk = {
+                        zainteresowany: q1,
+                        dla_kogo: q2,
+                        wiek_odpowiedni: q3
+                    };
+                }
+            },
+
+            // Symulacja przejścia dalej
+            goToNextStep: () => {
+                alert("Walidacja APK przeszła pomyślnie. W pełnej aplikacji przejdziesz do kroku 2: Wybór Wieku/Pakietu.");
+                // W pełnym kodzie tutaj byłoby np. App.nextStep();
+            }
+        };
+    </script>
+</body>
+</html>
