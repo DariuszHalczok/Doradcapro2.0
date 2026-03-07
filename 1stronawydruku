@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nowa Struktura Dokumentacji - OVB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ovb: {
+                            /* Primary Colors */
+                            blue: '#003366',
+                            white: '#FFFFFF',
+                            /* Additional gradations */
+                            'blue-medium': '#336699',
+                            'blue-light': '#6699CC',
+                            'light-grey': '#E5E5E5',
+                            'lettering-white': '#F2F2F2',
+                            /* Secondary Colors (Main & Light/Dark tones) */
+                            teal: '#009999',
+                            ocean: '#006666',
+                            sapphire: '#66CCCC',
+                            'hot-pink': '#FF3399',
+                            orchid: '#9966CC'
+                        }
+                    },
+                    fontFamily: {
+                        /* Zgodnie z wytycznymi OVB: Stag Sans jako główny, Segoe UI jako systemowy fallback */
+                        sans: ['"Stag Sans"', '"Segoe UI"', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @media print {
+            body { background-color: white; }
+            .print-hide { display: none; }
+            .page-break { page-break-before: always; }
+            .shadow-xl { box-shadow: none !important; border: 1px solid #e5e7eb; }
+        }
+    </style>
+</head>
+<body class="bg-ovb-lettering-white font-sans text-gray-800 antialiased min-h-screen py-8">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden border border-ovb-light-grey mb-8">
+        
+        <!-- STRONA TYTUŁOWA -->
+        <div class="bg-ovb-blue text-white p-12 text-center relative border-b-8 border-ovb-teal">
+            <h1 class="text-4xl font-bold mb-4 mt-8">Komplet Dokumentacji Ubezpieczeniowej</h1>
+            <h2 class="text-2xl text-ovb-blue-light font-light mb-8">Umowa Grupowego Ubezpieczenia na Życie CERTUM</h2>
+            
+            <div class="bg-ovb-blue-medium bg-opacity-80 inline-block p-6 rounded-lg text-left w-full max-w-md mx-auto border border-ovb-blue-light">
+                <p class="text-sm text-ovb-light-grey uppercase tracking-wider mb-1">Dla Klienta</p>
+                <p class="text-xl font-bold text-white mb-4">Maksymilian Sikorski</p>
+                <p class="text-sm text-ovb-light-grey uppercase tracking-wider mb-1">Numer Polisy / Certyfikatu</p>
+                <p class="text-lg font-bold text-white">90000785745_3</p>
+            </div>
+        </div>
+
+        <!-- SPIS TREŚCI -->
+        <div class="p-10 bg-white">
+            <h3 class="text-3xl font-bold text-ovb-blue mb-8 border-b-2 border-ovb-light-grey pb-4">Spis treści</h3>
+            
+            <div class="space-y-6">
+                <!-- Krok 1 -->
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-12 h-12 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-xl mr-4 border-2 border-ovb-blue-light">1</div>
+                    <div class="flex-1 border-b border-dashed border-ovb-light-grey pb-4">
+                        <h4 class="text-xl font-bold text-ovb-blue flex justify-between">
+                            <span>Karta Dystrybutora i Obowiązek Informacyjny</span>
+                            <span class="text-gray-400 text-sm font-normal">Strona 3</span>
+                        </h4>
+                        <p class="text-gray-600 text-sm mt-1">Dane Agenta, wpis do rejestru KNF, informacje o wynagrodzeniu, zasady składania reklamacji.</p>
+                        <span class="inline-block mt-2 px-2 py-1 bg-ovb-teal bg-opacity-10 text-ovb-ocean text-xs font-bold rounded">Wymóg KNF - IDD</span>
+                    </div>
+                </div>
+
+                <!-- Krok 2 -->
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-12 h-12 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-xl mr-4 border-2 border-ovb-blue-light">2</div>
+                    <div class="flex-1 border-b border-dashed border-ovb-light-grey pb-4">
+                        <h4 class="text-xl font-bold text-ovb-blue flex justify-between">
+                            <span>Analiza Potrzeb Klienta (APK)</span>
+                            <span class="text-gray-400 text-sm font-normal">Strona 6</span>
+                        </h4>
+                        <p class="text-gray-600 text-sm mt-1">Ankieta określająca Twoje potrzeby oraz dopasowująca odpowiedni zakres ubezpieczenia.</p>
+                        <span class="inline-block mt-2 px-2 py-1 bg-ovb-teal bg-opacity-10 text-ovb-ocean text-xs font-bold rounded">Wymóg KNF - IDD</span>
+                    </div>
+                </div>
+
+                <!-- Krok 3 -->
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-12 h-12 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-xl mr-4 border-2 border-ovb-blue-light">3</div>
+                    <div class="flex-1 border-b border-dashed border-ovb-light-grey pb-4">
+                        <h4 class="text-xl font-bold text-ovb-blue flex justify-between">
+                            <span>Deklaracja Przystąpienia do Ubezpieczenia</span>
+                            <span class="text-gray-400 text-sm font-normal">Strona 7</span>
+                        </h4>
+                        <p class="text-gray-600 text-sm mt-1">Twoje dane osobowe, wskazanie uposażonych, oświadczenie o stanie zdrowia, wybór pakietów oraz oświadczenia końcowe.</p>
+                        <span class="inline-block mt-2 px-2 py-1 bg-ovb-blue-light bg-opacity-20 text-ovb-blue text-xs font-bold rounded">Dokument Główny</span>
+                    </div>
+                </div>
+
+                <!-- Krok 4 -->
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-12 h-12 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-xl mr-4 border-2 border-ovb-blue-light">4</div>
+                    <div class="flex-1 border-b border-dashed border-ovb-light-grey pb-4">
+                        <h4 class="text-xl font-bold text-ovb-blue flex justify-between">
+                            <span>Oświadczenie o źródle pochodzenia majątku (AML)</span>
+                            <span class="text-gray-400 text-sm font-normal">Strona 10</span>
+                        </h4>
+                        <p class="text-gray-600 text-sm mt-1">Wymagane prawem informacje dotyczące źródła finansowania składek.</p>
+                        <span class="inline-block mt-2 px-2 py-1 bg-ovb-light-grey text-gray-700 text-xs font-bold rounded">Wymóg Prawny - AML</span>
+                    </div>
+                </div>
+
+                <!-- Krok 5 -->
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-12 h-12 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-xl mr-4 border-2 border-ovb-blue-light">5</div>
+                    <div class="flex-1 pb-4">
+                        <h4 class="text-xl font-bold text-ovb-blue flex justify-between">
+                            <span>Informacja o Przetwarzaniu Danych Osobowych (RODO)</span>
+                            <span class="text-gray-400 text-sm font-normal">Strona 11</span>
+                        </h4>
+                        <p class="text-gray-600 text-sm mt-1">Szczegółowe informacje dotyczące przetwarzania danych przez OVB, Stowarzyszenie Finance Club oraz Generali Życie T.U. S.A.</p>
+                        <span class="inline-block mt-2 px-2 py-1 bg-ovb-light-grey text-gray-700 text-xs font-bold rounded">Informacja RODO</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
