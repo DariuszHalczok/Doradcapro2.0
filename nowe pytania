@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVB - Aplikacja Sprzedażowa</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        /* --- OVB DESIGN SYSTEM VARIABLES --- */
+        :root {
+            --ovb-blue: #003366; --ovb-white: #FFFFFF; --ovb-teal: #009999; --ovb-hot-pink: #FF3399;
+            --ovb-blue-light: #6699CC; --ovb-light-grey: #E5E5E5; --ovb-text: #333333; --border-radius: 8px; --transition: all 0.3s ease;
+        }
+        * { box-sizing: border-box; outline: none; }
+        body { font-family: 'Segoe UI', sans-serif; background: #F5F7FA; color: var(--ovb-text); margin: 0; padding-bottom: 100px; }
+
+        /* HEADER */
+        .ovb-header { background: linear-gradient(135deg, var(--ovb-blue), #336699); color: white; padding: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header-content { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .ovb-logo-placeholder { background: white; color: var(--ovb-blue); font-weight: 900; font-size: 24px; padding: 8px 12px; border-radius: 4px; }
+        .agent-details { border-left: 1px solid rgba(255,255,255,0.3); padding-left: 15px; margin-left: 15px; }
+        .header-contact { text-align: right; font-size: 0.9em; }
+
+        /* PROGRESS */
+        .progress-section { background: white; padding: 15px 0; position: sticky; top: 0; z-index: 90; box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow-x: auto; }
+        .progress-steps { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; position: relative; padding: 0 20px; min-width: 800px; }
+        .progress-bg-line { position: absolute; top: 15px; left: 40px; right: 40px; height: 2px; background: #eee; z-index: 0; }
+        .progress-fill-line { position: absolute; top: 15px; left: 40px; height: 2px; background: var(--ovb-teal); z-index: 0; width: 0%; transition: width 0.4s; }
+        .step { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; width: 75px; }
+        .step-circle { width: 32px; height: 32px; border-radius: 50%; background: white; border: 2px solid #ddd; color: #999; display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 13px; margin-bottom: 5px; transition: 0.3s; }
+        .step.active .step-circle { border-color: var(--ovb-teal); color: var(--ovb-teal); box-shadow: 0 0 0 3px rgba(0, 153, 153, 0.1); }
+        .step.completed .step-circle { background: var(--ovb-teal); border-color: var(--ovb-teal); color: white; }
+        .step-label { font-size: 10px; text-transform: uppercase; font-weight: 600; color: #999; text-align: center; }
+        .step.active .step-label { color: var(--ovb-blue); }
+
+        /* CONTENT */
+        .main-container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+        .step-content { display: none; animation: fadeIn 0.4s; }
+        .step-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .form-section { background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 30px; margin-bottom: 25px; border: 1px solid #eee; }
+        .page-title { color: var(--ovb-blue); margin-bottom: 25px; font-size: 1.8rem; }
+        .section-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #f5f5f5; }
+        .section-icon { color: var(--ovb-blue); background: #EAF2F8; width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+        .section-header h3 { margin: 0; color: var(--ovb-blue); font-size: 1.2rem; }
+
+        /* QUESTIONS UI (APK) */
+        .question-block { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
+        .question-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .question-text { font-size: 1.05em; color: var(--ovb-blue); font-weight: 600; margin-bottom: 10px; display: block; }
+        .radio-group { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px; }
+        .radio-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95em; padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; transition: 0.2s; }
+        .radio-label:hover { background: #f9f9f9; border-color: var(--ovb-teal); }
+        .radio-label input[type="radio"] { width: 18px; height: 18px; accent-color: var(--ovb-teal); cursor: pointer; }
+        
+        /* FORMS */
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .full-width { grid-column: 1 / -1; }
+        .form-group { position: relative; margin-bottom: 5px; }
+        .form-control { width: 100%; padding: 12px 14px; padding-top: 20px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; transition: 0.3s; background: white; }
+        .form-control:focus { border-color: var(--ovb-teal); box-shadow: 0 0 0 3px rgba(0, 153, 153, 0.1); }
+        .form-control.invalid { border-color: var(--ovb-hot-pink); }
+        .floating-label { position: absolute; left: 14px; top: 12px; font-size: 15px; color: #777; pointer-events: none; transition: 0.2s; }
+        .form-control:focus ~ .floating-label, .form-control:not(:placeholder-shown) ~ .floating-label { top: 4px; font-size: 10px; color: var(--ovb-teal); font-weight: 600; }
+        .error-msg { color: var(--ovb-hot-pink); font-size: 11px; display: none; margin-top: 2px; }
+        .form-control.invalid ~ .error-msg { display: block; }
+        .pesel-badge { display: inline-flex; align-items: center; background: #EAF7F7; color: var(--ovb-teal); padding: 2px 8px; border-radius: 10px; margin-top: 5px; opacity: 0; font-size: 11px; }
+        .pesel-badge.visible { opacity: 1; }
+
+        /* CARDS & OPTIONS */
+        .cards-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .plan-card { border: 2px solid #eee; border-radius: 12px; padding: 20px; cursor: pointer; background: white; transition: 0.2s; display: flex; flex-direction: column; }
+        .plan-card:hover { border-color: var(--ovb-blue-light); transform: translateY(-3px); }
+        .plan-card.selected { border-color: var(--ovb-teal); background: #F0FCFC; box-shadow: 0 5px 15px rgba(0,153,153,0.15); }
+        .plan-title { font-size: 1.3em; font-weight: 700; color: var(--ovb-blue); text-align: center; }
+        .plan-price { text-align: center; font-size: 1.6em; font-weight: 600; color: #333; margin: 10px 0; }
+        .plan-features ul { padding: 0; list-style: none; font-size: 0.85em; color: #555; margin: 0; }
+        .plan-features li { padding: 5px 0; border-bottom: 1px dashed #eee; display: flex; gap: 8px; align-items: start; line-height: 1.3; }
+        .check-icon { color: var(--ovb-teal); flex-shrink: 0; font-size: 16px; margin-top: 2px; }
+
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+        .option-card { border: 1px solid #eee; border-radius: 8px; padding: 15px; display: flex; gap: 10px; cursor: pointer; transition: 0.2s; align-items: flex-start; }
+        .option-card:hover { border-color: var(--ovb-blue); background: #fafafa; }
+        .option-card input[type="checkbox"] { margin-top: 4px; accent-color: var(--ovb-teal); flex-shrink: 0; width: 20px; height: 20px; }
+        .option-content strong { color: var(--ovb-blue); display: block; margin-bottom: 5px; font-size: 1.05em; }
+        .option-content small { font-size: 0.85em; color: #666; display: block; line-height: 1.4; }
+        .option-content ul { padding-left: 15px; margin: 5px 0 0 0; font-size: 0.85em; color: #555; }
+
+        /* ZGODY (STEP 6) */
+        .declaration-item { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #f9f9f9; }
+        .declaration-header { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+        .declaration-header input { margin-top: 4px; accent-color: var(--ovb-teal); width:18px; height:18px; }
+        .declaration-header span { font-weight: 500; font-size: 0.95em; line-height: 1.4; }
+        .declaration-full-text { display: none; background: #fafafa; padding: 10px; margin-top: 5px; border-left: 3px solid var(--ovb-blue); font-size: 0.85em; color: #555; line-height: 1.5; }
+        .show-more-link { color: var(--ovb-teal); font-size: 0.8em; text-decoration: underline; cursor: pointer; margin-left: 38px; display: block; margin-top: -5px; margin-bottom: 10px; }
+
+        /* HEALTH GATE */
+        .health-gate { background: #FFF5F5; border: 1px solid #FFCCD5; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .medical-section { background: #fff; border: 1px solid var(--ovb-light-grey); border-radius: 8px; padding: 20px; margin-top: 20px; }
+        .medical-question { font-size: 0.95em; color: var(--ovb-text); line-height: 1.5; margin-bottom: 15px; background: #f8f9fa; padding: 15px; border-left: 4px solid var(--ovb-blue); border-radius: 4px; }
+        .health-btn { padding: 8px 25px; border: 1px solid #ccc; background: white; border-radius: 20px; cursor: pointer; transition: 0.2s; font-weight: 600; color: #666; margin-right: 10px; }
+        .health-btn.selected-yes { background: var(--ovb-hot-pink); color: white; border-color: var(--ovb-hot-pink); }
+        .health-btn.selected-no { background: var(--ovb-teal); color: white; border-color: var(--ovb-teal); }
+        .addon-reveal { display: none; animation: fadeIn 0.5s; padding: 15px; background: #F0FCFC; border-radius: 8px; border: 1px solid var(--ovb-teal); margin-top: 10px; }
+
+        /* FOOTER & STICKY */
+        .form-actions { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; }
+        .btn { padding: 12px 30px; border-radius: 25px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 16px; }
+        .btn-primary { background: var(--ovb-teal); color: white; box-shadow: 0 4px 10px rgba(0,153,153,0.3); }
+        .btn-primary:hover:not(:disabled) { background: #008080; transform: translateY(-1px); }
+        .btn-secondary { background: transparent; border: 1px solid #ccc; color: #666; }
+        .btn:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; color: #666; }
+        
+        .sticky-summary { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #ddd; padding: 15px 20px; z-index: 100; display: none; justify-content: center; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .sticky-content { max-width: 1000px; width: 100%; display: flex; justify-content: space-between; align-items: center; }
+        .total-price { font-size: 1.5em; font-weight: 700; color: var(--ovb-blue); }
+        
+        /* UTILS & PAYMENT */
+        .hidden { display: none !important; }
+        .payment-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .copy-btn { background: none; border: 1px solid var(--ovb-teal); color: var(--ovb-teal); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; }
+        
+        /* Summary Step Grid */
+        .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; font-size: 0.9em; }
+        .summary-label { color: #888; font-size: 0.85em; }
+        .summary-val { font-weight: 600; color: #333; }
+        .summary-block { grid-column: 1 / -1; border-top: 1px solid #eee; padding-top: 10px; margin-top: 5px; }
+        .summary-list { list-style: none; padding: 0; margin: 0; }
+        .summary-list li { margin-bottom: 5px; font-size: 0.85em; color: #555; display:flex; align-items:center; gap:5px; }
+        .summary-list li::before { content: '✓'; color: var(--ovb-teal); font-weight: bold; }
+        
+        /* MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; display: none; justify-content: center; align-items: center; }
+        .modal-box { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 400px; text-align: center; }
+        #toast { visibility: hidden; min-width: 250px; background-color: var(--ovb-blue); color: #fff; text-align: center; border-radius: 4px; padding: 10px; position: fixed; z-index: 2000; left: 50%; bottom: 80px; transform: translateX(-50%); font-size: 14px; opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
+        #toast.show { visibility: visible; opacity: 1; bottom: 100px; }
+        
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 10px; text-align: center; }
+            .form-grid { grid-template-columns: 1fr; }
+            .btn { width: 48%; justify-content: center; padding: 12px; }
+            .step-label { display: none; }
+            .sticky-summary { padding: 10px 15px; }
+            .total-price { font-size: 1.2em; }
+            .radio-group { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="ovb-header">
+        <div class="header-content">
+            <div style="display:flex; align-items:center; flex-wrap: wrap; justify-content: center;">
+                <div class="ovb-logo-placeholder">OVB</div>
+                <div class="agent-details"><span style="font-weight:600">Dariusz Halczok</span><br><span style="font-size:0.8em; opacity:0.9">Dyrektor Krajowy</span></div>
+            </div>
+            <div class="header-contact">517 682 682<br>dariusz.halczok@ovb.com.pl</div>
+        </div>
+    </header>
+
+    <!-- PROGRESS -->
+    <div class="progress-section">
+        <div class="progress-steps">
+            <div class="progress-bg-line"></div><div class="progress-fill-line" id="progressFill"></div>
+            <div class="step active" id="s1"><div class="step-circle">1</div><div class="step-label">APK</div></div>
+            <div class="step" id="s2"><div class="step-circle">2</div><div class="step-label">Wiek</div></div>
+            <div class="step" id="s3"><div class="step-circle">3</div><div class="step-label">Pakiet</div></div>
+            <div class="step" id="s4"><div class="step-circle">4</div><div class="step-label">Opcje</div></div>
+            <div class="step" id="s5"><div class="step-circle">5</div><div class="step-label">Dane</div></div>
+            <div class="step" id="s6"><div class="step-circle">6</div><div class="step-label">Zgody</div></div>
+            <div class="step" id="s7"><div class="step-circle">7</div><div class="step-label">Weryfikacja</div></div>
+            <div class="step" id="s8"><div class="step-circle">8</div><div class="step-label">SMS</div></div>
+            <div class="step" id="s9"><div class="step-circle">9</div><div class="step-label">Płatność</div></div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+
+        <!-- STEP 1: APK -->
+        <div id="step-1" class="step-content active">
+            <h1 class="page-title">Analiza Potrzeb Klienta (APK)</h1>
+            <div class="form-section">
+                <div class="question-block">
+                    <span class="question-text">1. Czy jesteś zainteresowany/a ochroną ubezpieczeniową w zakresie życia i zdrowia?</span>
+                    <div class="radio-group">
+                        <label class="radio-label"><input type="radio" name="apk_q1" value="YES" onchange="App.validateAPK()"> Tak</label>
+                        <label class="radio-label"><input type="radio" name="apk_q1" value="NO" onchange="App.validateAPK()"> Nie</label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <span class="question-text">2. W jakiej grupie wiekowej się znajdujesz?</span>
+                    <div class="radio-group">
+                        <label class="radio-label"><input type="radio" name="apk_q2" value="G1" onchange="App.validateAPK()"> 16 - 55 lat</label>
+                        <label class="radio-label"><input type="radio" name="apk_q2" value="G2" onchange="App.validateAPK()"> 56 - 69 lat</label>
+                        <label class="radio-label"><input type="radio" name="apk_q2" value="G3" onchange="App.validateAPK()"> 70 - 75 lat</label>
+                        <label class="radio-label"><input type="radio" name="apk_q2" value="OUT" onchange="App.validateAPK()"> Inna (poniżej 16 lub powyżej 75 lat)</label>
+                    </div>
+                </div>
+
+                <div id="apkRejectMsg" class="hidden" style="margin-top:20px; padding:15px; background:#FFF5F5; border:1px solid var(--ovb-hot-pink); border-radius:8px; color:var(--ovb-hot-pink); font-weight:600;">
+                    <span class="material-icons-outlined" style="vertical-align: middle; margin-right: 5px;">error_outline</span>
+                    Niestety, na podstawie podanych odpowiedzi nie możemy zaoferować Ci ubezpieczenia z tej oferty. Proces zostaje przerwany.
+                </div>
+            </div>
+            <div class="form-actions" style="justify-content:flex-end;">
+                <button class="btn btn-primary" id="btnStep1" onclick="App.nextStep()" disabled>Rozpocznij proces <span class="material-icons-outlined">arrow_forward</span></button>
+            </div>
+        </div>
+
+        <!-- STEP 2: WIEK (Weryfikacja dokładnej daty) -->
+        <div id="step-2" class="step-content">
+            <h1 class="page-title">Sprawdź dostępność pakietów</h1>
+            <div class="form-section" style="text-align:center;">
+                <p style="margin-bottom:20px;">Podaj dokładną datę urodzenia, aby system dopasował odpowiedni wariant cenowy.</p>
+                <div class="form-group" style="max-width:300px; margin:0 auto;">
+                    <input type="date" id="dataUrodzenia" class="form-control" required onchange="App.calculateAgeGroup()">
+                    <label class="floating-label">Data urodzenia</label>
+                </div>
+                <div id="ageResult" style="margin-top:15px; font-weight:600; min-height:20px;"></div>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="App.prevStep()">Wstecz</button>
+                <button class="btn btn-primary" id="btnStep2" onclick="App.validateStep2()" disabled>Dalej <span class="material-icons-outlined">arrow_forward</span></button>
+            </div>
+        </div>
+
+        <!-- STEP 3: PAKIET -->
+        <div id="step-3" class="step-content">
+            <h1 class="page-title" id="packageTitle">Wybierz Pakiet</h1>
+            <div class="cards-container" id="packagesContainer"></div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="App.prevStep()">Wstecz</button>
+                <button class="btn btn-primary" onclick="App.nextStep()">Dalej <span class="material-icons-outlined">arrow_forward</span></button>
+            </div>
+        </div>
+
+        <!-- STEP 4: CEGIEŁKI -->
+        <div id="step-4" class="step-content">
+            <h1 class="page-title">Cegiełki (Opcje dodatkowe)</h1>
+            <div id="bricksContainer"></div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="App.prevStep()">Wstecz</button>
+                <button class="btn btn-primary" onclick="App.nextStep()">Dalej <span class="material-icons-outlined">arrow_forward</span></button>
+            </div>
+        </div>
+
+        <!-- STEP 5: DANE UBEZPIECZONEGO -->
+        <div id="step-5" class="step-content">
+            <h1 class="page-title">Dane Ubezpieczonego</h1>
+            <form id="ovbForm">
+                <!-- Person -->
+                <div class="form-section">
+                    <div class="section-header"><div class="section-icon"><span class="material-icons-outlined">person</span></div><h3>Dane osobowe</h3></div>
+                    <div class="form-grid">
+                        <div class="form-group"><input type="text" id="imie" class="form-control" placeholder=" " required><label class="floating-label">Imię</label></div>
+                        <div class="form-group"><input type="text" id="nazwisko" class="form-control" placeholder=" " required><label class="floating-label">Nazwisko</label></div>
+                        <div class="form-group"><input type="text" id="pesel" class="form-control" placeholder=" " maxlength="11" required><label class="floating-label">PESEL</label><div id="peselBadge" class="pesel-badge"></div></div>
+                        <div class="form-group"><select id="obywatelstwo" class="form-control" required style="padding-top:18px"></select><label class="floating-label">Obywatelstwo 1</label></div>
+                        <div class="form-group"><select id="obywatelstwo2" class="form-control" style="padding-top:18px"><option value="">Brak</option></select><label class="floating-label">Obywatelstwo 2</label></div>
+                    </div>
+                </div>
+                <!-- Document -->
+                <div class="form-section">
+                    <div class="section-header"><div class="section-icon"><span class="material-icons-outlined">badge</span></div><h3>Dokument tożsamości</h3></div>
+                    <div class="form-grid">
+                        <div class="form-group"><select id="typDokumentu" class="form-control" style="padding-top:18px"><option value="DO">Dowód Osobisty</option><option value="MD">mDowód</option><option value="PA">Paszport</option></select><label class="floating-label">Typ</label></div>
+                        <div class="form-group"><input type="text" id="nrDokumentu" class="form-control" placeholder=" " required style="text-transform:uppercase"><label class="floating-label">Numer serii</label></div>
+                        <div class="form-group"><input type="date" id="dataWaznosci" class="form-control" placeholder=" " required><label class="floating-label">Data ważności</label></div>
+                    </div>
+                </div>
+                <!-- Address -->
+                <div class="form-section">
+                    <div class="section-header"><div class="section-icon"><span class="material-icons-outlined">home</span></div><h3>Adres</h3></div>
+                    <div class="form-grid">
+                        <div class="form-group full-width"><input type="text" id="ulica" class="form-control" placeholder=" " required><label class="floating-label">Ulica</label></div>
+                        <div class="form-group"><input type="text" id="nrDomu" class="form-control" placeholder=" " required><label class="floating-label">Nr domu</label></div>
+                        <div class="form-group"><input type="text" id="nrLokalu" class="form-control" placeholder=" "><label class="floating-label">Nr lokalu</label></div>
+                        <div class="form-group"><input type="text" id="kodPocztowy" class="form-control" placeholder=" " maxlength="6" required><label class="floating-label">Kod pocztowy</label></div>
+                        <div class="form-group"><input type="text" id="miasto" class="form-control" placeholder=" " required><label class="floating-label">Miejscowość</label></div>
+                        <div class="form-group"><select id="kraj" class="form-control" required style="padding-top:18px"></select><label class="floating-label">Kraj</label></div>
+                    </div>
+                </div>
+                <!-- Contact -->
+                <div class="form-section">
+                    <div class="section-header"><div class="section-icon"><span class="material-icons-outlined">phone</span></div><h3>Kontakt</h3></div>
+                    <div class="form-grid">
+                        <div class="form-group"><input type="email" id="email" class="form-control" placeholder=" " required><label class="floating-label">E-mail</label></div>
+                        <div class="form-group"><input type="tel" id="telefon" class="form-control" placeholder=" " required><label class="floating-label">Telefon (PL)</label></div>
+                        <div class="form-group full-width"><input type="text" id="zawod" class="form-control" placeholder=" " required><label class="floating-label">Zawód</label></div>
+                    </div>
+                </div>
+
+                <!-- UPOSAŻONY -->
+                <div class="form-section" style="background:#F0FCFC; border-color:var(--ovb-teal)">
+                    <div class="section-header"><div class="section-icon"><span class="material-icons-outlined">family_restroom</span></div><h3>Uposażony (Beneficjent)</h3></div>
+                    <p style="font-size:0.9em; margin-bottom:15px; color:#555">Kto ma otrzymać środki w przypadku śmierci?</p>
+                    <div style="display:flex; gap:20px; margin-bottom:15px; flex-wrap:wrap;">
+                        <label style="display:flex; align-items:center; gap:5px; font-weight:600;"><input type="radio" name="beneficiaryType" value="KC" checked onchange="App.toggleBeneficiaryForm()"> Dziedziczenie ustawowe (Kodeks Cywilny)</label>
+                        <label style="display:flex; align-items:center; gap:5px; font-weight:600;"><input type="radio" name="beneficiaryType" value="PERSON" onchange="App.toggleBeneficiaryForm()"> Wskazana osoba</label>
+                    </div>
+                    
+                    <div id="beneficiaryForm" class="hidden" style="border-top:1px dashed #ccc; padding-top:15px;">
+                        <div class="form-grid">
+                            <div class="form-group"><input type="text" id="benImie" class="form-control" placeholder=" "><label class="floating-label">Imię</label></div>
+                            <div class="form-group"><input type="text" id="benNazwisko" class="form-control" placeholder=" "><label class="floating-label">Nazwisko</label></div>
+                            <div class="form-group"><input type="date" id="benDataUrodzenia" class="form-control" placeholder=" "><label class="floating-label">Data urodzenia</label></div>
+                            <div class="form-group">
+                                <select id="benPokrewienstwo" class="form-control" style="padding-top:18px">
+                                    <option value="SPOUSE">Mąż / Żona</option>
+                                    <option value="PARTNER">Partner / Partnerka</option>
+                                    <option value="CHILD">Dziecko</option>
+                                    <option value="PARENT">Rodzic</option>
+                                    <option value="OTHER">Inny</option>
+                                </select>
+                                <label class="floating-label">Stopień pokrewieństwa</label>
+                            </div>
+                        </div>
+                        <div style="margin:15px 0;">
+                            <label style="font-size:0.9em; display:flex; align-items:center; gap:5px; cursor:pointer;">
+                                <input type="checkbox" id="benSameAddress" onchange="App.copyAddressToBeneficiary()" style="width:18px; height:18px; accent-color:var(--ovb-teal)"> Adres taki sam jak Ubezpieczonego
+                            </label>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group full-width"><input type="text" id="benUlica" class="form-control" placeholder=" "><label class="floating-label">Ulica i numer</label></div>
+                            <div class="form-group"><input type="text" id="benKod" class="form-control" placeholder=" "><label class="floating-label">Kod pocztowy</label></div>
+                            <div class="form-group"><input type="text" id="benMiasto" class="form-control" placeholder=" "><label class="floating-label">Miasto</label></div>
+                            <div class="form-group"><select id="benKraj" class="form-control" style="padding-top:18px"></select><label class="floating-label">Kraj</label></div>
+                            <div class="form-group"><select id="benObywatelstwo" class="form-control" style="padding-top:18px"></select><label class="floating-label">Obywatelstwo</label></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INFO DODATKOWE -->
+                <div class="form-section">
+                    <h3>Dodatkowe informacje</h3>
+                    <div class="options-grid">
+                        <label class="option-card"><input type="checkbox" id="chk_partner" onchange="App.togglePartnerSection()"><div style="margin-left:10px"><strong>Związek nieformalny</strong><br><small>Ochrona Partnera</small></div></label>
+                        <label class="option-card"><input type="checkbox" id="chk_resign" onchange="App.toggleResignSection()"><div style="margin-left:10px"><strong>Rezygnacja z polisy</strong><br><small>Zmiana polisy Generali</small></div></label>
+                    </div>
+                    <div id="partnerSection" class="hidden" style="margin-top:15px; border-top:1px dashed #eee; padding-top:10px;">
+                        <h4 style="color:var(--ovb-blue)">Dane Partnera</h4>
+                        <div class="form-grid">
+                            <div class="form-group"><input type="text" id="partnerImie" class="form-control" placeholder=" "><label class="floating-label">Imię</label></div>
+                            <div class="form-group"><input type="text" id="partnerNazwisko" class="form-control" placeholder=" "><label class="floating-label">Nazwisko</label></div>
+                            <div class="form-group"><input type="text" id="partnerPesel" class="form-control" placeholder=" " maxlength="11"><label class="floating-label">PESEL</label></div>
+                        </div>
+                    </div>
+                    <div id="resignSection" class="hidden" style="margin-top:15px; border-top:1px dashed #eee; padding-top:10px;">
+                        <h4 style="color:var(--ovb-blue)">Dane polisy do rezygnacji</h4>
+                        <div class="form-grid">
+                            <div class="form-group"><input type="text" id="oldPolicyNumber" class="form-control" placeholder=" " oninput="App.validatePolicyNumber(this)"><label class="floating-label">Nr Certyfikatu (wymagany '_')</label></div>
+                            <div class="form-group"><input type="text" id="resignDate" class="form-control" readonly style="background:#f0f0f0"><label class="floating-label">Data rezygnacji</label></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions"><button type="button" class="btn btn-secondary" onclick="App.prevStep()">Wstecz</button><button type="button" class="btn btn-primary" onclick="App.validateStep5()">Dalej <span class="material-icons-outlined">arrow_forward</span></button></div>
+            </form>
+        </div>
+
+        <!-- STEP 6: ZGODY -->
+        <div id="step-6" class="step-content">
+            <h1 class="page-title">Oświadczenia i Zgody</h1>
+            <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+                <button class="btn btn-secondary" style="font-size:0.8em; padding:8px 15px;" onclick="App.quickFillStandard()">Szybkie wypełnienie wymogów</button>
+                <button class="btn btn-secondary" style="font-size:0.8em; padding:8px 15px;" onclick="App.clearStep6()">Wyczyść</button>
+            </div>
+            
+            <div class="form-section">
+                <h3>AML / PEP</h3>
+                <div style="margin-bottom:10px">1. Czy jesteś osobą PEP? <label><input type="radio" name="pep1" value="YES"> TAK</label> <label><input type="radio" name="pep1" value="NO"> NIE</label></div>
+                <div>2. Rodzina/Współpracownik PEP? <label><input type="radio" name="pep2" value="YES"> TAK</label> <label><input type="radio" name="pep2" value="NO"> NIE</label></div>
+            </div>
+            <div class="form-section">
+                <h3>Zgody Wymagane</h3>
+                <div class="declaration-item">
+                    <label class="declaration-header"><input type="checkbox" id="cons_medical"><span style="margin-left:8px; line-height:1.4;">Zgoda na pozyskiwanie informacji o stanie zdrowia</span></label>
+                    <div style="font-size:0.85em; color:#666; margin-left:28px; margin-top:5px;">Wyrażam zgodę, aby Generali Życie T.U. S.A. otrzymywała od podmiotów leczniczych informacje w celu oceny ryzyka.</div>
+                </div>
+                <div class="declaration-item"><label class="declaration-header"><input type="checkbox" id="cons_share"><span style="margin-left:8px; line-height:1.4;">Udostępnienie danych innym zakładom</span></label></div>
+                <div class="declaration-item"><label class="declaration-header"><input type="checkbox" id="decl_terms"><span style="margin-left:8px; line-height:1.4;">Akceptuję OWU i warunki przystąpienia</span></label></div>
+                <div class="declaration-item"><label class="declaration-header"><input type="checkbox" id="decl_l4"><span style="margin-left:8px; line-height:1.4;">Nie przebywam na zwolnieniu lekarskim (L4)</span></label></div>
+                <div class="declaration-item"><label class="declaration-header"><input type="checkbox" id="decl_job"><span style="margin-left:8px; line-height:1.4;">Brak zawodów wykluczonych (np. górnik, pirotechnik)</span></label></div>
+            </div>
+            <div class="form-section health-gate">
+                <h3>Oświadczenie zdrowotne (5 lat)</h3>
+                <p style="font-size:0.9em; margin-bottom:10px">Oświadczam, że w okresie ostatnich 5 lat stan mojego zdrowia nie uległ istotnemu pogorszeniu, nie byłem leczony szpitalnie (z wyj. drobnych zabiegów) i nie zdiagnozowano u mnie chorób przewlekłych.</p>
+                <div style="display:flex; gap:20px;">
+                    <label><input type="radio" name="healthGate" value="YES"> TAK (Potwierdzam)</label>
+                    <label><input type="radio" name="healthGate" value="NO"> NIE (Wymagana ankieta)</label>
+                </div>
+            </div>
+            <div class="form-actions"><button class="btn btn-secondary" onclick="App.prevStep()">Wstecz</button><button class="btn btn-primary" onclick="App.validateStep6()">Dalej</button></div>
+        </div>
+
+        <!-- STEP 7: SUMMARY -->
+        <div id="step-7" class="step-content">
+            <h1 class="page-title">Podsumowanie</h1>
+            <div class="form-section">
+                <div style="border-bottom:1px solid #eee; padding-bottom:15px; margin-bottom:15px;">
+                    <strong id="sum-plan" style="color:var(--ovb-blue); font-size:1.2em;">--</strong>
+                    <div id="sum-plan-desc" style="font-size:0.85em; color:#555; margin-top:5px;"></div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.95em;">
+                    <div><span style="color:#777; font-size:0.85em;">Imię i Nazwisko:</span><br><strong id="sum-name">--</strong></div>
+                    <div><span style="color:#777; font-size:0.85em;">PESEL:</span><br><strong id="sum-pesel">--</strong></div>
+                    <div style="grid-column:1/-1"><span style="color:#777; font-size:0.85em;">Adres:</span><br><span id="sum-address">--</span></div>
+                    <div style="grid-column:1/-1; border-top:1px dashed #eee; padding-top:10px;"><span style="color:#777; font-size:0.85em;">Uposażony:</span><br><strong id="sum-beneficiary" style="color:var(--ovb-teal)">--</strong></div>
+                </div>
+                <div style="margin-top:25px; font-size:1.5em; text-align:right; font-weight:700; color:var(--ovb-teal)">Razem: <span id="sum-total">0,00 zł</span></div>
+            </div>
+            <div class="form-actions"><button class="btn btn-secondary" onclick="App.prevStep()">Wstecz</button><button class="btn btn-primary" onclick="App.nextStep()">Zatwierdź</button></div>
+        </div>
+
+        <!-- STEP 8: SMS -->
+        <div id="step-8" class="step-content">
+            <h1 class="page-title">Autoryzacja SMS</h1>
+            <div class="form-section" style="text-align:center">
+                <p>Na Twój numer wysłaliśmy kod.</p>
+                <div id="smsStep1" style="margin:20px 0;"><button class="btn btn-primary" style="margin:0 auto" onclick="App.sendSMS()">Wyślij Kod</button></div>
+                <div id="smsStep2" class="hidden">
+                    <input type="text" id="smsCode" class="form-control" placeholder="123456" style="width:150px; margin:10px auto; text-align:center; font-size:20px; letter-spacing:4px;">
+                    <button class="btn btn-primary" style="margin:10px auto" onclick="App.verifySMS()">Potwierdź</button>
+                </div>
+            </div>
+            <div class="form-actions"><button class="btn btn-secondary" onclick="App.prevStep()">Wstecz</button></div>
+        </div>
+        
+        <!-- STEP 9: PŁATNOŚĆ -->
+        <div id="step-9" class="step-content">
+            <h1 class="page-title" style="text-align:center">Dziękujemy!</h1>
+            <div class="form-section" style="text-align:center">
+                Wniosek przyjęty do realizacji.<br><br>
+                <div style="background:#f9f9f9; padding:15px; border-radius:8px; display:inline-block; text-align:left;">
+                    <strong>Dane do przelewu:</strong><br>
+                    Rachunek: 97 1030 1944 4702 9940 2030 3546<br>
+                    Kwota: <span id="finalAmount">--</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Sticky & Modal -->
+    <div class="sticky-summary" id="stickySummary"><div class="sticky-content"><div><span class="total-label" style="font-size:0.8em; color:#777;">Składka:</span><span class="total-price" id="stickyPrice" style="font-size:1.3em;">0,00 zł</span></div><button class="sticky-btn" onclick="App.nextStep()" style="padding:10px 20px;">Dalej</button></div></div>
+    <div class="modal-overlay" id="validationModal"><div class="modal-box"><div class="modal-title">Uwaga</div><div class="modal-list" id="modalErrorList"></div><button class="btn btn-primary" style="width:100%" onclick="document.getElementById('validationModal').style.display='none'">Rozumiem</button></div></div>
+
+    <script>
+        // CONFIG
+        const Config = {
+            countries: ["Polska", "Niemcy", "Ukraina", "Wielka Brytania", "USA"],
+            cities: { '00': 'Warszawa', '01': 'Warszawa', '30': 'Kraków', '40': 'Katowice', '50': 'Wrocław', '41': 'Bytom', '80': 'Gdańsk', '90': 'Łódź' }
+        };
+        
+        // STATE
+        const State = {
+            step: 1, age: 0, group: 0, plan: null, addons: new Map(), apk: null
+        };
+
+        // APP LOGIC
+        const App = {
+            init: () => {
+                ['obywatelstwo', 'obywatelstwo2', 'kraj', 'benKraj', 'benObywatelstwo'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) Config.countries.forEach(c => { 
+                        let o = document.createElement('option'); o.text = c; 
+                        if(c==='Polska' && id!=='obywatelstwo2') o.selected=true; 
+                        el.add(o); 
+                    });
+                });
+                App.updateProgress();
+                App.bindZipHandlers();
+            },
+            
+            updateProgress: () => {
+                const totalSteps = 9;
+                const p = ((State.step-1)/(totalSteps-1))*100; document.getElementById('progressFill').style.width = p+'%';
+                for(let i=1; i<=totalSteps; i++) {
+                    const el = document.getElementById('s'+i);
+                    if(el) el.className = i<State.step ? 'step completed' : (i===State.step ? 'step active' : 'step');
+                }
+            },
+
+            showStep: (s) => {
+                document.querySelectorAll('.step-content').forEach(e=>e.classList.remove('active'));
+                document.getElementById('step-'+s).classList.add('active');
+                State.step = s; App.updateProgress(); window.scrollTo(0,0);
+                
+                document.getElementById('stickySummary').style.display = (s > 2 && s < 9) ? 'flex' : 'none';
+                if(s === 7) App.renderSummary(); // step 7 is Weryfikacja
+            },
+            nextStep: () => App.showStep(State.step+1),
+            prevStep: () => App.showStep(State.step-1),
+
+            // STEP 1: APK
+            validateAPK: () => {
+                const q1 = document.querySelector('input[name="apk_q1"]:checked')?.value;
+                const q2 = document.querySelector('input[name="apk_q2"]:checked')?.value;
+                
+                const btn = document.getElementById('btnStep1');
+                const msg = document.getElementById('apkRejectMsg');
+
+                if (!q1 || !q2) {
+                    btn.disabled = true;
+                    msg.classList.add('hidden');
+                    return;
+                }
+
+                if (q1 === 'NO' || q2 === 'OUT') {
+                    btn.disabled = true;
+                    msg.classList.remove('hidden'); 
+                } else {
+                    btn.disabled = false; 
+                    msg.classList.add('hidden'); 
+                    State.apk = { zainteresowany: q1, grupa_wiekowa: q2 };
+                }
+            },
+
+            // STEP 2: AGE
+            calculateAgeGroup: () => {
+                const val = document.getElementById('dataUrodzenia').value;
+                if(!val) return;
+                const dob = new Date(val); const now = new Date();
+                let age = now.getFullYear() - dob.getFullYear();
+                State.age = age;
+                
+                // NEW BRACKETS LOGIC
+                if(age >= 16 && age <= 55) State.group = 1;
+                else if(age >= 56 && age <= 69) State.group = 2;
+                else if(age >= 70 && age <= 75) State.group = 3;
+                else State.group = 0;
+                
+                const btn = document.getElementById('btnStep2'); const res = document.getElementById('ageResult');
+                if(State.group > 0) {
+                    btn.disabled = false; res.innerText = `Zakwalifikowano do: Grupa ${State.group} (${age} lat)`; 
+                    App.renderPackages(State.group); App.renderBricks(State.group);
+                } else { btn.disabled = true; res.innerText = `Wiek poza zakresem (16-75 lat). Obliczony wiek: ${age} lat.`; }
+            },
+            validateStep2: () => { if(State.group>0) { App.nextStep(); } },
+
+            // STEP 3: PACKAGES
+            renderPackages: (g) => {
+                const c = document.getElementById('packagesContainer'); c.innerHTML='';
+                let pkgs = [];
+                if(g===1) pkgs = [{n:'Start',p:59,f:['Śmierć NW: 100 000 zł','Pobyt w szpitalu']},{n:'Standard',p:79,f:['Śmierć NW: 150 000 zł','Urodzenie dziecka']},{n:'Family',p:119,f:['Ochrona rodziny','Dziecko']},{n:'Premium',p:149,f:['Śmierć NW: 700 000 zł','Wysoka ochrona']},{n:'VIP',p:199,f:['Śmierć NW: 1 000 000 zł','Najwyższa ochrona']}];
+                else if(g===2) pkgs = [{n:'Silver 55+',p:89,f:['Śmierć kom.: 100 000 zł','Pobyt w szpitalu']},{n:'Gold 55+',p:149,f:['Śmierć kom.: 250 000 zł','Średnia ochrona']},{n:'Platinum 55+',p:249,f:['Śmierć kom.: 500 000 zł','Najwyższa ochrona']}];
+                else pkgs = [{n:'Senior Silver',p:69,f:['Śmierć NW: 30 000 zł','Dożywotnia ochrona']},{n:'Senior Gold',p:99,f:['Śmierć NW: 50 000 zł','Rozszerzona ochrona']}];
+                
+                pkgs.forEach((p, idx) => {
+                    const div = document.createElement('div'); div.className = 'plan-card';
+                    let isSel = (g===1&&idx===1)||(g===2&&idx===1)||(g===3&&idx===0);
+                    if(isSel) { div.classList.add('selected'); State.plan = p; }
+                    
+                    div.innerHTML = `<div class="plan-header"><div class="plan-title">${p.n}</div><div class="plan-price">${p.p} zł</div></div><div class="plan-features"><ul>${p.f.map(x=>`<li><span class="material-icons-outlined check-icon">check</span> ${x}</li>`).join('')}</ul></div>`;
+                    div.onclick = () => {
+                        document.querySelectorAll('.plan-card').forEach(e=>e.classList.remove('selected'));
+                        div.classList.add('selected'); State.plan = p; App.updateTotal();
+                    };
+                    c.appendChild(div);
+                });
+            },
+            
+            // STEP 4: BRICKS
+            renderBricks: (g) => {
+                const c = document.getElementById('bricksContainer'); c.innerHTML=''; State.addons.clear();
+                if(g===3) { c.innerHTML='<p style="text-align:center">Brak cegiełek dla Seniorów</p>'; return; }
+                
+                const d1 = document.createElement('div'); d1.className='form-section';
+                d1.innerHTML=`<h3>Cegiełki Podstawowe</h3><div class="options-grid">
+                    <label class="option-card"><input type="checkbox" onchange="App.toggleAddon('act',29.90,'Active')"><div class="option-content"><strong>Active (+29,90 zł)</strong><small>Urazy, Sport</small></div></label>
+                    <label class="option-card"><input type="checkbox" onchange="App.toggleAddon('kid',29.90,'Kids')"><div class="option-content"><strong>Kids (+29,90 zł)</strong><small>Dzieci, Szpital</small></div></label>
+                </div>`;
+                c.appendChild(d1);
+
+                const sp = g===1 ? 29.90 : 49.90;
+                const onkoDesc = g===1 ? 'Nowotwór: 40 000 zł' : 'Nowotwór: 20 000 zł';
+                const kardioDesc = g===1 ? 'Zawał/Udar: 50 000 zł' : 'Zawał/Udar: 20 000 zł';
+
+                const d2 = document.createElement('div'); d2.className='form-section';
+                d2.innerHTML = `<h3>Pakiety Specjalistyczne</h3>
+                    <div style="margin-bottom:10px; background:#f9f9f9; padding:10px; border-left:3px solid var(--ovb-blue);">Czy w ostatnich 5 latach diagnozowano/leczono u Ciebie nowotwór lub zawał/udar serca?</div>
+                    <div style="margin-bottom:15px"><button class="btn btn-secondary" onclick="App.toggleMed(false,this)">TAK (Chorowałem)</button> <button class="btn btn-secondary" onclick="App.toggleMed(true,this)">NIE (Jestem zdrowy)</button></div>
+                    <div id="medOptions" class="hidden options-grid">
+                        <label class="option-card"><input type="checkbox" id="chk_onko" onchange="App.toggleAddon('onko',${sp},'Onko')"><div class="option-content"><strong>Onko (+${sp} zł)</strong><small>${onkoDesc}</small></div></label>
+                        <label class="option-card"><input type="checkbox" id="chk_kardio" onchange="App.toggleAddon('kardio',${sp},'Kardio')"><div class="option-content"><strong>Kardio (+${sp} zł)</strong><small>${kardioDesc}</small></div></label>
+                    </div>`;
+                c.appendChild(d2);
+                App.updateTotal();
+            },
+            toggleMed: (ok, btn) => {
+                btn.parentElement.querySelectorAll('button').forEach(b=>{b.style.background='transparent'; b.style.color='var(--ovb-grey-text)';});
+                btn.style.background=ok?'var(--ovb-teal)':'var(--ovb-hot-pink)'; btn.style.color='white';
+                const d = document.getElementById('medOptions');
+                if(ok) d.classList.remove('hidden'); else { d.classList.add('hidden'); ['onko','kardio'].forEach(id=>{let e=document.getElementById('chk_'+id); if(e&&e.checked){e.checked=false;App.toggleAddon(id,0,'');}});}
+            },
+            toggleAddon: (id, p, n) => {
+                if(State.addons.has(id)) State.addons.delete(id); else State.addons.set(id, {p, n});
+                App.updateTotal();
+            },
+            updateTotal: () => {
+                let t = State.plan ? State.plan.p : 0;
+                State.addons.forEach(v => t += v.p);
+                const el = document.getElementById('stickyPrice');
+                if(el) el.innerText = t.toFixed(2) + ' zł';
+            },
+
+            // STEP 5: DATA
+            toggleBeneficiaryForm: () => {
+                const t = document.querySelector('input[name="beneficiaryType"]:checked').value;
+                const f = document.getElementById('beneficiaryForm');
+                if(t === 'PERSON') f.classList.remove('hidden'); else f.classList.add('hidden');
+            },
+            copyAddressToBeneficiary: () => {
+                if(document.getElementById('benSameAddress').checked) {
+                    ['Ulica','NrDomu','Lokalu','KodPocztowy','Miasto'].forEach(f => {
+                        let srcId = f.toLowerCase(); 
+                        if(f==='KodPocztowy') srcId='kodPocztowy'; if(f==='NrDomu') srcId='nrDomu'; if(f==='NrLokalu') srcId='nrLokalu';
+                        const val = document.getElementById(srcId).value;
+                        document.getElementById('ben'+f).value = val;
+                    });
+                    const k = document.getElementById('kraj'); if(k) document.getElementById('benKraj').value = k.value;
+                }
+            },
+            togglePartnerSection: () => document.getElementById('partnerSection').classList.toggle('hidden'),
+            toggleResignSection: () => {
+                const r = document.getElementById('resignSection'); r.classList.toggle('hidden');
+                if(!r.classList.contains('hidden')){
+                    const now = new Date(); let m = now.getMonth(); if(now.getDate()>25) m++;
+                    let ld = new Date(now.getFullYear(), m+1, 0); document.getElementById('resignDate').value = ld.toLocaleDateString('pl-PL');
+                }
+            },
+            validatePolicyNumber: (el) => { if(!el.value.includes('_')) el.classList.add('invalid'); else el.classList.remove('invalid'); },
+            
+            validateStep5: () => {
+                const inputs = document.querySelectorAll('#step-5 input:not(.hidden input):not([type="checkbox"]):not([type="radio"]), #step-5 select:not(.hidden select)');
+                let missing = [];
+                inputs.forEach(i => {
+                    if(i.hasAttribute('required') && !i.value) { i.classList.add('invalid'); missing.push("Pola formularza danych"); } 
+                    else i.classList.remove('invalid');
+                });
+                if(document.querySelector('input[name="beneficiaryType"]:checked').value === 'PERSON') {
+                    ['benImie','benNazwisko','benDataUrodzenia','benPokrewienstwo'].forEach(id=>{
+                        if(!document.getElementById(id).value) missing.push("Dane Uposażonego");
+                    });
+                }
+                if(missing.length > 0) { document.getElementById('modalErrorList').innerHTML = "Uzupełnij poprawnie dane osobowe i adresowe."; document.getElementById('validationModal').style.display='flex'; } 
+                else App.nextStep();
+            },
+
+            // STEP 6: ZGODY
+            quickFillStandard: () => {
+                document.querySelectorAll('input[name="pep1"]')[1].checked=true; document.querySelectorAll('input[name="pep2"]')[1].checked=true;
+                ['cons_medical','cons_share','decl_terms','decl_l4','decl_job'].forEach(id=>{let e=document.getElementById(id); if(e) e.checked=true;});
+                document.querySelectorAll('input[name="healthGate"]')[0].checked=true;
+            },
+            clearStep6: () => { document.querySelectorAll('#step-6 input').forEach(i=>i.checked=false); },
+            validateStep6: () => {
+                let missing = [];
+                if(!document.querySelector('input[name="pep1"]:checked')) missing.push("Oświadczenie PEP");
+                ['cons_medical','cons_share','decl_terms','decl_l4','decl_job'].forEach(id=>{if(!document.getElementById(id).checked) missing.push("Wymagane zgody i oświadczenia");});
+                const h=document.querySelector('input[name="healthGate"]:checked');
+                if(!h) missing.push("Oświadczenie o zdrowiu"); else if(h.value==='NO') {alert("Wymagana ankieta medyczna. Dalszy proces w aplikacji zablokowany."); return;}
+                if(missing.length>0) {
+                     document.getElementById('modalErrorList').innerHTML = [...new Set(missing)].join('<br>');
+                     document.getElementById('validationModal').style.display='flex';
+                } else App.nextStep();
+            },
+
+            // STEP 7: SUMMARY
+            renderSummary: () => {
+                const d = (id) => document.getElementById(id) ? document.getElementById(id).value : '--';
+                if(State.plan) {
+                    document.getElementById('sum-plan').innerText = State.plan.n + ` (${State.plan.p} zł)`;
+                    document.getElementById('sum-plan-desc').innerText = State.plan.f.join(', ');
+                }
+                document.getElementById('sum-name').innerText = d('imie')+' '+d('nazwisko');
+                document.getElementById('sum-pesel').innerText = d('pesel');
+                document.getElementById('sum-address').innerText = `${d('ulica')} ${d('nrDomu')}, ${d('miasto')}`;
+                
+                const ben = document.querySelector('input[name="beneficiaryType"]:checked').value;
+                if(ben==='KC') document.getElementById('sum-beneficiary-data').innerText="Kodeks Cywilny";
+                else document.getElementById('sum-beneficiary-data').innerText=`${d('benImie')} ${d('benNazwisko')} (${d('benDataUrodzenia')})`;
+                
+                document.getElementById('sum-total').innerText = document.getElementById('stickyPrice').innerText;
+            },
+
+            // STEP 8 & 9
+            sendSMS: () => {
+                document.getElementById('smsStep1').classList.add('hidden');
+                document.getElementById('smsStep2').classList.remove('hidden');
+                alert('Kod to: 123456');
+            },
+            verifySMS: () => { 
+                setTimeout(()=>{
+                    App.nextStep(); 
+                    document.getElementById('stickySummary').style.display='none';
+                    document.getElementById('finalAmount').innerText=document.getElementById('sum-total').innerText;
+                }, 500); 
+            },
+            
+            // ZIP HANDLER
+            bindZipHandlers: () => {
+                const handler = (srcId, targetId) => {
+                    document.getElementById(srcId).addEventListener('input', (e) => {
+                        let v = e.target.value.replace(/\D/g, '');
+                        if(v.length>2) v = v.substring(0,2)+'-'+v.substring(2,5);
+                        e.target.value = v;
+                        if(v.length>=2 && Config.cities[v.substring(0,2)]) {
+                            document.getElementById(targetId).value = Config.cities[v.substring(0,2)];
+                        }
+                    });
+                };
+                handler('kodPocztowy', 'miasto');
+                handler('benKod', 'benMiasto');
+            }
+        };
+
+        window.App = App;
+        window.onload = App.init;
+    </script>
+</body>
+</html>
