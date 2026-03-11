@@ -28,7 +28,7 @@
                         }
                     },
                     fontFamily: {
-                        /* Zgodnie z wytycznymi OVB: Stag Sans jako główny, Segoe UI jako systemowy fallback */
+                        /* Zgodnie z wytycznymi OVB */
                         sans: ['"Stag Sans"', '"Segoe UI"', 'system-ui', 'sans-serif'],
                     }
                 }
@@ -36,98 +36,114 @@
         }
     </script>
     <style>
+        /* Ustawienia specyficzne dla generowania PDF i druku */
+        @page {
+            size: A4;
+            margin: 0;
+        }
         @media print {
-            body { background-color: white; }
-            .print-hide { display: none; }
-            .page-break { page-break-before: always; }
-            .shadow-xl { box-shadow: none !important; border: 1px solid #e5e7eb; }
+            body { 
+                background-color: white !important; 
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .a4-page {
+                box-shadow: none !important;
+                border: none !important;
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0 !important;
+            }
         }
     </style>
 </head>
-<body class="bg-ovb-lettering-white font-sans text-gray-800 antialiased min-h-screen py-8">
+<body class="bg-gray-200 font-sans text-gray-800 antialiased flex justify-center py-8 print:py-0 print:bg-white">
 
-    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden border border-ovb-light-grey mb-8">
+    <!-- Kontener o sztywnych wymiarach A4 -->
+    <div class="a4-page w-[210mm] h-[297mm] bg-white shadow-2xl overflow-hidden relative box-border flex flex-col">
         
-        <!-- STRONA TYTUŁOWA -->
-        <div class="bg-ovb-blue text-white p-12 text-center relative border-b-8 border-ovb-teal">
-            <h1 class="text-4xl font-bold mb-4 mt-8">Komplet Dokumentacji Ubezpieczeniowej</h1>
-            <h2 class="text-2xl text-ovb-blue-light font-light mb-8">Umowa Grupowego Ubezpieczenia na Życie CERTUM</h2>
+        <!-- STRONA TYTUŁOWA (Nagłówek) -->
+        <div class="bg-ovb-blue text-white p-8 text-center relative border-b-[6px] border-ovb-teal flex-shrink-0">
+            <h1 class="text-3xl font-bold mb-2 mt-4">Komplet Dokumentacji Ubezpieczeniowej</h1>
+            <h2 class="text-xl text-ovb-blue-light font-light mb-6">Umowa Grupowego Ubezpieczenia na Życie CERTUM</h2>
             
-            <div class="bg-ovb-blue-medium bg-opacity-80 inline-block p-6 rounded-lg text-left w-full max-w-md mx-auto border border-ovb-blue-light">
-                <p class="text-sm text-ovb-light-grey uppercase tracking-wider mb-1">Dla Klienta</p>
-                <p class="text-xl font-bold text-white mb-4">Maksymilian Sikorski</p>
-                <p class="text-sm text-ovb-light-grey uppercase tracking-wider mb-1">Numer Polisy / Certyfikatu</p>
-                <p class="text-lg font-bold text-white">90000785745_3</p>
+            <div class="bg-ovb-blue-medium bg-opacity-80 inline-block p-4 rounded-lg text-left w-full max-w-sm mx-auto border border-ovb-blue-light">
+                <p class="text-xs text-ovb-light-grey uppercase tracking-wider mb-1">Dla Klienta</p>
+                <p class="text-lg font-bold text-white mb-3">Maksymilian Sikorski</p>
+                <p class="text-xs text-ovb-light-grey uppercase tracking-wider mb-1">Numer Polisy / Certyfikatu</p>
+                <p class="text-base font-bold text-white">90000785745_3</p>
             </div>
         </div>
 
-        <!-- SPIS TREŚCI -->
-        <div class="p-10 bg-white">
-            <h3 class="text-3xl font-bold text-ovb-blue mb-8 border-b-2 border-ovb-light-grey pb-4">Spis treści</h3>
+        <!-- SPIS TREŚCI (Zawartość) -->
+        <div class="px-10 py-8 bg-white flex-1">
+            <h3 class="text-2xl font-bold text-ovb-blue mb-5 border-b-2 border-ovb-light-grey pb-2">Spis treści</h3>
             
-            <div class="space-y-6">
+            <div class="space-y-5">
                 <!-- Krok 1 -->
                 <div class="flex items-start">
-                    <div class="flex-shrink-0 w-12 h-12 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-xl mr-4 border-2 border-ovb-blue-light">1</div>
-                    <div class="flex-1 border-b border-dashed border-ovb-light-grey pb-4">
-                        <h4 class="text-xl font-bold text-ovb-blue flex justify-between">
+                    <div class="flex-shrink-0 w-10 h-10 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-lg mr-4 border-2 border-ovb-blue-light">1</div>
+                    <div class="flex-1 border-b border-dashed border-ovb-light-grey pb-3">
+                        <h4 class="text-lg font-bold text-ovb-blue flex justify-between items-center">
                             <span>Karta Dystrybutora i Obowiązek Informacyjny</span>
-                            <span class="text-gray-400 text-sm font-normal">Strona 3</span>
+                            <span class="text-gray-400 text-xs font-normal">Strona 3</span>
                         </h4>
-                        <p class="text-gray-600 text-sm mt-1">Dane Agenta, wpis do rejestru KNF, informacje o wynagrodzeniu, zasady składania reklamacji.</p>
-                        <span class="inline-block mt-2 px-2 py-1 bg-ovb-teal bg-opacity-10 text-ovb-ocean text-xs font-bold rounded">Wymóg KNF - IDD</span>
+                        <p class="text-gray-600 text-sm mt-0.5">Dane Agenta, wpis do rejestru KNF, informacje o wynagrodzeniu, zasady składania reklamacji.</p>
+                        <span class="inline-block mt-1.5 px-2 py-0.5 bg-ovb-teal bg-opacity-10 text-ovb-ocean text-[10px] uppercase font-bold rounded">Wymóg KNF - IDD</span>
                     </div>
                 </div>
 
                 <!-- Krok 2 -->
                 <div class="flex items-start">
-                    <div class="flex-shrink-0 w-12 h-12 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-xl mr-4 border-2 border-ovb-blue-light">2</div>
-                    <div class="flex-1 border-b border-dashed border-ovb-light-grey pb-4">
-                        <h4 class="text-xl font-bold text-ovb-blue flex justify-between">
+                    <div class="flex-shrink-0 w-10 h-10 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-lg mr-4 border-2 border-ovb-blue-light">2</div>
+                    <div class="flex-1 border-b border-dashed border-ovb-light-grey pb-3">
+                        <h4 class="text-lg font-bold text-ovb-blue flex justify-between items-center">
                             <span>Analiza Potrzeb Klienta (APK)</span>
-                            <span class="text-gray-400 text-sm font-normal">Strona 6</span>
+                            <span class="text-gray-400 text-xs font-normal">Strona 6</span>
                         </h4>
-                        <p class="text-gray-600 text-sm mt-1">Ankieta określająca Twoje potrzeby oraz dopasowująca odpowiedni zakres ubezpieczenia.</p>
-                        <span class="inline-block mt-2 px-2 py-1 bg-ovb-teal bg-opacity-10 text-ovb-ocean text-xs font-bold rounded">Wymóg KNF - IDD</span>
+                        <p class="text-gray-600 text-sm mt-0.5">Ankieta określająca Twoje potrzeby oraz dopasowująca odpowiedni zakres ubezpieczenia.</p>
+                        <span class="inline-block mt-1.5 px-2 py-0.5 bg-ovb-teal bg-opacity-10 text-ovb-ocean text-[10px] uppercase font-bold rounded">Wymóg KNF - IDD</span>
                     </div>
                 </div>
 
                 <!-- Krok 3 -->
                 <div class="flex items-start">
-                    <div class="flex-shrink-0 w-12 h-12 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-xl mr-4 border-2 border-ovb-blue-light">3</div>
-                    <div class="flex-1 border-b border-dashed border-ovb-light-grey pb-4">
-                        <h4 class="text-xl font-bold text-ovb-blue flex justify-between">
+                    <div class="flex-shrink-0 w-10 h-10 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-lg mr-4 border-2 border-ovb-blue-light">3</div>
+                    <div class="flex-1 border-b border-dashed border-ovb-light-grey pb-3">
+                        <h4 class="text-lg font-bold text-ovb-blue flex justify-between items-center">
                             <span>Deklaracja Przystąpienia do Ubezpieczenia</span>
-                            <span class="text-gray-400 text-sm font-normal">Strona 7</span>
+                            <span class="text-gray-400 text-xs font-normal">Strona 7</span>
                         </h4>
-                        <p class="text-gray-600 text-sm mt-1">Twoje dane osobowe, wskazanie uposażonych, oświadczenie o stanie zdrowia, wybór pakietów oraz oświadczenia końcowe.</p>
-                        <span class="inline-block mt-2 px-2 py-1 bg-ovb-blue-light bg-opacity-20 text-ovb-blue text-xs font-bold rounded">Dokument Główny</span>
+                        <p class="text-gray-600 text-sm mt-0.5">Twoje dane osobowe, wskazanie uposażonych, oświadczenie o stanie zdrowia, wybór pakietów.</p>
+                        <span class="inline-block mt-1.5 px-2 py-0.5 bg-ovb-blue-light bg-opacity-20 text-ovb-blue text-[10px] uppercase font-bold rounded">Dokument Główny</span>
                     </div>
                 </div>
 
                 <!-- Krok 4 -->
                 <div class="flex items-start">
-                    <div class="flex-shrink-0 w-12 h-12 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-xl mr-4 border-2 border-ovb-blue-light">4</div>
-                    <div class="flex-1 border-b border-dashed border-ovb-light-grey pb-4">
-                        <h4 class="text-xl font-bold text-ovb-blue flex justify-between">
-                            <span>Oświadczenie o źródle pochodzenia majątku (AML)</span>
-                            <span class="text-gray-400 text-sm font-normal">Strona 10</span>
+                    <div class="flex-shrink-0 w-10 h-10 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-lg mr-4 border-2 border-ovb-blue-light">4</div>
+                    <div class="flex-1 border-b border-dashed border-ovb-light-grey pb-3">
+                        <h4 class="text-lg font-bold text-ovb-blue flex justify-between items-center">
+                            <span>Oświadczenie o źródle pochodzenia majątku</span>
+                            <span class="text-gray-400 text-xs font-normal">Strona 10</span>
                         </h4>
-                        <p class="text-gray-600 text-sm mt-1">Wymagane prawem informacje dotyczące źródła finansowania składek.</p>
-                        <span class="inline-block mt-2 px-2 py-1 bg-ovb-light-grey text-gray-700 text-xs font-bold rounded">Wymóg Prawny - AML</span>
+                        <p class="text-gray-600 text-sm mt-0.5">Wymagane prawem informacje dotyczące źródła finansowania składek.</p>
+                        <span class="inline-block mt-1.5 px-2 py-0.5 bg-ovb-light-grey text-gray-700 text-[10px] uppercase font-bold rounded">Wymóg Prawny - AML</span>
                     </div>
                 </div>
 
                 <!-- Krok 5 -->
                 <div class="flex items-start">
-                    <div class="flex-shrink-0 w-12 h-12 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-xl mr-4 border-2 border-ovb-blue-light">5</div>
-                    <div class="flex-1 pb-4">
-                        <h4 class="text-xl font-bold text-ovb-blue flex justify-between">
-                            <span>Informacja o Przetwarzaniu Danych Osobowych (RODO)</span>
-                            <span class="text-gray-400 text-sm font-normal">Strona 11</span>
+                    <div class="flex-shrink-0 w-10 h-10 bg-ovb-lettering-white rounded-full flex items-center justify-center text-ovb-blue font-bold text-lg mr-4 border-2 border-ovb-blue-light">5</div>
+                    <div class="flex-1 pb-1">
+                        <h4 class="text-lg font-bold text-ovb-blue flex justify-between items-center">
+                            <span>Informacja o Przetwarzaniu Danych (RODO)</span>
+                            <span class="text-gray-400 text-xs font-normal">Strona 11</span>
                         </h4>
-                        <p class="text-gray-600 text-sm mt-1">Szczegółowe informacje dotyczące przetwarzania danych przez OVB, Stowarzyszenie Finance Club oraz Generali Życie T.U. S.A.</p>
-                        <span class="inline-block mt-2 px-2 py-1 bg-ovb-light-grey text-gray-700 text-xs font-bold rounded">Informacja RODO</span>
+                        <p class="text-gray-600 text-sm mt-0.5">Informacje o przetwarzaniu danych przez OVB, Stowarzyszenie oraz Generali Życie T.U. S.A.</p>
+                        <span class="inline-block mt-1.5 px-2 py-0.5 bg-ovb-light-grey text-gray-700 text-[10px] uppercase font-bold rounded">Informacja RODO</span>
                     </div>
                 </div>
             </div>
